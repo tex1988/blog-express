@@ -53,15 +53,7 @@ class PostRepository {
   }
 
   async delete(id) {
-    return this.#prisma.comment.delete({
-      where: {
-        commentId: Number(id),
-      },
-    });
-  }
-
-  async deleteAllByPostId(id) {
-    return this.#prisma.comment.deleteMany({
+    return this.#prisma.post.delete({
       where: {
         postId: Number(id),
       },

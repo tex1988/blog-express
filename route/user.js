@@ -25,7 +25,7 @@ router.get('/:userId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const user = await userService.save(req.body);
-    res.json(user);
+    res.status(201).json(user);
   } catch (e) {
     next(e);
   }

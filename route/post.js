@@ -25,7 +25,7 @@ router.get('/:postId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const post = await postService.save(req.body);
-    res.json(post);
+    res.status(201).json(post);
   } catch (e) {
     next(e);
   }
@@ -55,7 +55,7 @@ router.post('/:postId/comment', async (req, res, next) => {
   try {
     const { postId } = req.params;
     const comments = await postService.savePostComment(postId, req.body);
-    res.json(comments);
+    res.status(201).json(comments);
   } catch (e) {
     next(e);
   }

@@ -25,7 +25,7 @@ router.get('/:commentId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   try {
     const comment = await commentRepository.save(req.body);
-    res.json(comment);
+    res.status(201).json(comment);
   } catch (e) {
     next(e);
   }

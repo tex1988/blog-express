@@ -7,7 +7,7 @@ function errorResponder(error, request, response, next) {
   response.header('Content-Type', 'application/json');
   const status = error.status || 500;
   let message;
-  if (error.status === 500) {
+  if (error.status === 500 || !error.status) {
     message = 'Internal server error';
   } else {
     message = error.message;
