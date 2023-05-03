@@ -61,4 +61,14 @@ router.post('/:postId/comment', async (req, res, next) => {
   }
 });
 
+router.delete('/:postId', async (req, res, next) => {
+  try {
+    const { postId } = req.params;
+    const post = await postService.delete(postId);
+    res.json(post);
+  } catch (e) {
+    next(e);
+  }
+});
+
 module.exports = router;

@@ -66,6 +66,14 @@ class CommentRepository {
       },
     });
   }
+
+  async deleteAllByPostId(id) {
+    return this.#prisma.comment.deleteMany({
+      where: {
+        postId: Number(id),
+      },
+    });
+  }
 }
 
 module.exports = CommentRepository;

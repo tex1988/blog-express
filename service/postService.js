@@ -30,6 +30,11 @@ class PostService {
     return this.#postRepository.update(id, post);
   }
 
+  async delete(id) {
+    await this.#commentRepository.deleteAllByPostId(id);
+    return this.#postRepository.delete(id);
+  }
+
   async findAllPostComments(id) {
     await this.#validateIfPostExists(id);
     return this.#commentRepository.findAllByPostId(id);
