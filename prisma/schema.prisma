@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId    BigInt    @id @default(autoincrement())
+  username  String    @unique @db.VarChar(20)
+  firstName String?   @db.VarChar(50)
+  lastName  String?   @db.VarChar(50)
+  email     String    @unique @db.VarChar(100)
+  posts     Post[]
+  comments  Comment[]
+}
+
+model Post {
+  postId   BigInt    @id @default(autoincrement())
+  title    String    @unique @db.VarChar(100)
+  content  String    @db.VarChar(max)
+  created  DateTime
+  modified DateTime?
+  userId   BigInt
+  user     User      @relation(fields: [userId], references: [userId])
+  comments Comment[]
+}
+
+model Comment {
+  commentId BigInt    @id @default(autoincrement())
+  content   String    @db.VarChar(max)
+  created   DateTime
+  modified  DateTime?
+  userId    BigInt
+  postId    BigInt
+  user      User      @relation(fields: [userId], references: [userId], onDelete: NoAction, onUpdate: NoAction)
+  post      Post      @relation(fields: [postId], references: [postId])
+}
