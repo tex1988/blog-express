@@ -3,7 +3,7 @@ function errorLogger(error, request, response, next) {
   next(error);
 }
 
-function errorResponder(error, request, response) {
+function errorResponder(error, request, response, next) {
   response.header('Content-Type', 'application/json');
   const status = error.status || 500;
   let message;
@@ -15,7 +15,7 @@ function errorResponder(error, request, response) {
   response.status(status).json({ status: status, message: message });
 }
 
-function invalidPathHandler(request, response) {
+function invalidPathHandler(request, response, next) {
   response.status(404);
   response.json({ status: 404, message: 'Invalid path' });
 }
