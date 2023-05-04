@@ -1,10 +1,6 @@
-const UserRepository = require('../repository/userRepository');
-const PostRepository = require('../repository/postRepository');
 const CommentRepository = require('../repository/commentRepository');
 
 class CommentService {
-  #userRepository = new UserRepository();
-  #postRepository = new PostRepository();
   #commentRepository = new CommentRepository();
 
   constructor() {

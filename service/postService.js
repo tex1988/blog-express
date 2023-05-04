@@ -1,9 +1,9 @@
-const UserRepository = require('../repository/userRepository');
+const UserService = require('./userService');
 const PostRepository = require('../repository/postRepository');
 const CommentRepository = require('../repository/commentRepository');
 
 class PostService {
-  #userRepository = new UserRepository();
+  #userService = new UserService();
   #postRepository = new PostRepository();
   #commentRepository = new CommentRepository();
 
@@ -41,7 +41,7 @@ class PostService {
   }
 
   async savePostComment(id, comment) {
-    await this.#validateIfUserExists(comment.userId);
+    await this.#userService.validateIfUserExists(comment.userId);
     await this.#validateIfPostExists(id);
     comment.postId = id;
     return this.#commentRepository.save(comment);
@@ -51,15 +51,6 @@ class PostService {
     const post = await this.#postRepository.findById(id);
     if (!post) {
       const error = new Error(`Post with id:${id} not found`);
-      error.status = 404;
-      throw error;
-    }
-  }
-
-  async #validateIfUserExists(id) {
-    const user = await this.#userRepository.findById(id);
-    if (!user) {
-      const error = new Error(`User with id:${id} not found`);
       error.status = 404;
       throw error;
     }

@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const CommentRepository = require('../repository/commentRepository');
-const commentRepository = new CommentRepository();
+const CommentService = require('../service/commentService');
+const commentService = new CommentService();
 
 router.get('/', async (req, res, next) => {
   try {
-    const comments = await commentRepository.findAll();
+    const comments = await commentService.findAll();
     res.json(comments);
   } catch (e) {
     next(e);
@@ -15,7 +15,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:commentId', async (req, res, next) => {
   try {
     const { commentId } = req.params;
-    const comment = await commentRepository.findById(commentId);
+    const comment = await commentService.findById(commentId);
     res.json(comment);
   } catch (e) {
     next(e);
@@ -24,7 +24,7 @@ router.get('/:commentId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
-    const comment = await commentRepository.save(req.body);
+    const comment = await commentService.save(req.body);
     res.status(201).json(comment);
   } catch (e) {
     next(e);
@@ -34,7 +34,7 @@ router.post('/', async (req, res, next) => {
 router.put('/:commentId', async (req, res, next) => {
   try {
     const { commentId } = req.params;
-    const comment = await commentRepository.update(commentId, req.body);
+    const comment = await commentService.update(commentId, req.body);
     res.json(comment);
   } catch (e) {
     next(e);
@@ -44,7 +44,7 @@ router.put('/:commentId', async (req, res, next) => {
 router.delete('/:commentId', async (req, res, next) => {
   try {
     const { commentId } = req.params;
-    const comment = await commentRepository.delete(commentId);
+    const comment = await commentService.delete(commentId);
     res.json(comment);
   } catch (e) {
     next(e);

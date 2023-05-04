@@ -31,16 +31,16 @@ class UserService {
   }
 
   async findAllUserPosts(id) {
-    await this.#validateIfUserExists(id);
+    await this.validateIfUserExists(id);
     return this.#postRepository.findAllByUserId(id);
   }
 
   async findAllUserComments(id) {
-    await this.#validateIfUserExists(id);
+    await this.validateIfUserExists(id);
     return this.#commentRepository.findAllByUserId(id);
   }
 
-  async #validateIfUserExists(id) {
+  async validateIfUserExists(id) {
     const user = await this.#userRepository.findById(id);
     if (!user) {
       const error = new Error(`User with id:${id} not found`);
