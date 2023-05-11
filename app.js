@@ -9,7 +9,7 @@ const app = express();
 const { errorLogger, errorResponder, invalidPathHandler } = require('./middleware/errorHandler');
 
 app.use(express.json());
-app.use(express.static('./public'));
+app.use(express.static('./static'));
 
 app.use('/', indexRouter);
 app.use('/user', userRouter);

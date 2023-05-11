@@ -1,6 +1,7 @@
 const UserService = require('./userService');
 const PostRepository = require('../repository/postRepository');
 const CommentRepository = require('../repository/commentRepository');
+const { isNumber } = require('../validator/validator');
 
 class PostService {
   #userService = new UserService();
@@ -19,6 +20,7 @@ class PostService {
   }
 
   async findById(id) {
+    isNumber(id);
     return this.#postRepository.findById(id);
   }
 
@@ -27,20 +29,24 @@ class PostService {
   }
 
   async update(id, post) {
+    isNumber(id);
     return this.#postRepository.update(id, post);
   }
 
   async delete(id) {
+    isNumber(id);
     await this.#commentRepository.deleteAllByPostId(id);
     return this.#postRepository.delete(id);
   }
 
   async findAllPostComments(id) {
+    isNumber(id);
     await this.#validateIfPostExists(id);
     return this.#commentRepository.findAllByPostId(id);
   }
 
   async savePostComment(id, comment) {
+    isNumber(id);
     await this.#userService.validateIfUserExists(comment.userId);
     await this.#validateIfPostExists(id);
     comment.postId = id;

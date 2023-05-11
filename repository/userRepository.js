@@ -8,14 +8,24 @@ class UserRepository {
     return UserRepository._instance;
   }
 
-  async findAll() {
-    return this.#prisma.user.findMany();
+  async findAll(params) {
+    return this.#prisma.user.findMany({
+      where: params
+    });
   }
 
   async findById(id) {
     return this.#prisma.user.findUnique({
       where: {
         userId: Number(id),
+      },
+    });
+  }
+
+  async findByUserName(username) {
+    return this.#prisma.user.findUnique({
+      where: {
+        username: Number(username),
       },
     });
   }

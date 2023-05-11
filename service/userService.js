@@ -1,11 +1,13 @@
 const UserRepository = require('../repository/userRepository');
 const PostRepository = require('../repository/postRepository');
 const CommentRepository = require('../repository/commentRepository');
+const { isNumber } = require('../validator/validator');
 
 class UserService {
   #userRepository = new UserRepository();
   #postRepository = new PostRepository();
   #commentRepository = new CommentRepository();
+  #allowedParams = ['username', 'firstname', 'lastname', 'email'];
 
   constructor() {
     if (!UserService._instance) {
@@ -14,11 +16,13 @@ class UserService {
     return UserService._instance;
   }
 
-  async findAll() {
-    return this.#userRepository.findAll();
+  async findAll(params) {
+    this.#validateParams(params);
+    return this.#userRepository.findAll(params);
   }
 
   async findById(id) {
+    isNumber(id);
     return this.#userRepository.findById(id);
   }
 
@@ -27,15 +31,18 @@ class UserService {
   }
 
   async update(id, user) {
+    isNumber(id);
     return this.#userRepository.update(id, user);
   }
 
   async findAllUserPosts(id) {
+    isNumber(id);
     await this.validateIfUserExists(id);
     return this.#postRepository.findAllByUserId(id);
   }
 
   async findAllUserComments(id) {
+    isNumber(id);
     await this.validateIfUserExists(id);
     return this.#commentRepository.findAllByUserId(id);
   }
@@ -47,6 +54,16 @@ class UserService {
       error.status = 404;
       throw error;
     }
+  }
+
+  #validateParams(params) {
+    Object.keys(params).forEach((param) => {
+      if (!this.#allowedParams.includes(param)) {
+        const error = new Error(`Unsupported param: ${param}`);
+        error.status = 400;
+        throw error;
+      }
+    });
   }
 }
 
