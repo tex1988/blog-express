@@ -1,7 +1,7 @@
 import Main from './pages/Main';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Login from './pages/Login';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useState } from 'react';
 
 export const UserContext = createContext(undefined);
 

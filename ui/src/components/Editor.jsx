@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
 import { UserContext } from '../App';
-import { fetchUserPosts, postPost } from '../api/api';
+import { fetchUserPosts, savePost } from '../api/api';
 
 const Editor = (props) => {
-  const { setPosts } = props;
+  const { setEditorVisible, setPosts } = props;
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const { user } = useContext(UserContext);
@@ -16,15 +16,19 @@ const Editor = (props) => {
     setContent(event.target.value);
   }
 
-  function post() {
+  function onSaveClick() {
     const post = {
       userId: user.userId,
       title: title,
       content: content,
     };
-    postPost(post).then((code) => {
+    savePost(post).then((code) => {
       if (code === 201) {
-        fetchUserPosts(user.userId).then((posts) => setPosts(posts));
+        fetchUserPosts(user.userId)
+          .then((posts) => {
+            setPosts(posts)
+            setEditorVisible(false);
+          });
       } else {
         alert('An error occurred please try again later');
       }
@@ -35,8 +39,9 @@ const Editor = (props) => {
     <div className='flex-column'>
       <input onChange={onHeaderInput} value={title} placeholder="Post title" />
       <textarea className="text-area" value={content} onChange={onContentInput}></textarea>
-      <div className='flex-column' style={{justifyContent: 'center', alignContent: 'center', flexWrap: 'wrap'}}>
-        <button onClick={post}>Post</button>
+      <div className='flex-row-center' style={{justifyContent: 'center', alignContent: 'center', flexWrap: 'wrap'}}>
+        <button onClick={onSaveClick}>Save</button>
+        <button onClick={() => setEditorVisible(false)}>Cancel</button>
       </div>
     </div>
   );

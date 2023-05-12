@@ -9,7 +9,8 @@ const Login = () => {
   const navigate = useNavigate();
 
   function onLogin() {
-    fetchUser(1).then((json) => setUser(json));
+    fetchUser(1)
+      .then((json) => setUser(json));
   }
 
   function onInput(event) {

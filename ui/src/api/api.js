@@ -12,7 +12,8 @@ export async function fetchUserPosts(userId) {
 
 export async function fetchUser(userId) {
   const url = `${BASE_URL}/user/${userId}`;
-  return fetch(url).then((resp) => resp.json());
+  return fetch(url)
+    .then((resp) => resp.json());
 }
 
 export async function fetchUserByUsername(username) {
@@ -22,7 +23,7 @@ export async function fetchUserByUsername(username) {
     .then(json => json[0]);
 }
 
-export async function postPost(post) {
+export async function savePost(post) {
   const url = `${BASE_URL}/post`
   return fetch(url, {
     method: 'POST',
