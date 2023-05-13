@@ -27,7 +27,7 @@ module.exports = {
                     from: paths.public,
                     to: 'assets',
                     globOptions: {
-                        ignore: ['*.DS_Store'],
+                        ignore: ['*.DS_Store', '**/index.html'],
                     },
                     noErrorOnMissing: true,
                 },
@@ -37,8 +37,6 @@ module.exports = {
         // Generates an HTML file from a template
         // Generates deprecation warning: https://github.com/jantimon/html-webpack-plugin/issues/1501
         new HtmlWebpackPlugin({
-            favicon: paths.public + '/favicon.ico',
-            manifest: paths.public + '/manifest.json',
             template: paths.public + '/index.html', // template file
             filename: 'index.html', // output file
         }),
