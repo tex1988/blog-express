@@ -20,7 +20,7 @@ const Login = () => {
   function onClick() {
     fetchUserByUsername(input)
       .then((user) => setUser(user))
-      .then(() => navigate('/'))
+      .then(() => navigate('/'));
   }
 
   function onInputKeyPress(event) {
@@ -30,10 +30,12 @@ const Login = () => {
   }
 
   return (
-    <div className='centered-container'>
-      <h3 style={{textAlign: 'center'}}>Sign in</h3>
-      <input value={input} onInput={onInput} onKeyDown={onInputKeyPress} placeholder='Username' style={{textAlign: 'center'}}/>
-      <button onClick={onClick}>Log in</button>
+    <div className='login-container'>
+      <div className='login-form'><h3 style={{ textAlign: 'center' }}>Sign in</h3>
+        <input value={input} onInput={onInput} onKeyDown={onInputKeyPress} placeholder='Username'
+               style={{ textAlign: 'center' }} />
+        <button onClick={onClick}>Log in</button>
+      </div>
     </div>
   );
 };

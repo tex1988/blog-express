@@ -34,6 +34,18 @@ export async function savePost(post) {
   }).then(res => res.status)
 }
 
+export async function updatePost(id, post) {
+  const url = `${BASE_URL}/post/${id}`
+  return fetch(url, {
+    method: 'PUT',
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(post)
+  }).then(res => res.status)
+}
+
+
 export async function deletePostById(postId) {
   const url = `${BASE_URL}/post/${postId}`
   return fetch(url, {

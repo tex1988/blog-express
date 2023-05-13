@@ -1,4 +1,4 @@
-import Main from './pages/Main';
+import Home from './pages/Home';
 import { Route, Routes } from 'react-router-dom';
 import Login from './pages/Login';
 import { createContext, useState } from 'react';
@@ -15,7 +15,7 @@ function App() {
         path="/"
         element={
           <UserContext.Provider value={value}>
-            <Main />
+            <Home />
           </UserContext.Provider>
         }
       />

@@ -1,12 +1,9 @@
-import { useContext, useState } from 'react';
-import { UserContext } from '../App';
-import { fetchUserPosts, savePost } from '../api/api';
+import { useState } from 'react';
 
 const Editor = (props) => {
-  const { setEditorVisible, setPosts } = props;
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const { user } = useContext(UserContext);
+  const { onSave, onCancel, initialTitle, initialContent } = props;
+  const [title, setTitle] = useState(initialTitle);
+  const [content, setContent] = useState(initialContent);
 
   function onHeaderInput(event) {
     setTitle(event.target.value);
@@ -16,32 +13,13 @@ const Editor = (props) => {
     setContent(event.target.value);
   }
 
-  function onSaveClick() {
-    const post = {
-      userId: user.userId,
-      title: title,
-      content: content,
-    };
-    savePost(post).then((code) => {
-      if (code === 201) {
-        fetchUserPosts(user.userId)
-          .then((posts) => {
-            setPosts(posts)
-            setEditorVisible(false);
-          });
-      } else {
-        alert('An error occurred please try again later');
-      }
-    });
-  }
-
   return (
     <div className='flex-column'>
-      <input onChange={onHeaderInput} value={title} placeholder="Post title" />
-      <textarea className="text-area" value={content} onChange={onContentInput}></textarea>
-      <div className='flex-row-center' style={{justifyContent: 'center', alignContent: 'center', flexWrap: 'wrap'}}>
-        <button onClick={onSaveClick}>Save</button>
-        <button onClick={() => setEditorVisible(false)}>Cancel</button>
+      <input onChange={onHeaderInput} value={title} placeholder='Post title' />
+      <textarea className='text-area' value={content} onChange={onContentInput}></textarea>
+      <div className='flex-row-center' style={{ justifyContent: 'center', alignContent: 'center', flexWrap: 'wrap' }}>
+        <button onClick={() => onSave(title, content)}>Save</button>
+        <button onClick={onCancel}>Cancel</button>
       </div>
     </div>
   );

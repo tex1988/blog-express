@@ -1,10 +1,12 @@
-import { deletePostById, fetchUserPosts } from '../api/api';
-import { useContext } from 'react';
+import { deletePostById, fetchUserPosts, savePost, updatePost } from '../api/api';
+import { useContext, useState } from 'react';
 import { UserContext } from '../App';
+import Editor from './Editor';
 
 const Post = (props) => {
   const { user } = useContext(UserContext);
   const { postId, title, content, userName, created, modified, setPosts } = props;
+  const [editMode, setEditMode] = useState(false);
 
   function getDate(stringDate) {
     const date = new Date(stringDate);
@@ -21,22 +23,56 @@ const Post = (props) => {
     });
   }
 
-  return (
-    <div className="flex-column">
+  function getEditorProps() {
+    return {
+      onSave: (title, content) => onPostEdit(title, content),
+      onCancel: () => setEditMode(false),
+      initialTitle: title,
+      initialContent: content,
+    };
+  }
+
+  function onPostEdit(title, content) {
+    const post = {
+      userId: user.userId,
+      title: title,
+      content: content,
+    };
+    updatePost(postId, post).then((code) => {
+      if (code === 200) {
+        fetchUserPosts(user.userId)
+          .then((posts) => {
+            setPosts(posts);
+            setEditMode(false);
+          });
+      } else {
+        alert('An error occurred please try again later');
+      }
+    });
+  }
+
+  const postElement = (
+    <>
       <h3>{title}</h3>
-      <div className="post-info">
+      <div className='post-info'>
         Posted by {userName}, {getDate(created)}
       </div>
-      <div className="content">{content}</div>
+      <div className='content'>{content}</div>
       {modified && (
-        <div className="post-info" style={{ textAlign: 'right' }}>
+        <div className='post-info' style={{ textAlign: 'right' }}>
           Edited {getDate(modified)}
         </div>
       )}
-      <div className="flex-row-left">
-        <button>Edit</button>
+      <div className='flex-row-left'>
+        <button onClick={() => setEditMode(true)}>Edit</button>
         <button onClick={onDeleteClick}>Delete</button>
       </div>
+    </>
+  );
+
+  return (
+    <div className='flex-column'>
+      {editMode ? <Editor {...getEditorProps()}/> : postElement}
     </div>
   );
 };

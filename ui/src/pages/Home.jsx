@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { fetchUserPosts } from '../api/api';
+import { fetchUserPosts, savePost } from '../api/api';
 import Post from '../components/Post';
 import { Navigate } from 'react-router-dom';
 import { UserContext } from '../App';
@@ -7,7 +7,7 @@ import Editor from '../components/Editor';
 
 export const EditorContext = createContext(undefined);
 
-const Main = () => {
+const Home = () => {
   const { user } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
   const [isEditorVisible, setEditorVisible] = useState(false);
@@ -32,8 +32,10 @@ const Main = () => {
 
   function getEditorProps() {
     return {
-      setPosts: (posts) => setPosts(posts),
-      setEditorVisible: (value) => setEditorVisible(value),
+      onSave: (title, content) => onPostSave(title, content),
+      onCancel: () => setEditorVisible(false),
+      initialTitle: '',
+      initialContent: '',
     };
   }
 
@@ -44,20 +46,39 @@ const Main = () => {
   }
 
   function onAddPostClick() {
-    setEditorVisible(!isEditorVisible);
+    setEditorVisible(true);
+  }
+
+  function onPostSave(title, content) {
+    const post = {
+      userId: user.userId,
+      title: title,
+      content: content,
+    };
+    savePost(post).then((code) => {
+      if (code === 201) {
+        fetchUserPosts(user.userId)
+          .then((posts) => {
+            setPosts(posts);
+            setEditorVisible(false);
+          });
+      } else {
+        alert('An error occurred please try again later');
+      }
+    });
   }
 
   if (user === undefined) {
-    return <Navigate to="/login" />;
+    return <Navigate to='/login' />;
   }
 
   return (
-    <div className="container">
-      <div className="flex-column">
+    <div className='container'>
+      <div className='flex-column'>
         {getPosts()}
         {isEditorVisible && <Editor {...getEditorProps()} />}
         <div
-          className="flex-column"
+          className='flex-column'
           style={{ justifyContent: 'center', alignContent: 'center', flexWrap: 'wrap' }}>
           {!isEditorVisible && <button onClick={onAddPostClick}>Create post</button>}
         </div>
@@ -66,4 +87,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default Home;
