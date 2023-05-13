@@ -4,6 +4,7 @@ import Post from '../components/Post';
 import { Navigate } from 'react-router-dom';
 import { UserContext } from '../App';
 import Editor from '../components/Editor';
+import Navbar from '../components/Navbar';
 
 export const EditorContext = createContext(undefined);
 
@@ -22,6 +23,7 @@ const Home = () => {
     return {
       postId: post.postId,
       userName: `${user.firstName} ${user.lastName}`,
+      userId: post.userId,
       title: post.title,
       content: post.content,
       created: post.created,
@@ -74,6 +76,7 @@ const Home = () => {
 
   return (
     <div className='container'>
+      <Navbar/>
       <div className='flex-column'>
         {getPosts()}
         {isEditorVisible && <Editor {...getEditorProps()} />}

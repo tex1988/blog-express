@@ -5,8 +5,9 @@ import Editor from './Editor';
 
 const Post = (props) => {
   const { user } = useContext(UserContext);
-  const { postId, title, content, userName, created, modified, setPosts } = props;
+  const { postId, title, content, userName, userId, created, modified, setPosts } = props;
   const [editMode, setEditMode] = useState(false);
+  const isEditable = userId === user.userId;
 
   function getDate(stringDate) {
     const date = new Date(stringDate);
@@ -63,16 +64,18 @@ const Post = (props) => {
           Edited {getDate(modified)}
         </div>
       )}
-      <div className='flex-row-left'>
-        <button onClick={() => setEditMode(true)}>Edit</button>
-        <button onClick={onDeleteClick}>Delete</button>
-      </div>
+      {isEditable && (
+        <div className='flex-row-left'>
+          <button onClick={() => setEditMode(true)}>Edit</button>
+          <button onClick={onDeleteClick}>Delete</button>
+        </div>
+      )}
     </>
   );
 
   return (
     <div className='flex-column'>
-      {editMode ? <Editor {...getEditorProps()}/> : postElement}
+      {editMode ? <Editor {...getEditorProps()} /> : postElement}
     </div>
   );
 };
