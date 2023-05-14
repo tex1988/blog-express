@@ -20,7 +20,7 @@ const PostPreview = (props) => {
 
   return (
     <div className='flex-column'>
-      <h3 onClick={navigateToPost}>{title}</h3>
+      <h3 onClick={navigateToPost} style={{cursor: 'pointer'}}>{title}</h3>
       <div className="post-info">
         Posted by {userName}, {getDate(created)}
       </div>
