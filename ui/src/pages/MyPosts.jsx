@@ -10,7 +10,7 @@ import PostPreview from '../components/PostPreview';
 
 export const EditorContext = createContext(undefined);
 
-const Home = () => {
+const MyPosts = () => {
   const { user } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
   const [isEditorVisible, setEditorVisible] = useState(false);
@@ -45,7 +45,9 @@ const Home = () => {
 
   function getPosts() {
     if (posts.length > 0) {
-      return posts.map((post) => <PostPreview key={`post_${post.postId}`} {...getPostProps(post)} />);
+      return posts.map((post) => (
+        <PostPreview key={`post_${post.postId}`} {...getPostProps(post)} />
+      ));
     }
   }
 
@@ -76,22 +78,16 @@ const Home = () => {
   }
 
   return (
-    <>
-      <Navbar />
-      <div className="container">
-        <div className="flex-column"  style={{width: '100%'}}>
-          {getPosts()}
-          {isEditorVisible && <Editor {...getEditorProps()} />}
-          <div
-            className="flex-column"
-            style={{ justifyContent: 'center', alignContent: 'center', flexWrap: 'wrap' }}>
-            {!isEditorVisible && <button onClick={onAddPostClick}>Create post</button>}
-          </div>
-        </div>
+    <div className="flex-column" style={{ width: '100%' }}>
+      {getPosts()}
+      {isEditorVisible && <Editor {...getEditorProps()} />}
+      <div
+        className="flex-column"
+        style={{ justifyContent: 'center', alignContent: 'center', flexWrap: 'wrap' }}>
+        {!isEditorVisible && <button onClick={onAddPostClick}>Create post</button>}
       </div>
-      <Footer />
-    </>
+    </div>
   );
 };
 
-export default Home;
+export default MyPosts;
