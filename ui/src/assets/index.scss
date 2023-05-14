@@ -11,7 +11,7 @@ html * {
   display: flex;
   flex-direction: row;
   background: #ebebeb;
-  padding: 10px;
+  padding: 60px 10px 10px 10px;
 
   width: 1536px;
 
@@ -105,13 +105,10 @@ h3 {
 
 #topnav {
   width: 100%;
-
   position: fixed;
   top: 0;
   left: 0;
-
   background-color: Black;
-
   font-family: Arial, sans-serif;
   font-size: 15px;
 }
@@ -120,21 +117,15 @@ h3 {
   display: inline-block;
   width: 100px;
   height: 55px;
-
   color: White;
-
-  /* centering text */
-  text-align: center;    /* horizontally */
-  line-height: 55px;     /* vertically */
-
+  text-align: center;
+  line-height: 55px;
   text-decoration: none;
 }
 
 #logo {
   width: 120px;
-
   background-color: RoyalBlue;
-
   font-weight: bold;
 }
 

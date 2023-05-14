@@ -31,10 +31,10 @@ const Login = () => {
 
   return (
     <div className='login-container'>
-      <div className='login-form'><h3 style={{ textAlign: 'center' }}>Sign in</h3>
+      <div className='login-form'><h3 style={{ textAlign: 'center', margin: '10px 0 20px 0' }}>Sign in to BLOGGO</h3>
         <input value={input} onInput={onInput} onKeyDown={onInputKeyPress} placeholder='Username'
                style={{ textAlign: 'center' }} />
-        <button onClick={onClick}>Log in</button>
+        <button onClick={onClick}>Sign in</button>
       </div>
     </div>
   );

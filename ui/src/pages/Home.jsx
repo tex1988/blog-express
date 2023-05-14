@@ -75,18 +75,19 @@ const Home = () => {
   }
 
   return (
-    <div className='container'>
-      <Navbar/>
-      <div className='flex-column'>
-        {getPosts()}
-        {isEditorVisible && <Editor {...getEditorProps()} />}
-        <div
-          className='flex-column'
-          style={{ justifyContent: 'center', alignContent: 'center', flexWrap: 'wrap' }}>
-          {!isEditorVisible && <button onClick={onAddPostClick}>Create post</button>}
+    <><Navbar />
+      <div className='container'>
+        <div className='flex-column'>
+          {getPosts()}
+          {isEditorVisible && <Editor {...getEditorProps()} />}
+          <div
+            className='flex-column'
+            style={{ justifyContent: 'center', alignContent: 'center', flexWrap: 'wrap' }}>
+            {!isEditorVisible && <button onClick={onAddPostClick}>Create post</button>}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
