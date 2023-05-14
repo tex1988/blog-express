@@ -9,7 +9,12 @@ class PostRepository {
   }
 
   async findAll() {
-    return this.#prisma.post.findMany();
+    return this.#prisma.post.findMany({
+      include: {
+        user: true,
+        comments: true,
+      },
+    });
   }
 
   async findAllByUserId(id) {

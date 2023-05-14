@@ -1,7 +1,12 @@
 const BASE_URL = `${location.protocol}//${window.location.host}`;
 
 export function fetchPosts() {
-  const url = `${BASE_URL}/posts`;
+  const url = `${BASE_URL}/post`;
+  return fetch(url).then((resp) => resp.json());
+}
+
+export function fetchPostById(id) {
+  const url = `${BASE_URL}/post/${id}`;
   return fetch(url).then((resp) => resp.json());
 }
 
@@ -44,7 +49,6 @@ export async function updatePost(id, post) {
     body: JSON.stringify(post)
   }).then(res => res.status)
 }
-
 
 export async function deletePostById(postId) {
   const url = `${BASE_URL}/post/${postId}`

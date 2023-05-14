@@ -3,6 +3,8 @@ import Login from './pages/Login';
 import { createContext, useState } from 'react';
 import MainLayout from './layouts/MainLayout';
 import MyPosts from './pages/MyPosts';
+import Post from './pages/Post';
+import AllPosts from './pages/AllPosts';
 
 export const UserContext = createContext(undefined);
 
@@ -11,37 +13,20 @@ function App() {
   const value = { user: user, setUser: setUser };
 
   return (
-    // <Routes>
-    //   <Route
-    //     path="/"
-    //     element={
-    //       <UserContext.Provider value={value}>
-    //         <Home />
-    //       </UserContext.Provider>
-    //     }
-    //   />
-    //   <Route
-    //     path="/login"
-    //     element={
-    //       <UserContext.Provider value={value}>
-    //         <Login />
-    //       </UserContext.Provider>
-    //     }
-    //   />
-    // </Routes>
-
     <Routes>
       <Route
-        path="/"
+        path='/'
         element={
           <UserContext.Provider value={value}>
             <MainLayout />
           </UserContext.Provider>
         }>
-        <Route path="/" element={<MyPosts />} />
+        <Route path='/' element={<AllPosts />} />
+        <Route path='/user/:userId/post' element={<MyPosts />} />
+        <Route path={'/user/:userId/post/:postId'} element={<Post />} />
       </Route>
       <Route
-        path="/login"
+        path='/login'
         element={
           <UserContext.Provider value={value}>
             <Login />

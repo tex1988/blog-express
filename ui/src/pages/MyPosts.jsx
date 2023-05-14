@@ -1,11 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { fetchUserPosts, savePost } from '../api/api';
-import Post from '../components/Post';
 import { Navigate } from 'react-router-dom';
 import { UserContext } from '../App';
 import Editor from '../components/Editor';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import PostPreview from '../components/PostPreview';
 
 export const EditorContext = createContext(undefined);

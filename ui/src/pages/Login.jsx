@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { UserContext } from '../App';
 import { fetchUser, fetchUserByUsername } from '../api/api';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [input, setInput] = useState('');
@@ -9,8 +9,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   function onLogin() {
-    fetchUser(1)
-      .then((json) => setUser(json));
+    fetchUser(1).then((json) => setUser(json));
   }
 
   function onInput(event) {
@@ -18,9 +17,10 @@ const Login = () => {
   }
 
   function onClick() {
-    fetchUserByUsername(input)
-      .then((user) => setUser(user))
-      .then(() => navigate('/'));
+    fetchUserByUsername(input).then((user) => {
+      setUser(user);
+      navigate(`/user/${user.userId}/post`);
+    });
   }
 
   function onInputKeyPress(event) {
@@ -30,10 +30,16 @@ const Login = () => {
   }
 
   return (
-    <div className='login-container'>
-      <div className='login-form'><h3 style={{ textAlign: 'center', margin: '10px 0 20px 0' }}>Sign in to BLOGGO</h3>
-        <input value={input} onInput={onInput} onKeyDown={onInputKeyPress} placeholder='Username'
-               style={{ textAlign: 'center' }} />
+    <div className="login-container">
+      <div className="login-form">
+        <h3 style={{ textAlign: 'center', margin: '10px 0 20px 0' }}>Sign in to BLOGGO</h3>
+        <input
+          value={input}
+          onInput={onInput}
+          onKeyDown={onInputKeyPress}
+          placeholder="Username"
+          style={{ textAlign: 'center' }}
+        />
         <button onClick={onClick}>Sign in</button>
       </div>
     </div>
