@@ -4,7 +4,9 @@ html * {
 
 #root {
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
 }
 
 .container {
@@ -133,4 +135,21 @@ h3 {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.footer {
+  width: 100%;
+  padding: 10px;
+  margin: 0;
+  background-color: black;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+
+  a {
+    color: #f5f5f5;
+  }
 }

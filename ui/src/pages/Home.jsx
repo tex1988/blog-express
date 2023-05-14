@@ -5,6 +5,7 @@ import { Navigate } from 'react-router-dom';
 import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 export const EditorContext = createContext(undefined);
 
@@ -59,11 +60,10 @@ const Home = () => {
     };
     savePost(post).then((code) => {
       if (code === 201) {
-        fetchUserPosts(user.userId)
-          .then((posts) => {
-            setPosts(posts);
-            setEditorVisible(false);
-          });
+        fetchUserPosts(user.userId).then((posts) => {
+          setPosts(posts);
+          setEditorVisible(false);
+        });
       } else {
         alert('An error occurred please try again later');
       }
@@ -71,22 +71,24 @@ const Home = () => {
   }
 
   if (user === undefined) {
-    return <Navigate to='/login' />;
+    return <Navigate to="/login" />;
   }
 
   return (
-    <><Navbar />
-      <div className='container'>
-        <div className='flex-column'>
+    <>
+      <Navbar />
+      <div className="container">
+        <div className="flex-column">
           {getPosts()}
           {isEditorVisible && <Editor {...getEditorProps()} />}
           <div
-            className='flex-column'
+            className="flex-column"
             style={{ justifyContent: 'center', alignContent: 'center', flexWrap: 'wrap' }}>
             {!isEditorVisible && <button onClick={onAddPostClick}>Create post</button>}
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };
