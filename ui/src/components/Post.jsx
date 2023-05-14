@@ -2,17 +2,13 @@ import { deletePostById, fetchUserPosts, savePost, updatePost } from '../api/api
 import { useContext, useState } from 'react';
 import { UserContext } from '../App';
 import Editor from './Editor';
+import { getDate } from '../../utils/utils';
 
 const Post = (props) => {
   const { user } = useContext(UserContext);
   const { postId, title, content, userName, userId, created, modified, setPosts } = props;
   const [editMode, setEditMode] = useState(false);
   const isEditable = userId === user.userId;
-
-  function getDate(stringDate) {
-    const date = new Date(stringDate);
-    return date.toLocaleString('en-US');
-  }
 
   function onDeleteClick() {
     deletePostById(postId).then((status) => {

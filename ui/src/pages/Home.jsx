@@ -6,6 +6,7 @@ import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import PostPreview from '../components/PostPreview';
 
 export const EditorContext = createContext(undefined);
 
@@ -44,7 +45,7 @@ const Home = () => {
 
   function getPosts() {
     if (posts.length > 0) {
-      return posts.map((post) => <Post key={`post_${post.postId}`} {...getPostProps(post)} />);
+      return posts.map((post) => <PostPreview key={`post_${post.postId}`} {...getPostProps(post)} />);
     }
   }
 
@@ -78,7 +79,7 @@ const Home = () => {
     <>
       <Navbar />
       <div className="container">
-        <div className="flex-column">
+        <div className="flex-column"  style={{width: '100%'}}>
           {getPosts()}
           {isEditorVisible && <Editor {...getEditorProps()} />}
           <div
