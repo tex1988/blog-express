@@ -16,20 +16,21 @@ const Post = () => {
 
   useEffect(() => {
     fetchPostById(postId)
-      .then(post => setPost(post))
-  }, [])
+      .then(post => setPost(post));
+  }, []);
 
-  useEffect(()=> {}, [post])
+  useEffect(() => {
+  }, [post]);
 
   function getEditable() {
-    if(!user) return false;
-    return Number(userId) === Number(user.userId)
+    if (!user) return false;
+    return Number(userId) === Number(user.userId);
   }
 
   function onDeleteClick() {
     deletePostById(postId).then((status) => {
       if (status === 200) {
-        navigate(`user/${userId}/post`)
+        navigate(`user/${userId}/post`);
       } else {
         alert('An error occurred please try again later');
       }
@@ -75,17 +76,17 @@ const Post = () => {
           Edited {getDate(modified)}
         </div>
       )}
-      {isEditable && (
-        <div className="flex-row-left">
-          <button onClick={() => setEditMode(true)}>Edit</button>
-          <button onClick={onDeleteClick}>Delete</button>
-        </div>
-      )}
+      <div className="flex-row-left">
+        {isEditable && <button onClick={() => setEditMode(true)}>Edit</button>}
+        {isEditable && <button onClick={onDeleteClick}>Delete</button>}
+        {(user && user?.userId !== Number(userId)) && <button>Left a comment</button>}
+      </div>
     </>
   );
 
   return (
-    <div className="flex-column" style={{width: '100%'}}>{editMode ? <Editor {...getEditorProps()} /> : postElement}</div>
+    <div className='flex-column' style={{ width: '100%' }}>{editMode ?
+      <Editor {...getEditorProps()} /> : postElement}</div>
   );
 };
 
