@@ -8,15 +8,11 @@ const Login = () => {
   const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
-  function onLogin() {
-    fetchUser(1).then((json) => setUser(json));
-  }
-
   function onInput(event) {
     setInput(event.target.value);
   }
 
-  function onClick() {
+  function onSignIn() {
     fetchUserByUsername(input).then((user) => {
       setUser(user);
       navigate(`/user/${user.userId}/post`);
@@ -25,14 +21,14 @@ const Login = () => {
 
   function onInputKeyPress(event) {
     if (event.key === 'Enter') {
-      onClick();
+      onSignIn();
     }
   }
 
   return (
     <div className="login-container">
       <div className="login-form">
-        <h3 style={{ textAlign: 'center', margin: '10px 0 20px 0' }}>Sign in to BLOGGO</h3>
+        <h3 style={{ textAlign: 'center', margin: '10px 0 20px 0' }}>Sign in to Blog-express</h3>
         <input
           value={input}
           onInput={onInput}
@@ -40,7 +36,7 @@ const Login = () => {
           placeholder="Username"
           style={{ textAlign: 'center' }}
         />
-        <button onClick={onClick}>Sign in</button>
+        <button onClick={onSignIn}>Sign in</button>
       </div>
     </div>
   );

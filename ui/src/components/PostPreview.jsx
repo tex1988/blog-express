@@ -2,7 +2,7 @@ import { getDate } from '../../utils/utils';
 import { useNavigate } from 'react-router-dom';
 
 const PostPreview = (props) => {
-  const { postId, title, content, userName, userId, created, modified } = props;
+  const { postId, title, content, userName, userId, created, modified, commentsCount } = props;
   const contentPreview = getContentPreview();
   const navigate = useNavigate();
 
@@ -15,21 +15,23 @@ const PostPreview = (props) => {
   }
 
   function navigateToPost() {
-    navigate(`/user/${userId}/post/${postId}`)
+    navigate(`/user/${userId}/post/${postId}`);
   }
 
   return (
-    <div className='flex-column'>
-      <h3 onClick={navigateToPost} style={{cursor: 'pointer'}}>{title}</h3>
+    <div className="flex-column">
+      <h3 onClick={navigateToPost} style={{ cursor: 'pointer' }}>
+        {title}
+      </h3>
       <div className="post-info">
         Posted by {userName}, {getDate(created)}
       </div>
       <div className="content">{contentPreview}</div>
-      {modified && (
-        <div className="post-info" style={{ textAlign: 'right' }}>
-          Edited {getDate(modified)}
-        </div>
-      )}
+
+      <div className="post-info" style={{ textAlign: 'right' }}>
+        <div>Comments: {commentsCount}</div>
+        {modified && <div>Edited {getDate(modified)}</div>}
+      </div>
     </div>
   );
 };

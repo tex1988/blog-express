@@ -12,7 +12,9 @@ class PostRepository {
     return this.#prisma.post.findMany({
       include: {
         user: true,
-        comments: true,
+        _count: {
+          select: { comments: true },
+        },
       },
     });
   }
@@ -22,6 +24,9 @@ class PostRepository {
       where: {
         userId: Number(id),
       },
+      orderBy: {
+        postId: 'asc',
+      },
     });
   }
 
@@ -29,6 +34,10 @@ class PostRepository {
     return this.#prisma.post.findFirst({
       where: {
         postId: Number(id),
+      },
+      include: {
+        user: true,
+        comments: true,
       },
     });
   }

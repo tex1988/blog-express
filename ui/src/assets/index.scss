@@ -76,6 +76,9 @@ h3 {
 }
 
 .post-info {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
   font-size: 13px;
   color: grey;
   margin: 5px;

@@ -9,7 +9,7 @@ const Navbar = () => {
   return (
     <nav id="topnav">
       <Link id="logo" className="nav-link" to='/'>
-        BLOGGO
+        Blog-express
       </Link>
       <Link className="nav-link" to='/'>
         All posts

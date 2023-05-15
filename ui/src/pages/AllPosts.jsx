@@ -26,7 +26,7 @@ const AllPosts = () => {
       content: post.content,
       created: post.created,
       modified: post.modified,
-      setPosts: (value) => setPosts(value),
+      commentsCount: post._count.comments
     };
   }
 
