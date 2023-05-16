@@ -27,6 +27,7 @@ const MyPosts = () => {
       content: post.content,
       created: post.created,
       modified: post.modified,
+      commentsCount: post._count.comments,
       setPosts: (value) => setPosts(value),
     };
   }

@@ -23,12 +23,12 @@ const PostPreview = (props) => {
       <h3 onClick={navigateToPost} style={{ cursor: 'pointer' }}>
         {title}
       </h3>
-      <div className="post-info">
+      <div className="info">
         Posted by {userName}, {getDate(created)}
       </div>
       <div className="content">{contentPreview}</div>
 
-      <div className="post-info" style={{ textAlign: 'right' }}>
+      <div className="info" style={{ textAlign: 'right' }}>
         <div>Comments: {commentsCount}</div>
         {modified && <div>Edited {getDate(modified)}</div>}
       </div>

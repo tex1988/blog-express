@@ -25,6 +25,17 @@ class CommentRepository {
       where: {
         postId: Number(id),
       },
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+      orderBy: {
+        created: 'desc',
+      },
     });
   }
 
@@ -32,6 +43,17 @@ class CommentRepository {
     return this.#prisma.comment.findFirst({
       where: {
         commentId: Number(id),
+      },
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+      orderBy: {
+        created: 'desc',
       },
     });
   }

@@ -1,31 +1,26 @@
-import { deletePostById, fetchPostById, fetchUserPosts, savePost, updatePost } from '../api/api';
+import { deletePostById, fetchPostById, updatePost } from '../api/api';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../App';
 import Editor from '../components/Editor';
-import { getDate } from '../../utils/utils';
+import { getDate, isTheSameUser } from '../../utils/utils';
 import { useNavigate, useParams } from 'react-router-dom';
+import Comments from '../components/Comments';
 
 const Post = () => {
-  const { user } = useContext(UserContext);
+  const { user: loggedInUser } = useContext(UserContext);
   const { userId, postId } = useParams();
   const [post, setPost] = useState({});
-  const { title, content, firstName, lastName, created, modified } = post;
+  const { title, content, created, modified, user, _count } = post;
   const [editMode, setEditMode] = useState(false);
-  const isEditable = getEditable();
+  const isEditable = isTheSameUser(loggedInUser, userId);
+  const [showComments, setShowComments] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchPostById(postId)
-      .then(post => setPost(post));
+    fetchPostById(postId).then((post) => setPost(post));
   }, []);
 
-  useEffect(() => {
-  }, [post]);
-
-  function getEditable() {
-    if (!user) return false;
-    return Number(userId) === Number(user.userId);
-  }
+  useEffect(() => {}, [post]);
 
   function onDeleteClick() {
     deletePostById(postId).then((status) => {
@@ -48,7 +43,7 @@ const Post = () => {
 
   function onPostEdit(title, content) {
     const post = {
-      userId: user.userId,
+      userId: loggedInUser.userId,
       title: title,
       content: content,
     };
@@ -67,26 +62,33 @@ const Post = () => {
   const postElement = (
     <>
       <h3>{title}</h3>
-      <div className="post-info">
-        Posted by {firstName} {lastName}, {getDate(created)}
+      <div className="info">
+        Posted by {user?.firstName} {user?.lastName}, {getDate(created)}
       </div>
       <div className="content">{content}</div>
-      {modified && (
-        <div className="post-info" style={{ textAlign: 'right' }}>
-          Edited {getDate(modified)}
+      <div className="info" style={{ textAlign: 'right' }}>
+        <div
+          onClick={() => setShowComments(!showComments)}
+          style={{ cursor: 'pointer', textDecoration: 'underline' }}>
+          Comments: {_count?.comments}
         </div>
-      )}
+        {modified && <div>Edited {getDate(modified)}</div>}
+      </div>
       <div className="flex-row-left">
         {isEditable && <button onClick={() => setEditMode(true)}>Edit</button>}
         {isEditable && <button onClick={onDeleteClick}>Delete</button>}
-        {(user && user?.userId !== Number(userId)) && <button>Left a comment</button>}
+      </div>
+      {showComments && <Comments />}
+      <div className="flex-row-center">
+        {loggedInUser && loggedInUser?.userId !== Number(userId) && <button>Left a comment</button>}
       </div>
     </>
   );
 
   return (
-    <div className='flex-column' style={{ width: '100%' }}>{editMode ?
-      <Editor {...getEditorProps()} /> : postElement}</div>
+    <div className="flex-column" style={{ width: '100%' }}>
+      {editMode ? <Editor {...getEditorProps()} /> : postElement}
+    </div>
   );
 };
 

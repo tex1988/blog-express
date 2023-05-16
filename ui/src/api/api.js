@@ -56,3 +56,16 @@ export async function deletePostById(postId) {
     method: 'DELETE',
   }).then(res => res.status)
 }
+
+export async function fetchCommentsByPostId(postId) {
+  const url = `${BASE_URL}/post/${postId}/comment`
+  return fetch(url)
+    .then((resp) => resp.json());
+}
+
+export async function deleteCommentById(commentId) {
+  const url = `${BASE_URL}/comment/${commentId}`
+  return fetch(url, {
+    method: 'DELETE',
+  }).then(res => res.status)
+}

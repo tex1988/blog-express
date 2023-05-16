@@ -24,6 +24,11 @@ class PostRepository {
       where: {
         userId: Number(id),
       },
+      include: {
+        _count: {
+          select: { comments: true },
+        },
+      },
       orderBy: {
         postId: 'asc',
       },
@@ -37,7 +42,9 @@ class PostRepository {
       },
       include: {
         user: true,
-        comments: true,
+        _count: {
+          select: { comments: true },
+        },
       },
     });
   }
