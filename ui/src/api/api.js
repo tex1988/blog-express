@@ -10,17 +10,6 @@ export function fetchPostById(id) {
   return fetch(url).then((resp) => resp.json());
 }
 
-export async function fetchUserPosts(userId) {
-  const url = `${BASE_URL}/user/${userId}/post`;
-  return await fetch(url).then((resp) => resp.json());
-}
-
-export async function fetchUser(userId) {
-  const url = `${BASE_URL}/user/${userId}`;
-  return fetch(url)
-    .then((resp) => resp.json());
-}
-
 export async function fetchUserByUsername(username) {
   const url = `${BASE_URL}/user?username=${username}`;
   return fetch(url)
@@ -55,6 +44,17 @@ export async function deletePostById(postId) {
   return fetch(url, {
     method: 'DELETE',
   }).then(res => res.status)
+}
+
+export async function fetchUserPosts(userId) {
+  const url = `${BASE_URL}/user/${userId}/post`;
+  return await fetch(url).then((resp) => resp.json());
+}
+
+export async function fetchUser(userId) {
+  const url = `${BASE_URL}/user/${userId}`;
+  return fetch(url)
+    .then((resp) => resp.json());
 }
 
 export async function fetchCommentById(commentId) {
