@@ -28,7 +28,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <div className="login-form">
-        <h3 style={{ textAlign: 'center', margin: '10px 0 20px 0' }}>Sign in to Blog-express</h3>
+        <h3 style={{ textAlign: 'center', margin: '10px 0 20px 0' }}>Sign in to BLOG-EXPRESS</h3>
         <input
           value={input}
           onInput={onInput}
