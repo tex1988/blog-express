@@ -75,7 +75,7 @@ class CommentRepository {
         commentId: Number(id),
       },
       data: {
-        content: comment.title,
+        content: comment.content,
         modified: new Date(),
       },
     });

@@ -34,14 +34,15 @@ const Post = () => {
 
   function getEditorProps() {
     return {
-      onSave: (title, content) => onPostEdit(title, content),
+      onSave: (content, title) => onPostEdit(content, title),
       onCancel: () => setEditMode(false),
       initialTitle: title,
       initialContent: content,
+      useTitle: true,
     };
   }
 
-  function onPostEdit(title, content) {
+  function onPostEdit(content, title) {
     const post = {
       userId: loggedInUser.userId,
       title: title,

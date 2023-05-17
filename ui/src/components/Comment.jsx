@@ -2,10 +2,12 @@ import { getDate, isTheSameUser } from '../../utils/utils';
 import { useContext, useState } from 'react';
 import { UserContext } from '../App';
 import { deleteCommentById } from '../api/api';
+import Editor from './Editor';
 
 const Comment = (props) => {
   const { user } = useContext(UserContext);
-  const { commentId, content, created, modified, userId, userName, onUpdate } = props;
+  const { commentId, content, created, modified, userId, userName, onUpdate, onCommentUpdate } =
+    props;
   const [editMode, setEditMode] = useState(false);
   const isEditable = isTheSameUser(user, userId);
 
@@ -19,8 +21,26 @@ const Comment = (props) => {
     });
   }
 
-  return (
-    <div className="flex-column" style={{marginTop: '5px'}}>
+  function getEditorProps() {
+    return {
+      onSave: (content) => onCommentEdit(content),
+      onCancel: () => setEditMode(false),
+      initialContent: content,
+      useTitle: false,
+    };
+  }
+
+  function onCommentEdit(content) {
+    const comment = {
+      commentId: commentId,
+      content: content,
+    }
+    onCommentUpdate(comment);
+    setEditMode(false);
+  }
+
+  const postElement = (
+    <>
       <div className="info">
         {userName}, {getDate(created)}
       </div>
@@ -30,6 +50,12 @@ const Comment = (props) => {
         {isEditable && <button onClick={() => setEditMode(true)}>Edit</button>}
         {isEditable && <button onClick={onDeleteClick}>Delete</button>}
       </div>
+    </>
+  );
+
+  return (
+    <div className="flex-column" style={{ marginTop: '5px' }}>
+      {editMode ? <Editor {...getEditorProps()} /> : postElement}
     </div>
   );
 };

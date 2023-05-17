@@ -16,6 +16,9 @@ class PostRepository {
           select: { comments: true },
         },
       },
+      orderBy: {
+        postId: 'asc',
+      },
     });
   }
 
