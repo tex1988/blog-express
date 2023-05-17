@@ -1,7 +1,14 @@
 import { useState } from 'react';
 
 const Editor = (props) => {
-  const { onSave, onCancel, initialTitle, initialContent, useTitle } = props;
+  const {
+    onSave,
+    onCancel,
+    initialTitle = '',
+    initialContent = '',
+    useTitle = false,
+    useCancel = true,
+  } = props;
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
 
@@ -13,13 +20,19 @@ const Editor = (props) => {
     setContent(event.target.value);
   }
 
+  function onSaveCLick() {
+    onSave(content, title);
+    setContent('');
+    setTitle('');
+  }
+
   return (
     <div className="flex-column">
       {useTitle && <input onChange={onHeaderInput} value={title} placeholder="Post title" />}
       <textarea className="text-area" value={content} onChange={onContentInput}></textarea>
       <div className="flex-row-center" style={buttonsRowStyle}>
-        <button onClick={() => onSave(content, title)}>Save</button>
-        <button onClick={onCancel}>Cancel</button>
+        <button onClick={onSaveCLick}>Save</button>
+        {useCancel && <button onClick={onCancel}>Cancel</button>}
       </div>
     </div>
   );

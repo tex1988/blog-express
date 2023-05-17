@@ -66,6 +66,14 @@ class CommentRepository {
         postId: Number(comment.postId),
         created: new Date(),
       },
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
     });
   }
 

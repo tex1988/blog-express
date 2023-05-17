@@ -69,8 +69,9 @@ const Post = () => {
       <div className="content">{content}</div>
       <div className="info" style={{ textAlign: 'right' }}>
         <div
-          onClick={() => setShowComments(!showComments)}
-          style={{ cursor: 'pointer', textDecoration: 'underline' }}>
+          onClick={_count?.comments < 1 ? () => {} : () => setShowComments(!showComments)}
+          style={{ cursor: 'pointer', textDecoration: 'underline' }}
+          aria-disabled={_count?.comments < 1}>
           Comments: {_count?.comments}
         </div>
         {modified && <div>Edited {getDate(modified)}</div>}
@@ -80,9 +81,6 @@ const Post = () => {
         {isEditable && <button onClick={onDeleteClick}>Delete</button>}
       </div>
       {showComments && <Comments />}
-      <div className="flex-row-center">
-        {loggedInUser && loggedInUser?.userId !== Number(userId) && <button>Left a comment</button>}
-      </div>
     </>
   );
 
