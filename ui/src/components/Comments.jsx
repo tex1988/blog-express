@@ -12,7 +12,7 @@ import { UserContext } from '../App';
 import { isTheSameUser } from '../../utils/utils';
 import Editor from './Editor';
 
-const Comments = () => {
+const Comments = (showComments, setCommentCount) => {
   const { user } = useContext(UserContext);
   const { userId, postId } = useParams();
   const [comments, setComments] = useState([]);
@@ -75,6 +75,7 @@ const Comments = () => {
   function updateCommentsAfterSave(comment) {
     const updatedComments = [comment, ...comments];
     setComments(updatedComments);
+    setCommentCount(prev => prev++)
   }
 
   function updateCommentsAfterUpdate(comment) {
@@ -89,6 +90,7 @@ const Comments = () => {
     const updatedComments = [...comments];
     updatedComments.splice(index, 1);
     setComments(updatedComments);
+    setCommentCount(prev => prev--)
   }
 
   function getEditorProps() {
@@ -107,7 +109,7 @@ const Comments = () => {
 
   return (
     <div className="flex-column" style={{ marginTop: '5px' }}>
-      {getComments()}
+      {showComments && getComments()}
       <div className="flex-column" style={{ width: '100%' }}>
         {isCanLeftAComment && <Editor {...getEditorProps()} />}
       </div>

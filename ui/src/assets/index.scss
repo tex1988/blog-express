@@ -62,7 +62,7 @@ input {
 }
 
 textarea {
-  font-size: 13px;
+  font-size: 14px;
   padding: 5px;
   margin: 5px;
   width: 100%;
@@ -86,6 +86,11 @@ h3 {
 
 .content {
   margin: 5px;
+}
+
+.underlined-button {
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .login-container {

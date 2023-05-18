@@ -11,16 +11,19 @@ const Post = () => {
   const { userId, postId } = useParams();
   const [post, setPost] = useState({});
   const { title, content, created, modified, user, _count } = post;
+  const [commentCount, setCommentCount] = useState(_count?.comments);
   const [editMode, setEditMode] = useState(false);
   const isEditable = isTheSameUser(loggedInUser, userId);
   const [showComments, setShowComments] = useState(false);
+  const hasComments = commentCount > 0;
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchPostById(postId).then((post) => setPost(post));
   }, []);
 
-  useEffect(() => {}, [post]);
+  useEffect(() => {
+  }, [post]);
 
   function onDeleteClick() {
     deletePostById(postId).then((status) => {
@@ -63,29 +66,31 @@ const Post = () => {
   const postElement = (
     <>
       <h3>{title}</h3>
-      <div className="info">
-        Posted by {user?.firstName} {user?.lastName}, {getDate(created)}
+      <div className='info'>
+        <span>Posted by {user?.firstName} {user?.lastName}, {getDate(created)}</span>
+        {modified && <span>Edited {getDate(modified)}</span>}
       </div>
-      <div className="content">{content}</div>
-      <div className="info" style={{ textAlign: 'right' }}>
+      <div className='content'>{content}</div>
+      <div className='info' style={{ textAlign: 'right' }}>
         <div
-          onClick={_count?.comments < 1 ? () => {} : () => setShowComments(!showComments)}
-          style={{ cursor: 'pointer', textDecoration: 'underline' }}
-          aria-disabled={_count?.comments < 1}>
-          Comments: {_count?.comments}
+          className={hasComments ? 'underlined-button' : ''}
+          onClick={hasComments ? () => {
+          } : () => setShowComments(!showComments)}
+          aria-disabled={hasComments}
+          style={hasComments ? {} : { textDecoration: 'none' }}>
+          Comments: {commentCount}
         </div>
-        {modified && <div>Edited {getDate(modified)}</div>}
+        {isEditable && (<div className='flex-row-left'>
+          <div className='underlined-button' onClick={() => setEditMode(true)}>Edit</div>
+          <div className='underlined-button' onClick={onDeleteClick} style={{ marginLeft: '5px' }}>Delete</div>
+        </div>)}
       </div>
-      <div className="flex-row-left">
-        {isEditable && <button onClick={() => setEditMode(true)}>Edit</button>}
-        {isEditable && <button onClick={onDeleteClick}>Delete</button>}
-      </div>
-      {showComments && <Comments />}
+      <Comments {...{ showComments, setCommentCount }} />
     </>
   );
 
   return (
-    <div className="flex-column" style={{ width: '100%' }}>
+    <div className='flex-column' style={{ width: '100%' }}>
       {editMode ? <Editor {...getEditorProps()} /> : postElement}
     </div>
   );
