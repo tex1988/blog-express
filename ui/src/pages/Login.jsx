@@ -13,10 +13,15 @@ const Login = () => {
   }
 
   function onSignIn() {
-    fetchUserByUsername(input).then((user) => {
-      setUser(user);
-      navigate(`/user/${user.userId}/post`);
-    });
+    fetchUserByUsername(input)
+      .then((user) => {
+        if (user) {
+          setUser(user);
+          navigate(`/user/${user.userId}/post`);
+        } else {
+          alert(`User '${input}' not found`);
+        }
+      });
   }
 
   function onInputKeyPress(event) {
@@ -26,20 +31,31 @@ const Login = () => {
   }
 
   return (
-    <div className="login-container">
-      <div className="login-form">
-        <h3 style={{ textAlign: 'center', margin: '10px 0 20px 0' }}>Sign in to BLOG-EXPRESS</h3>
+    <div className='login-container'>
+      <div className='login-form'>
+        <h3 style={styles.header}>Sign in to BLOG-EXPRESS</h3>
         <input
           value={input}
           onInput={onInput}
           onKeyDown={onInputKeyPress}
-          placeholder="Username"
-          style={{ textAlign: 'center' }}
+          placeholder='Username'
+          style={styles.userInput}
         />
-        <button onClick={onSignIn}>Sign in</button>
+        <button onClick={onSignIn} disabled={input.length < 1}>Sign in</button>
       </div>
     </div>
   );
+};
+
+const styles = {
+  header: {
+    textAlign: 'center',
+    margin: '10px 0 20px 0',
+    color: 'white',
+  },
+  userInput: {
+    textAlign: 'center',
+  },
 };
 
 export default Login;

@@ -110,7 +110,7 @@ const Comments = (props) => {
   }
 
   return (
-    <div className='flex-column' style={{ marginTop: '5px' }}>
+    <div className='flex-column' style={{ marginTop: '5px', marginLeft: '20px' }}>
       {showComments && getComments()}
       <div className='flex-column' style={{ width: '100%' }}>
         {isCanLeftAComment && <Editor {...getEditorProps()} />}
