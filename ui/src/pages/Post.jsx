@@ -11,7 +11,7 @@ const Post = () => {
   const { userId, postId } = useParams();
   const [post, setPost] = useState({});
   const { title, content, created, modified, user, _count } = post;
-  const [commentCount, setCommentCount] = useState(_count?.comments);
+  const [commentCount, setCommentCount] = useState(0);
   const [editMode, setEditMode] = useState(false);
   const isEditable = isTheSameUser(loggedInUser, userId);
   const [showComments, setShowComments] = useState(false);
@@ -23,6 +23,7 @@ const Post = () => {
   }, []);
 
   useEffect(() => {
+    setCommentCount(_count ? _count.comments : 0);
   }, [post]);
 
   function onDeleteClick() {
@@ -74,8 +75,7 @@ const Post = () => {
       <div className='info' style={{ textAlign: 'right' }}>
         <div
           className={hasComments ? 'underlined-button' : ''}
-          onClick={hasComments ? () => {
-          } : () => setShowComments(!showComments)}
+          onClick={hasComments ? () => setShowComments(!showComments) : () => {}}
           aria-disabled={hasComments}
           style={hasComments ? {} : { textDecoration: 'none' }}>
           Comments: {commentCount}
@@ -85,7 +85,7 @@ const Post = () => {
           <div className='underlined-button' onClick={onDeleteClick} style={{ marginLeft: '5px' }}>Delete</div>
         </div>)}
       </div>
-      <Comments {...{ showComments, setCommentCount }} />
+      <Comments {...{ showComments, setCommentCount, setShowComments }} />
     </>
   );
 
