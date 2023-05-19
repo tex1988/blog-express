@@ -100,6 +100,7 @@ const Comments = (props) => {
       onSave: (content) => onCommentSave(content),
       useTitle: false,
       useCancel: false,
+      saveLabel: 'Post a comment'
     };
   }
 

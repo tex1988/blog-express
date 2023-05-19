@@ -4,6 +4,7 @@ const Editor = (props) => {
   const {
     onSave,
     onCancel,
+    saveLabel = 'Save',
     initialTitle = '',
     initialContent = '',
     useTitle = false,
@@ -31,7 +32,7 @@ const Editor = (props) => {
       {useTitle && <input onChange={onHeaderInput} value={title} placeholder="Post title" />}
       <textarea className="text-area" value={content} onChange={onContentInput}></textarea>
       <div className="flex-row-center" style={buttonsRowStyle}>
-        <button onClick={onSaveCLick}>Save</button>
+        <button onClick={onSaveCLick}>{saveLabel}</button>
         {useCancel && <button onClick={onCancel}>Cancel</button>}
       </div>
     </div>
