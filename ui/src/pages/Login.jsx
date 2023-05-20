@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { UserContext } from '../App';
 import { fetchUser, fetchUserByUsername } from '../api/api';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [input, setInput] = useState('');
@@ -34,14 +34,16 @@ const Login = () => {
     <div className='login-container'>
       <div className='login-form'>
         <h3 style={styles.header}>Sign in to BLOG-EXPRESS</h3>
+        <p>Username</p>
         <input
           value={input}
           onInput={onInput}
           onKeyDown={onInputKeyPress}
-          placeholder='Username'
           style={styles.userInput}
         />
         <button onClick={onSignIn} disabled={input.length < 1}>Sign in</button>
+        <span>New to BLOG-EXPRESS?</span>
+        <Link to='/'>Create an account</Link>
       </div>
     </div>
   );
@@ -56,6 +58,12 @@ const styles = {
   userInput: {
     textAlign: 'center',
   },
+
+  button: {
+    backgroundColor: 'green',
+    color: 'white',
+    border: 'green',
+  }
 };
 
 export default Login;

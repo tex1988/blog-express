@@ -113,6 +113,54 @@ h3 {
   box-shadow: 0 0 40px grey;
   background-color: #393939;
   padding: 30px;
+
+  span {
+    color: white;
+    font-size: 12px;
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  a {
+    color: royalblue;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  p {
+    color: white;
+    margin: 0 0 0 5px;
+    font-size: 12px;
+  }
+
+  input {
+    background-color: #282828;
+    border: 1px solid #4b4b4b;
+    border-radius: 3px;
+    color: white;
+    transition: border-color 200ms linear;
+
+    &:focus {
+      border: 1px solid royalblue;
+      outline: none;
+    }
+  }
+
+  button {
+    background-color: #02a102;
+    color: white;
+    border-color: transparent;
+    border-radius: 3px;
+    transition: background-color 200ms linear;
+
+    &:disabled {
+      background-color: #016401;
+    }
+
+    &:hover:enabled {
+      background-color: #02c202;
+    }
+  }
 }
 
 .footer {
