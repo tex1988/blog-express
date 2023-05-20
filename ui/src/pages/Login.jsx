@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { UserContext } from '../App';
-import { fetchUser, fetchUserByUsername } from '../api/api';
+import { fetchUserByUsername } from '../api/api';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
@@ -31,39 +31,24 @@ const Login = () => {
   }
 
   return (
-    <div className='login-container'>
+    <div className='login-wrapper'>
+      <h3>Sign in</h3>
+      <h3>to BLOG-EXPRESS</h3>
       <div className='login-form'>
-        <h3 style={styles.header}>Sign in to BLOG-EXPRESS</h3>
         <p>Username</p>
         <input
           value={input}
           onInput={onInput}
           onKeyDown={onInputKeyPress}
-          style={styles.userInput}
         />
         <button onClick={onSignIn} disabled={input.length < 1}>Sign in</button>
+      </div>
+      <div className='sign-info'>
         <span>New to BLOG-EXPRESS?</span>
         <Link to='/'>Create an account</Link>
       </div>
     </div>
   );
-};
-
-const styles = {
-  header: {
-    textAlign: 'center',
-    margin: '10px 0 20px 0',
-    color: 'white',
-  },
-  userInput: {
-    textAlign: 'center',
-  },
-
-  button: {
-    backgroundColor: 'green',
-    color: 'white',
-    border: 'green',
-  }
 };
 
 export default Login;

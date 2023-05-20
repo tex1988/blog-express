@@ -2,6 +2,10 @@ html * {
   font-family: Arial, Geneva, Helvetica, sans-serif;
 }
 
+body {
+  margin: 0;
+}
+
 #root {
   display: flex;
   flex-direction: column;
@@ -10,6 +14,7 @@ html * {
 }
 
 .container {
+  margin-top: 55px;
   display: flex;
   flex-direction: row;
   background: #ebebeb;
@@ -93,26 +98,39 @@ h3 {
   text-decoration: underline;
 }
 
-.login-container {
+html, body, #root, .login-wrapper {
+  height: 100%;
+}
+
+.login-wrapper {
   display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
   justify-content: center;
   align-content: center;
+  background-color: #282828;
   width: 100%;
   height: 100%;
-  margin: 200px;
+
+  h3 {
+    text-align: center;
+    margin: 0 0 5px 0;
+    color: white;
+  }
 }
 
 .login-form {
+  width: 250px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
   justify-content: center;
   align-content: center;
-  border: 1px solid grey;
+  border: 1px solid #4b4b4b;
   border-radius: 5px;
-  box-shadow: 0 0 40px grey;
-  background-color: #393939;
-  padding: 30px;
+  background-color: #2f2f2f;
+  padding: 20px;
+  margin-top: 20px;
 
   span {
     color: white;
@@ -134,11 +152,13 @@ h3 {
   }
 
   input {
+    width: 90%;
     background-color: #282828;
     border: 1px solid #4b4b4b;
     border-radius: 3px;
     color: white;
     transition: border-color 200ms linear;
+    padding: 7px 15px 7px 15px;
 
     &:focus {
       border: 1px solid royalblue;
@@ -147,19 +167,33 @@ h3 {
   }
 
   button {
-    background-color: #02a102;
+    background-color: #238636;
     color: white;
-    border-color: transparent;
+    border: 1px transparent;
     border-radius: 3px;
-    transition: background-color 200ms linear;
+    box-sizing: border-box;
+    transition: all 200ms linear;
+    padding: 7px;
+    margin-top: 15px;
 
     &:disabled {
       background-color: #016401;
+      color: #b2b2b2;
     }
 
     &:hover:enabled {
-      background-color: #02c202;
+      background-color: #26a641;
     }
+  }
+}
+
+.sign-info {
+  @extend .login-form;
+  margin-top: 10px;
+  background-color: transparent;
+
+  span {
+    margin-top: 0;
   }
 }
 
