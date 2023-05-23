@@ -38,6 +38,7 @@ const MyPosts = () => {
       onCancel: () => setEditorVisible(false),
       initialTitle: '',
       initialContent: '',
+      useTitle: true
     };
   }
 

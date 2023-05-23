@@ -31,11 +31,11 @@ const Login = () => {
   }
 
   return (
-    <div className='login-wrapper'>
+    <div className='centered-wrapper'>
       <h3>Sign in</h3>
       <h3>to BLOG-EXPRESS</h3>
-      <div className='login-form'>
-        <span className='input-label'>Username</span>
+      <div className='form' style={{width: '250px'}}>
+        <label className='input-label'>Username</label>
         <input
           value={input}
           onInput={onInput}
@@ -43,9 +43,9 @@ const Login = () => {
         />
         <button onClick={onSignIn} disabled={input.length < 1}>Sign in</button>
       </div>
-      <div className='sign-info'>
+      <div className='form-info'>
         <span>New to BLOG-EXPRESS?</span>
-        <Link to='/'>Create an account</Link>
+        <Link to='/register'>Create an account</Link>
       </div>
     </div>
   );

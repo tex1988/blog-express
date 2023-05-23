@@ -5,6 +5,7 @@ import MainLayout from './layouts/MainLayout';
 import MyPosts from './pages/MyPosts';
 import Post from './pages/Post';
 import AllPosts from './pages/AllPosts';
+import Register from './pages/Register';
 
 export const UserContext = createContext(undefined);
 
@@ -33,6 +34,7 @@ function App() {
           </UserContext.Provider>
         }
       />
+      <Route path='/register' element={<Register />} />
     </Routes>
   );
 }
