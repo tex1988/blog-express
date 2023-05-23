@@ -12,16 +12,16 @@ const Login = () => {
     setInput(event.target.value);
   }
 
-  function onSignIn() {
-    fetchUserByUsername(input)
-      .then((user) => {
-        if (user) {
-          setUser(user);
-          navigate(`/user/${user.userId}/post`);
-        } else {
-          alert(`User '${input}' not found`);
-        }
-      });
+  function onSignIn(event) {
+    event.preventDefault();
+    fetchUserByUsername(input).then((user) => {
+      if (user) {
+        setUser(user);
+        navigate(`/user/${user.userId}/post`);
+      } else {
+        alert(`User '${input}' not found`);
+      }
+    });
   }
 
   function onInputKeyPress(event) {
@@ -31,21 +31,27 @@ const Login = () => {
   }
 
   return (
-    <div className='centered-wrapper'>
+    <div className="centered-wrapper">
       <h3>Sign in</h3>
       <h3>to BLOG-EXPRESS</h3>
-      <div className='form' style={{width: '250px'}}>
-        <label className='input-label'>Username</label>
+      <form className="form" onSubmit={onSignIn} style={{ width: '250px' }}>
+        <label className="input-label" htmlFor="username">
+          Username
+        </label>
         <input
+          id="username"
+          autoComplete="nickname"
           value={input}
           onInput={onInput}
           onKeyDown={onInputKeyPress}
         />
-        <button onClick={onSignIn} disabled={input.length < 1}>Sign in</button>
-      </div>
-      <div className='form-info'>
+        <button type="submit" disabled={input.length < 1}>
+          Sign in
+        </button>
+      </form>
+      <div className="form-info">
         <span>New to BLOG-EXPRESS?</span>
-        <Link to='/register'>Create an account</Link>
+        <Link to="/register">Create an account</Link>
       </div>
     </div>
   );

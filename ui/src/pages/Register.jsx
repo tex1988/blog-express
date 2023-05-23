@@ -7,24 +7,24 @@ export const Register = () => {
       <form className='form'>
         <div className='flex-row-center'>
           <div className='flex-column'>
-            <label className='input-label'>First name</label>
-            <input/>
+            <label className='input-label' htmlFor='fname'>First name</label>
+            <input id='fname' autoComplete='given-name'/>
           </div>
           <div className='flex-column'>
-            <label className='input-label'>Last name</label>
-            <input/>
-          </div>
-        </div>
-        <div className='flex-row-center mt-10'>
-          <div className='flex-column'>
-            <label className='input-label'>Username</label>
-            <input/>
+            <label className='input-label' htmlFor='lname'>Last name</label>
+            <input id='lname' autoComplete='family-name'/>
           </div>
         </div>
         <div className='flex-row-center mt-10'>
           <div className='flex-column'>
-            <label className='input-label'>Email</label>
-            <input/>
+            <label className='input-label' htmlFor='username'>Username</label>
+            <input id='username' autoComplete='nickname'/>
+          </div>
+        </div>
+        <div className='flex-row-center mt-10'>
+          <div className='flex-column'>
+            <label className='input-label' htmlFor='email'>Email</label>
+            <input id='email' autoComplete='email'/>
           </div>
         </div>
         <button type='submit'>Register</button>
