@@ -34,7 +34,7 @@ const MyPosts = () => {
 
   function getEditorProps() {
     return {
-      onSave: (title, content) => onPostSave(title, content),
+      onSave: (title, content) => onPostSave(content, title),
       onCancel: () => setEditorVisible(false),
       initialTitle: '',
       initialContent: '',
