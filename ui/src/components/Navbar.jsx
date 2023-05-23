@@ -10,9 +10,9 @@ const Navbar = () => {
   return (
     <nav style={styles.topNav}>
       <div style={styles.navLinkGroup}>
-        <Link style={{ ...styles.navLink, ...styles.logo }} to='/'>
-        BLOG-EXPRESS
-      </Link>
+        <Link style={{ ...styles.navLink, ...styles.logo }} to="/">
+          BLOG-EXPRESS
+        </Link>
         {user && (
           <Link
             style={
@@ -25,13 +25,15 @@ const Navbar = () => {
           </Link>
         )}
         <Link
-          style={location.pathname === '/' ? { ...styles.navLink, ...styles.active } : styles.navLink}
-          to='/'>
+          style={
+            location.pathname === '/' ? { ...styles.navLink, ...styles.active } : styles.navLink
+          }
+          to="/">
           All posts
         </Link>
       </div>
       <Link
-        style={styles.navLink}
+        style={{ ...styles.navLink, ...styles.userInfo }}
         to={user ? `/user/${user.userId}/post` : '/login'}>
         {userName}
       </Link>
@@ -76,6 +78,10 @@ const styles = {
     backgroundColor: 'RoyalBlue',
     fontWeight: 'bold',
     fontSize: '13px',
+  },
+
+  userInfo: {
+    textDecoration: 'underline',
   },
 };
 
