@@ -9,17 +9,13 @@ body {
 #root {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
 .container {
-  margin-top: 55px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   background: #ebebeb;
-  padding: 60px 10px 10px 10px;
-
   width: 1536px;
 
   @media (max-width: 803px) {
@@ -93,7 +89,7 @@ h3 {
   margin: 5px;
 }
 
-.underlined-button {
+.action-link {
   cursor: pointer;
   text-decoration: underline;
 }
@@ -145,10 +141,11 @@ html, body, #root, .login-wrapper {
     text-align: center;
   }
 
-  p {
+  .input-label {
     color: white;
-    margin: 0 0 0 5px;
+    margin: 0 0 0 7px;
     font-size: 12px;
+    text-align: left;
   }
 
   input {
@@ -198,7 +195,7 @@ html, body, #root, .login-wrapper {
 }
 
 .footer {
-  width: 100%;
+  //width: 100%;
   padding: 10px;
   margin: 0;
   background-color: black;

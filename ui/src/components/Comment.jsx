@@ -29,18 +29,25 @@ const Comment = (props) => {
 
   const commentElement = (
     <>
-      <div className="info">
+      <span className="info">
         {userName}, {getDate(created)}
-      </div>
-      <div className="content">{content}</div>
-      <div className='info'>
-        {modified && <div>Edited {getDate(modified)}</div>}
-        {isEditable && (<div className='flex-row-left'>
-          <div className='underlined-button' onClick={() => setEditMode(true)}>Edit</div>
-          <div className='underlined-button' onClick={() => onCommentDelete(commentId)}
-               style={{ marginLeft: '5px' }}>Delete
+      </span>
+      <span className="content">{content}</span>
+      <div className="info">
+        {modified && <span>Edited {getDate(modified)}</span>}
+        {isEditable && (
+          <div className="flex-row-left">
+            <span className="action-link" onClick={() => setEditMode(true)}>
+              Edit
+            </span>
+            <span
+              className="action-link"
+              onClick={() => onCommentDelete(commentId)}
+              style={{ marginLeft: '5px' }}>
+              Delete
+            </span>
           </div>
-        </div>)}
+        )}
       </div>
     </>
   );

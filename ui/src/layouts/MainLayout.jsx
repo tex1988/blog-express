@@ -3,14 +3,13 @@ import { Outlet } from 'react-router-dom';
 import Footer from '../components/Footer';
 
 const MainLayout = () => {
-
   return (
     <>
-      <Navbar />
-      <div className='container'>
-          <Outlet />
+      <div className="container">
+        <Navbar />
+        <Outlet />
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 };

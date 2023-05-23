@@ -71,18 +71,18 @@ const Post = () => {
         <span>Posted by {user?.firstName} {user?.lastName}, {getDate(created)}</span>
         {modified && <span>Edited {getDate(modified)}</span>}
       </div>
-      <div className='content'>{content}</div>
+      <span className='content'>{content}</span>
       <div className='info' style={{ textAlign: 'right' }}>
-        <div
-          className={hasComments ? 'underlined-button' : ''}
+        <span
+          className={hasComments ? 'action-link' : ''}
           onClick={hasComments ? () => setShowComments(!showComments) : () => {}}
           aria-disabled={hasComments}
           style={hasComments ? {} : { textDecoration: 'none' }}>
           Comments: {commentCount}
-        </div>
+        </span>
         {isEditable && (<div className='flex-row-left'>
-          <div className='underlined-button' onClick={() => setEditMode(true)}>Edit</div>
-          <div className='underlined-button' onClick={onDeleteClick} style={{ marginLeft: '5px' }}>Delete</div>
+          <span className='action-link' onClick={() => setEditMode(true)}>Edit</span>
+          <span className='action-link' onClick={onDeleteClick} style={{ marginLeft: '5px' }}>Delete</span>
         </div>)}
       </div>
       <Comments {...{ showComments, setCommentCount, setShowComments }} />

@@ -8,29 +8,30 @@ const Navbar = () => {
   const location = useLocation();
 
   return (
-    <nav id="topnav" style={styles.topNav}>
-      <Link id="logo" style={{ ...styles.navLink, ...styles.logo }} to="/">
+    <nav style={styles.topNav}>
+      <div style={styles.navLinkGroup}>
+        <Link style={{ ...styles.navLink, ...styles.logo }} to='/'>
         BLOG-EXPRESS
       </Link>
-      {user && (
+        {user && (
+          <Link
+            style={
+              location.pathname === `/user/${user.userId}/post`
+                ? { ...styles.navLink, ...styles.active }
+                : styles.navLink
+            }
+            to={`/user/${user.userId}/post`}>
+            My posts
+          </Link>
+        )}
         <Link
-          style={
-            location.pathname === `/user/${user.userId}/post`
-              ? { ...styles.navLink, ...styles.active }
-              : styles.navLink
-          }
-          to={`/user/${user.userId}/post`}>
-          My posts
+          style={location.pathname === '/' ? { ...styles.navLink, ...styles.active } : styles.navLink}
+          to='/'>
+          All posts
         </Link>
-      )}
+      </div>
       <Link
-        style={location.pathname === '/' ? { ...styles.navLink, ...styles.active } : styles.navLink}
-        to="/">
-        All posts
-      </Link>
-      <Link
-        id="about"
-        style={{ ...styles.navLink, ...styles.about }}
+        style={styles.navLink}
         to={user ? `/user/${user.userId}/post` : '/login'}>
         {userName}
       </Link>
@@ -41,23 +42,28 @@ const Navbar = () => {
 const styles = {
   topNav: {
     width: '100%',
-    position: 'fixed',
-    top: 0,
-    left: 0,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     backgroundColor: 'Black',
     fontFamily: 'Arial, sans-serif',
     fontSize: '15px',
+    height: '55px',
   },
 
   navLink: {
     display: 'inline-block',
     width: '100px',
-    height: '55px',
+    height: '100%',
     color: 'white',
     textAlign: 'center',
     lineHeight: '55px',
     textDecoration: 'none',
     boxSizing: 'border-box',
+  },
+
+  navLinkGroup: {
+    display: 'flex',
   },
 
   active: {
@@ -66,15 +72,10 @@ const styles = {
 
   logo: {
     width: '120px',
+    height: '100%',
     backgroundColor: 'RoyalBlue',
     fontWeight: 'bold',
     fontSize: '13px',
-  },
-
-  about: {
-    position: 'absolute',
-    top: '0',
-    right: '0',
   },
 };
 

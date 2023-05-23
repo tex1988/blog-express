@@ -35,7 +35,7 @@ const Login = () => {
       <h3>Sign in</h3>
       <h3>to BLOG-EXPRESS</h3>
       <div className='login-form'>
-        <p>Username</p>
+        <span className='input-label'>Username</span>
         <input
           value={input}
           onInput={onInput}

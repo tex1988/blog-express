@@ -31,7 +31,7 @@ const AllPosts = () => {
   }
 
   return (
-    <div className="flex-column" style={{ width: '100%' }}>
+    <div className="flex-column" style={{ padding: '10px' }}>
       {getPosts()}
     </div>
   );
