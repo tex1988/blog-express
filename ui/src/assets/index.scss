@@ -31,18 +31,25 @@ body {
   }
 }
 
-.flex-row-center {
+.flex-row {
   display: flex;
   flex-direction: row;
-  justify-content: center;
   flex-basis: 100%;
 }
 
+.flex-row-center {
+  @extend .flex-row;
+  justify-content: center;
+}
+
 .flex-row-left {
-  display: flex;
-  flex-direction: row;
+  @extend .flex-row;
   justify-content: flex-start;
-  flex-basis: 100%;
+}
+
+.flex-row-right {
+  @extend .flex-row;
+  justify-content: flex-end;
 }
 
 .flex-column {
@@ -174,6 +181,10 @@ html, body, #root, .centered-wrapper {
     &:hover:enabled {
       background-color: #26a641;
     }
+
+    &:active {
+      background-color: #016401;
+    }
   }
 }
 
@@ -205,4 +216,8 @@ html, body, #root, .centered-wrapper {
 
 .mt-10 {
   margin-top: 10px;
+}
+
+.fb-auto {
+  flex-basis: auto;
 }

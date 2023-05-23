@@ -31,7 +31,7 @@ const Editor = (props) => {
     <div className="flex-column">
       {useTitle && <input onChange={onHeaderInput} value={title} placeholder="Post title" />}
       <textarea className="text-area" value={content} onChange={onContentInput}></textarea>
-      <div className="flex-row-center" style={buttonsRowStyle}>
+      <div className="flex-row-center fb-auto" style={buttonsRowStyle}>
         <button onClick={onSaveCLick}>{saveLabel}</button>
         {useCancel && <button onClick={onCancel}>Cancel</button>}
       </div>

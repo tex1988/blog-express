@@ -81,7 +81,7 @@ const Post = () => {
           Comments: {commentCount}
         </span>
         {isEditable && (
-          <div className="flex-row-left">
+          <div className="flex-row-left" style={{flexBasis: 'auto'}}>
             <span className="action-link" onClick={() => setEditMode(true)}>Edit</span>
             <span className="action-link" onClick={onDeleteClick} style={{ marginLeft: '5px' }}>Delete</span>
           </div>

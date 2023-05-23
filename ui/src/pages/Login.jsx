@@ -26,7 +26,7 @@ const Login = () => {
 
   function onInputKeyPress(event) {
     if (event.key === 'Enter') {
-      onSignIn();
+      onSignIn(event);
     }
   }
 

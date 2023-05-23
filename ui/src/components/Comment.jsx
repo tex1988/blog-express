@@ -34,9 +34,9 @@ const Comment = (props) => {
         {modified && <span>Edited {getDate(modified)}</span>}
       </div>
       <span className="content">{content}</span>
-      <div className="info" style={{ flexDirection: 'row-reverse' }}>
+      <div className="info">
         {isEditable && (
-          <div className="flex-row-left">
+          <div className="flex-row-right">
             <span className="action-link" onClick={() => setEditMode(true)}>
               Edit
             </span>
