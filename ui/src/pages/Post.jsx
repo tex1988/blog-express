@@ -67,12 +67,12 @@ const Post = () => {
   const postElement = (
     <>
       <h3>{title}</h3>
-      <div className='info'>
+      <div className="info">
         <span>Posted by {user?.firstName} {user?.lastName}, {getDate(created)}</span>
         {modified && <span>Edited {getDate(modified)}</span>}
       </div>
-      <span className='content'>{content}</span>
-      <div className='info' style={{ textAlign: 'right' }}>
+      <span className="content">{content}</span>
+      <div className="info" style={{ textAlign: 'right' }}>
         <span
           className={hasComments ? 'action-link' : ''}
           onClick={hasComments ? () => setShowComments(!showComments) : () => {}}
@@ -80,17 +80,19 @@ const Post = () => {
           style={hasComments ? {} : { textDecoration: 'none' }}>
           Comments: {commentCount}
         </span>
-        {isEditable && (<div className='flex-row-left'>
-          <span className='action-link' onClick={() => setEditMode(true)}>Edit</span>
-          <span className='action-link' onClick={onDeleteClick} style={{ marginLeft: '5px' }}>Delete</span>
-        </div>)}
+        {isEditable && (
+          <div className="flex-row-left">
+            <span className="action-link" onClick={() => setEditMode(true)}>Edit</span>
+            <span className="action-link" onClick={onDeleteClick} style={{ marginLeft: '5px' }}>Delete</span>
+          </div>
+        )}
       </div>
       <Comments {...{ showComments, setCommentCount, setShowComments }} />
     </>
   );
 
   return (
-    <div className='flex-column' style={{ width: '100%' }}>
+    <div className='flex-column' style={{ padding: '10px' }}>
       {editMode ? <Editor {...getEditorProps()} /> : postElement}
     </div>
   );

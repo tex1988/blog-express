@@ -29,12 +29,12 @@ const Comment = (props) => {
 
   const commentElement = (
     <>
-      <span className="info">
-        {userName}, {getDate(created)}
-      </span>
-      <span className="content">{content}</span>
       <div className="info">
+        <span>{userName}, {getDate(created)}</span>
         {modified && <span>Edited {getDate(modified)}</span>}
+      </div>
+      <span className="content">{content}</span>
+      <div className="info" style={{ flexDirection: 'row-reverse' }}>
         {isEditable && (
           <div className="flex-row-left">
             <span className="action-link" onClick={() => setEditMode(true)}>
@@ -53,7 +53,7 @@ const Comment = (props) => {
   );
 
   return (
-    <div className="flex-column" style={{ marginTop: '5px' }}>
+    <div className="flex-column">
       {editMode ? <Editor {...getEditorProps()} /> : commentElement}
     </div>
   );
