@@ -1,17 +1,24 @@
 import { Route, Routes } from 'react-router-dom';
 import Login from './pages/Login';
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import MainLayout from './layouts/MainLayout';
 import MyPosts from './pages/MyPosts';
 import Post from './pages/Post';
 import AllPosts from './pages/AllPosts';
 import Register from './pages/Register';
+import { getFromLocalStorage } from '../utils/utils';
 
 export const UserContext = createContext(undefined);
+export const USER_KEY = 'user';
 
 function App() {
   const [user, setUser] = useState(undefined);
   const value = { user: user, setUser: setUser };
+
+  useEffect(() => {
+    const user = getFromLocalStorage(USER_KEY);
+    setUser(user);
+  })
 
   return (
     <Routes>
