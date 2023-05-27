@@ -18,7 +18,7 @@ function App() {
   useEffect(() => {
     const user = getFromLocalStorage(USER_KEY);
     setUser(user);
-  })
+  }, [])
 
   return (
     <Routes>

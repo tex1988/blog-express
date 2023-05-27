@@ -1,43 +1,49 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { UserContext } from '../App';
 import { Link, useLocation } from 'react-router-dom';
+import UserMenu from './UserMenu';
 
 const Navbar = () => {
   const { user } = useContext(UserContext);
   const userName = user ? user.username : 'Sign in';
   const location = useLocation();
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   return (
-    <nav style={styles.topNav}>
-      <div style={styles.navLinkGroup}>
-        <Link style={{ ...styles.navLink, ...styles.logo }} to="/">
-          BLOG-EXPRESS
-        </Link>
-        {user && (
+    <>
+      <nav style={styles.topNav}>
+        <div style={styles.navLinkGroup}>
+          <Link style={{ ...styles.navLink, ...styles.logo }} to='/'>
+            BLOG-EXPRESS
+          </Link>
+          {user && (
+            <Link
+              style={
+                location.pathname === `/user/${user.userId}/post`
+                  ? { ...styles.navLink, ...styles.active }
+                  : styles.navLink
+              }
+              to={`/user/${user.userId}/post`}>
+              My posts
+            </Link>
+          )}
           <Link
             style={
-              location.pathname === `/user/${user.userId}/post`
-                ? { ...styles.navLink, ...styles.active }
-                : styles.navLink
+              location.pathname === '/' ? { ...styles.navLink, ...styles.active } : styles.navLink
             }
-            to={`/user/${user.userId}/post`}>
-            My posts
+            to='/'>
+            All posts
           </Link>
-        )}
+        </div>
         <Link
-          style={
-            location.pathname === '/' ? { ...styles.navLink, ...styles.active } : styles.navLink
-          }
-          to="/">
-          All posts
+          onClick={() => setShowUserMenu(!showUserMenu)}
+          style={{ ...styles.navLink, ...styles.userInfo }}
+          to={user ? `/user/${user.userId}/post` : '/login'}>
+          {userName}
+          {showUserMenu && <UserMenu />}
         </Link>
-      </div>
-      <Link
-        style={{ ...styles.navLink, ...styles.userInfo }}
-        to={user ? `/user/${user.userId}/post` : '/login'}>
-        {userName}
-      </Link>
-    </nav>
+      </nav>
+     </>
   );
 };
 
