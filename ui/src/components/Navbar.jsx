@@ -1,6 +1,6 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../App';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import UserMenu from './UserMenu';
 
 const Navbar = () => {
@@ -8,6 +8,15 @@ const Navbar = () => {
   const userName = user ? user.username : 'Sign in';
   const location = useLocation();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const navigate = useNavigate();
+
+  function onUserInfoClick() {
+    if(user) {
+      setShowUserMenu(!showUserMenu)
+    } else {
+      navigate('/login');
+    }
+  }
 
   return (
     <>
@@ -35,13 +44,12 @@ const Navbar = () => {
             All posts
           </Link>
         </div>
-        <Link
-          onClick={() => setShowUserMenu(!showUserMenu)}
-          style={{ ...styles.navLink, ...styles.userInfo }}
-          to={user ? `/user/${user.userId}/post` : '/login'}>
+        <div
+          onClick={onUserInfoClick}
+          style={{ ...styles.navLink, ...styles.userInfo }}>
           {userName}
-          {showUserMenu && <UserMenu />}
-        </Link>
+          {user && <UserMenu showUserMenu={showUserMenu}/>}
+        </div>
       </nav>
      </>
   );
@@ -88,6 +96,7 @@ const styles = {
 
   userInfo: {
     textDecoration: 'underline',
+    cursor: 'pointer'
   },
 };
 

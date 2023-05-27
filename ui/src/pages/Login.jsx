@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { USER_KEY } from '../App';
+import { useContext, useState } from 'react';
+import { USER_KEY, UserContext } from '../App';
 import { fetchUserByUsername } from '../api/api';
 import { Link, useNavigate } from 'react-router-dom';
 import { saveToLocalStorage } from '../../utils/utils';
 
 const Login = () => {
   const [input, setInput] = useState('');
+  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   function onInput(event) {
@@ -17,6 +18,7 @@ const Login = () => {
     fetchUserByUsername(input).then((user) => {
       if (user) {
         saveToLocalStorage(USER_KEY, user);
+        setUser(user);
         navigate(`/user/${user.userId}/post`);
       } else {
         alert(`User '${input}' not found`);
