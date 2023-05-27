@@ -29,7 +29,7 @@ const Post = () => {
   function onDeleteClick() {
     deletePostById(postId).then((status) => {
       if (status === 200) {
-        navigate(`user/${userId}/post`);
+        navigate(`/user/${userId}/post`);
       } else {
         alert('An error occurred please try again later');
       }

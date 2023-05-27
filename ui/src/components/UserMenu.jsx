@@ -17,7 +17,7 @@ const UserMenu = (props) => {
 
   return (
     <div
-      style={showUserMenu ? { ...styles.container, opacity: '1' } : styles.container}>
+      style={showUserMenu ? { ...styles.container, opacity: '1', zIndex: '100' } : styles.container}>
       <div style={styles.menu}>
         <span style={styles.item}>
           Signed in as <b>{username}</b>
@@ -41,6 +41,7 @@ const styles = {
     top: '-10px',
     right: '50px',
     opacity: '0',
+    zIndex: '-1',
     transition: 'all 200ms linear',
   },
 

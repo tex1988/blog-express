@@ -19,7 +19,6 @@ const Navbar = () => {
   }
 
   return (
-    <>
       <nav style={styles.topNav}>
         <div style={styles.navLinkGroup}>
           <Link style={{ ...styles.navLink, ...styles.logo }} to='/'>
@@ -51,7 +50,6 @@ const Navbar = () => {
           {user && <UserMenu showUserMenu={showUserMenu}/>}
         </div>
       </nav>
-     </>
   );
 };
 
@@ -61,17 +59,18 @@ const styles = {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: 'Black',
+    backgroundColor: '#282828',
     fontFamily: 'Arial, sans-serif',
     fontSize: '15px',
     height: '55px',
+    borderBottom: '1px solid #4b4b4b'
   },
 
   navLink: {
     display: 'inline-block',
     width: '100px',
     height: '100%',
-    color: 'white',
+    color: '#f6f6f6',
     textAlign: 'center',
     lineHeight: '55px',
     textDecoration: 'none',
@@ -84,6 +83,7 @@ const styles = {
 
   active: {
     borderBottom: '3px solid RoyalBlue',
+    color: 'white'
   },
 
   logo: {
