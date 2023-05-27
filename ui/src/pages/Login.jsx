@@ -34,26 +34,28 @@ const Login = () => {
 
   return (
     <div className="centered-wrapper">
-      <h3>Sign in</h3>
-      <h3>to BLOG-EXPRESS</h3>
-      <form className="form" onSubmit={onSignIn} style={{ width: '250px' }}>
-        <label className="input-label" htmlFor="username">
-          Username
-        </label>
-        <input
-          id="username"
-          autoComplete="nickname"
-          value={input}
-          onInput={onInput}
-          onKeyDown={onInputKeyPress}
-        />
-        <button type="submit" disabled={input.length < 1}>
-          Sign in
-        </button>
-      </form>
-      <div className="form-info">
-        <span>New to BLOG-EXPRESS?</span>
-        <Link to="/register">Create an account</Link>
+      <div>
+        <h3>Sign in</h3>
+        <h3>to BLOG-EXPRESS</h3>
+        <form className="form" onSubmit={onSignIn} style={{ width: '250px' }}>
+          <label className="input-label" htmlFor="username">
+            Username
+          </label>
+          <input
+            id="username"
+            autoComplete="nickname"
+            value={input}
+            onInput={onInput}
+            onKeyDown={onInputKeyPress}
+          />
+          <button type="submit" disabled={input.length < 1}>
+            Sign in
+          </button>
+        </form>
+        <div className="form-info">
+          <span>New to BLOG-EXPRESS?</span>
+          <Link to="/register">Create an account</Link>
+        </div>
       </div>
     </div>
   );
