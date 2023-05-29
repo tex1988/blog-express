@@ -51,6 +51,7 @@ const PaginationWrapper = styled.div`
       background-color: royalblue;
       border-color: royalblue;
       color: white;
+      pointer-events: none;
     }
   }
 
