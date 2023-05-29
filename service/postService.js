@@ -2,6 +2,7 @@ const UserService = require('./userService');
 const PostRepository = require('../repository/postRepository');
 const CommentRepository = require('../repository/commentRepository');
 const { isNumber } = require('../validator/validator');
+const { getPageParams } = require('./utils');
 
 class PostService {
   #userService = new UserService();
@@ -15,8 +16,12 @@ class PostService {
     return PostService._instance;
   }
 
-  async findAll() {
-    return this.#postRepository.findAll();
+  async findAll(params) {
+    const count = await this.#postRepository.getCount();
+    const pageParams = getPageParams(params, count);
+    const pageCount = Math.ceil(count / pageParams.take);
+    const posts = await this.#postRepository.findAll(pageParams);
+    return { posts, pageCount };
   }
 
   async findById(id) {

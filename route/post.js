@@ -5,7 +5,8 @@ const postService = new PostService();
 
 router.get('/', async (req, res, next) => {
   try {
-    const posts = await postService.findAll();
+    const { page, size } = req.query;
+    const posts = await postService.findAll(req.query);
     res.json(posts);
   } catch (e) {
     next(e);

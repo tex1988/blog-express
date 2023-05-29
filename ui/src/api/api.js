@@ -2,7 +2,15 @@ const BASE_URL = `${location.protocol}//${window.location.host}`;
 
 export function fetchPosts() {
   const url = `${BASE_URL}/post`;
-  return fetch(url).then((res) => res.json());
+  return fetch(url)
+    .then((res) => res.json())
+    .then((json) => json.posts);
+}
+
+export function fetchPostsByPage(size, page) {
+  const url = `${BASE_URL}/post?page=${page}&size=${size}`;
+  return fetch(url)
+    .then((res) => res.json());
 }
 
 export function fetchPostById(id) {
