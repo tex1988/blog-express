@@ -7,6 +7,7 @@ import Post from './pages/Post';
 import AllPosts from './pages/AllPosts';
 import Register from './pages/Register';
 import { getFromLocalStorage } from '../utils/utils';
+import Error from './pages/Error';
 
 export const UserContext = createContext(undefined);
 export const USER_KEY = 'user';
@@ -27,6 +28,7 @@ function App() {
         <Route path="/" element={<AllPosts />} />
         <Route path="/user/:userId/post" element={<MyPosts />} />
         <Route path={'/user/:userId/post/:postId'} element={<Post />} />
+        <Route path="/error" element={<Error />} />
       </Route>
       <Route
         path="/login"

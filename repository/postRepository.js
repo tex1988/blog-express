@@ -17,7 +17,7 @@ class PostRepository {
         },
       },
       orderBy: {
-        postId: 'asc',
+        created: 'desc',
       },
     });
   }
@@ -33,7 +33,7 @@ class PostRepository {
         },
       },
       orderBy: {
-        postId: 'asc',
+        created: 'desc',
       },
     });
   }
@@ -59,6 +59,12 @@ class PostRepository {
         content: post.content,
         created: new Date(),
         userId: Number(post.userId),
+      },
+      include: {
+        user: true,
+        _count: {
+          select: { comments: true },
+        },
       },
     });
   }

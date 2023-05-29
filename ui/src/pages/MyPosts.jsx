@@ -38,7 +38,7 @@ const MyPosts = () => {
       onCancel: () => setEditorVisible(false),
       initialTitle: '',
       initialContent: '',
-      useTitle: true
+      useTitle: true,
     };
   }
 
@@ -60,16 +60,19 @@ const MyPosts = () => {
       title: title,
       content: content,
     };
-    savePost(post).then((code) => {
-      if (code === 201) {
-        fetchUserPosts(user.userId).then((posts) => {
-          setPosts(posts);
-          setEditorVisible(false);
-        });
+    savePost(post).then(async (res) => {
+      if (res.status === 201) {
+        updatePostsAfterSave(await res.json());
       } else {
         alert('An error occurred please try again later');
       }
     });
+  }
+
+  function updatePostsAfterSave(post) {
+    const updatedPosts = [post, ...posts];
+    setPosts(updatedPosts);
+    setEditorVisible(false);
   }
 
   if (user === undefined) {

@@ -25,7 +25,7 @@ export async function savePost(post) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(post),
-  }).then((res) => res.status);
+  });
 }
 
 export async function updatePost(id, post) {
