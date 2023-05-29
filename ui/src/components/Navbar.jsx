@@ -59,6 +59,7 @@ const Navbar = () => {
           </Link>
         </div>
         <div
+          ref={ref}
           onClick={toggleMenuVisibility}
           style={{ ...styles.navLink, ...styles.userInfo }}>
           {userName}
