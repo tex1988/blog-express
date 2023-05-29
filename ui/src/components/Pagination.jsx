@@ -27,9 +27,9 @@ const PaginationWrapper = styled.div`
 
     a {
       text-align: center;
-      width: 32px;
-      height: 32px;
-      line-height: 32px;
+      width: 28px;
+      height: 28px;
+      line-height: 28px;
       border: 1px solid #4b4b4b;
       border-radius: 5px;
       margin-right: 10px;
