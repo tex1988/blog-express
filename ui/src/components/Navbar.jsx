@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { UserContext } from '../App';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import UserMenu from './UserMenu';
@@ -8,15 +8,30 @@ const Navbar = () => {
   const userName = user ? user.username : 'Sign in';
   const location = useLocation();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const ref = useRef(null);
   const navigate = useNavigate();
 
-  function onUserInfoClick() {
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside, true);
+
+    return () =>
+      document.removeEventListener("click", handleClickOutside, true);
+  }, []);
+
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current?.contains(event.target)) {
+      setShowUserMenu(false)
+    }
+  };
+
+  const toggleMenuVisibility = () => {
     if(user) {
       setShowUserMenu(!showUserMenu)
     } else {
       navigate('/login');
     }
-  }
+  };
 
   return (
       <nav style={styles.topNav}>
@@ -44,10 +59,10 @@ const Navbar = () => {
           </Link>
         </div>
         <div
-          onClick={onUserInfoClick}
+          onClick={toggleMenuVisibility}
           style={{ ...styles.navLink, ...styles.userInfo }}>
           {userName}
-          {user && <UserMenu showUserMenu={showUserMenu}/>}
+          {showUserMenu && <UserMenu showUserMenu={showUserMenu}/>}
         </div>
       </nav>
   );
