@@ -1,17 +1,12 @@
+import styled from 'styled-components';
+
 const Error = () => {
+  return <ErrorWrapper>Oops...Error. Please try again later</ErrorWrapper>;
+};
 
-  return (
-    <div style={styles.errorContainer}>
-      Oops...Error. Please try again later
-    </div>
-  )
-}
+const ErrorWrapper = styled.div`
+  font-size: 15px;
+  padding: 40px;
+`;
 
-const styles = {
-  errorContainer: {
-    fontSize: '15px',
-    padding: '40px'
-  }
-}
-
-export default Error
+export default Error;
