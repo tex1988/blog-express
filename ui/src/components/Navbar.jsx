@@ -1,7 +1,8 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { UserContext } from '../App';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import UserMenu from './UserMenu';
+import styled from 'styled-components';
 
 const Navbar = () => {
   const { user } = useContext(UserContext);
@@ -32,86 +33,69 @@ const Navbar = () => {
   };
 
   return (
-    <nav style={styles.topNav}>
-      <div style={styles.navLinkGroup}>
-        <Link style={{ ...styles.navLink, ...styles.logo }} to="/">
+    <Nav currentLocation={location.pathname}>
+      <div className="nav-group">
+        <NavLink className="logo" to="/">
           BLOG-EXPRESS
-        </Link>
-        {user && (
-          <Link
-            style={
-              location.pathname === `/user/${user.userId}/post`
-                ? { ...styles.navLink, ...styles.active }
-                : styles.navLink
-            }
-            to={`/user/${user.userId}/post`}>
-            My posts
-          </Link>
-        )}
-        <Link
-          style={
-            location.pathname === '/' ? { ...styles.navLink, ...styles.active } : styles.navLink
-          }
-          to="/">
-          All posts
-        </Link>
+        </NavLink>
+        {user && <NavLink to={`/user/${user.userId}/post`}>My posts</NavLink>}
+        <NavLink to="/">All posts</NavLink>
       </div>
-      <div
-        ref={ref}
-        onClick={toggleMenuVisibility}
-        style={{ ...styles.navLink, ...styles.userInfo }}>
+      <div className="user-info" ref={ref} onClick={toggleMenuVisibility}>
         {userName}
         <UserMenu showUserMenu={showUserMenu} />
       </div>
-    </nav>
+    </Nav>
   );
 };
 
-const styles = {
-  topNav: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#282828',
-    fontFamily: 'Arial, sans-serif',
-    fontSize: '15px',
-    height: '55px',
-    borderBottom: '1px solid #4b4b4b',
-  },
+const Nav = styled.nav`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #282828;
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  height: 55px;
+  border-bottom: 1px solid #4b4b4b;
 
-  navLink: {
-    display: 'inline-block',
-    width: '100px',
-    height: '100%',
-    color: '#f6f6f6',
-    textAlign: 'center',
-    lineHeight: '55px',
-    textDecoration: 'none',
-    boxSizing: 'border-box',
-  },
+  a {
+    display: inline-block;
+    width: 100px;
+    height: 100%;
+    color: #f6f6f6;
+    text-align: center;
+    line-height: 55px;
+    text-decoration: none;
+    box-sizing: border-box;
+  }
 
-  navLinkGroup: {
-    display: 'flex',
-  },
+  .active {
+    border-bottom: 3px solid RoyalBlue;
+    color: white;
+  }
 
-  active: {
-    borderBottom: '3px solid RoyalBlue',
-    color: 'white',
-  },
+  .logo {
+    width: 120px;
+    height: 100%;
+    background-color: RoyalBlue;
+    font-weight: bold;
+    font-size: 13px;
+  }
 
-  logo: {
-    width: '120px',
-    height: '100%',
-    backgroundColor: 'RoyalBlue',
-    fontWeight: 'bold',
-    fontSize: '13px',
-  },
+  .nav-group {
+    display: flex;
+  }
 
-  userInfo: {
-    textDecoration: 'underline',
-    cursor: 'pointer',
-  },
-};
+  .user-info {
+    display: inline-block;
+    width: 100px;
+    line-height: 55px;
+    text-align: center;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+`;
 
 export default Navbar;
