@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { USER_KEY, UserContext } from '../App';
 import { useNavigate } from 'react-router-dom';
 import { removeFromLocalStorage } from '../../utils/utils';
+import styled, { css } from 'styled-components';
 
 const UserMenu = (props) => {
   const { showUserMenu } = props;
@@ -16,58 +17,60 @@ const UserMenu = (props) => {
   }
 
   return (
-    <div
-      style={showUserMenu ? { ...styles.container, opacity: '1', zIndex: '1' } : styles.container}>
-      <div style={styles.menu}>
-        <span style={styles.item}>
-          Signed in as <b>{username}</b>
-        </span>
-        <span style={styles.item}>{`${firstName} ${lastName}`}</span>
-        <span style={styles.item}>{email}</span>
-        <span style={{ ...styles.item, ...styles.action }}>Edit</span>
-        <span onClick={logOut} style={{ ...styles.item, ...styles.action, borderBottom: 'none' }}>
-          Sign out
-        </span>
+    <UserMenuWrapper showUserMenu={showUserMenu}>
+      <div>
+        <span>Signed in as <b>{username}</b></span>
+        <span>{`${firstName} ${lastName}`}</span>
+        <span>{email}</span>
+        <span className="action">Edit</span>
+        <span className="action no-border" onClick={logOut}>Sign out</span>
       </div>
-    </div>
+    </UserMenuWrapper>
   );
 };
 
-const styles = {
-  container: {
-    position: 'relative',
-    lineHeight: 'normal',
-    cursor: 'auto',
-    top: '-10px',
-    right: '50px',
-    opacity: '0',
-    zIndex: '-1',
-    transition: 'all 200ms linear',
-  },
+const UserMenuWrapper = styled.div`
+  position: relative;
+  line-height: normal;
+  cursor: auto;
+  top: -10px;
+  right: 50px;
+  opacity: 0;
+  z-index: -1;
+  transition: all 200ms linear;
 
-  menu: {
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'absolute',
-    backgroundColor: '#2f2f2f',
-    border: '1px solid #4b4b4b',
-    borderRadius: '5px',
-    padding: '0 10px 0 10px',
-  },
+  ${props => props.showUserMenu && css`
+    opacity: 1;
+    z-index: 1;
+  `}
 
-  item: {
-    color: 'white',
-    fontSize: '13px',
-    paddingBottom: '10px',
-    marginTop: '10px',
-    textAlign: 'left',
-    borderBottom: '1px solid #4b4b4b',
-  },
+  div {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    background-color: #2f2f2f;
+    border: 1px solid #4b4b4b;
+    border-radius: 5px;
+    padding: 0 10px 0 10px;
+  }
 
-  action: {
-    textDecoration: 'underline',
-    cursor: 'pointer',
-  },
-};
+  span {
+    color: white;
+    font-size: 13px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    text-align: left;
+    border-bottom: 1px solid #4b4b4b;
+  }
+
+  .action {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .no-border {
+    border-bottom: none;
+  }
+`;
 
 export default UserMenu;

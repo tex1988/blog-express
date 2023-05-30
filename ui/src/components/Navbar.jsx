@@ -18,26 +18,24 @@ const Navbar = () => {
     return () => document.removeEventListener('click', handleClickOutside, true);
   }, []);
 
-  const handleClickOutside = (event) => {
+  function handleClickOutside(event) {
     if (ref.current && !ref.current?.contains(event.target)) {
       setShowUserMenu(false);
     }
-  };
+  }
 
-  const toggleMenuVisibility = () => {
+  function toggleMenuVisibility() {
     if (user) {
       setShowUserMenu(!showUserMenu);
     } else {
       navigate('/login');
     }
-  };
+  }
 
   return (
     <Nav currentLocation={location.pathname}>
       <div className="nav-group">
-        <NavLink className="logo" to="/">
-          BLOG-EXPRESS
-        </NavLink>
+        <NavLink className="logo" to="/">BLOG-EXPRESS</NavLink>
         {user && <NavLink to={`/user/${user.userId}/post`}>My posts</NavLink>}
         <NavLink to="/">All posts</NavLink>
       </div>
