@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchPosts, fetchPostsByPage } from '../api/api';
+import { fetchPostsByPage } from '../api/api';
 import PostPreview from '../components/PostPreview';
 import Pagination from '../components/Pagination';
 
@@ -10,19 +10,18 @@ const AllPosts = () => {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    fetchPage(page);
+    fetchPostPage(page);
   }, []);
 
   useEffect(() => {
-    fetchPage(page)
-  }, [page])
+    fetchPostPage(page);
+  }, [page]);
 
-  function fetchPage(pageNumber) {
-    fetchPostsByPage(PAGE_SIZE, pageNumber)
-      .then(res => {
-        setPageCount(res.pageCount);
-        setPosts(res.posts);
-      })
+  function fetchPostPage(pageNumber) {
+    fetchPostsByPage(PAGE_SIZE, pageNumber).then((res) => {
+      setPageCount(res.pageCount);
+      setPosts(res.posts);
+    });
   }
 
   function getPosts() {
