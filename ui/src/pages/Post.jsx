@@ -19,7 +19,13 @@ const Post = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchPostById(postId).then((post) => setPost(post));
+    fetchPostById(postId).then((post) => {
+      if (post.status) {
+        navigate('/error');
+      } else {
+        setPost(post);
+      }
+    });
   }, []);
 
   useEffect(() => {
@@ -68,7 +74,9 @@ const Post = () => {
     <>
       <h3>{title}</h3>
       <div className="info">
-        <span>Posted by {user?.firstName} {user?.lastName}, {getDate(created)}</span>
+        <span>
+          Posted by {user?.firstName} {user?.lastName}, {getDate(created)}
+        </span>
         {modified && <span>Edited {getDate(modified)}</span>}
       </div>
       <span className="content">{content}</span>
@@ -81,9 +89,13 @@ const Post = () => {
           Comments: {commentCount}
         </span>
         {isEditable && (
-          <div className="flex-row-left" style={{flexBasis: 'auto'}}>
-            <span className="action-link" onClick={() => setEditMode(true)}>Edit</span>
-            <span className="action-link" onClick={onDeleteClick} style={{ marginLeft: '5px' }}>Delete</span>
+          <div className="flex-row-left" style={{ flexBasis: 'auto' }}>
+            <span className="action-link" onClick={() => setEditMode(true)}>
+              Edit
+            </span>
+            <span className="action-link" onClick={onDeleteClick} style={{ marginLeft: '5px' }}>
+              Delete
+            </span>
           </div>
         )}
       </div>
@@ -92,7 +104,7 @@ const Post = () => {
   );
 
   return (
-    <div className='flex-column' style={{ padding: '10px' }}>
+    <div className="flex-column" style={{ padding: '10px' }}>
       {editMode ? <Editor {...getEditorProps()} /> : postElement}
     </div>
   );

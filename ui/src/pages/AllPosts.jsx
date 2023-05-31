@@ -2,25 +2,27 @@ import { useEffect, useState } from 'react';
 import { fetchPostsByPage } from '../api/api';
 import PostPreview from '../components/PostPreview';
 import Pagination from '../components/Pagination';
+import { useNavigate } from 'react-router-dom';
 
 const AllPosts = () => {
   const PAGE_SIZE = 5;
   const [posts, setPosts] = useState([]);
   const [pageCount, setPageCount] = useState(1);
   const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    fetchPostPage(page);
-  }, []);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchPostPage(page);
   }, [page]);
 
   function fetchPostPage(pageNumber) {
-    fetchPostsByPage(PAGE_SIZE, pageNumber).then((res) => {
-      setPageCount(res.pageCount);
-      setPosts(res.posts);
+    fetchPostsByPage(PAGE_SIZE, pageNumber).then((posts) => {
+      if (posts.status) {
+        navigate('/error');
+      } else {
+        setPageCount(posts.pageCount);
+        setPosts(posts.posts);
+      }
     });
   }
 

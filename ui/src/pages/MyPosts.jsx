@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { fetchUserPosts, savePost } from '../api/api';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import PostPreview from '../components/PostPreview';
@@ -11,10 +11,17 @@ const MyPosts = () => {
   const { user } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
   const [isEditorVisible, setEditorVisible] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user !== undefined) {
-      fetchUserPosts(user.userId).then((json) => setPosts(json));
+      fetchUserPosts(user.userId).then((posts) => {
+        if (posts.status) {
+          navigate('/error');
+        } else {
+          setPosts(posts);
+        }
+      });
     }
   }, []);
 
