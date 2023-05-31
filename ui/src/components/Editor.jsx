@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import styled from 'styled-components';
 
 const Editor = (props) => {
   const {
@@ -31,18 +32,21 @@ const Editor = (props) => {
     <div className="flex-column">
       {useTitle && <input onChange={onHeaderInput} value={title} placeholder="Post title" />}
       <textarea className="text-area" value={content} onChange={onContentInput}></textarea>
-      <div className="flex-row-center fb-auto" style={buttonsRowStyle}>
+      <ButtonRow>
         <button onClick={onSaveCLick}>{saveLabel}</button>
         {useCancel && <button onClick={onCancel}>Cancel</button>}
-      </div>
+      </ButtonRow>
     </div>
   );
 };
 
-const buttonsRowStyle = {
-  justifyContent: 'center',
-  alignContent: 'center',
-  flexWrap: 'wrap',
-};
+const ButtonRow = styled.div.attrs({
+  className: 'flex-row-center'
+})`
+  flex-basis: auto;
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+`
 
 export default Editor;
