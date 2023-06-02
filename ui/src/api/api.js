@@ -1,15 +1,8 @@
 const BASE_URL = `${location.protocol}//${window.location.host}`;
 
-export function fetchPosts() {
-  const url = `${BASE_URL}/post`;
-  return fetch(url)
-    .then((res) => res.json())
-    .then((json) => json.posts);
-}
-
 export function fetchPostsByPage(size, page) {
-  const url = `${BASE_URL}/post?page=${page}&size=${size}`;
-  return fetch(url)
+  const url = `${BASE_URL}/post?`;
+  return fetch(url + new URLSearchParams({size, page}))
     .then((res) => res.json());
 }
 
@@ -80,9 +73,9 @@ export async function fetchCommentById(commentId) {
   return fetch(url).then((res) => res.json());
 }
 
-export async function fetchCommentsByPostId(postId) {
-  const url = `${BASE_URL}/post/${postId}/comment`;
-  return fetch(url).then((res) => res.json());
+export async function fetchCommentsByPostId(postId, params) {
+  const url = `${BASE_URL}/post/${postId}/comment?`;
+  return fetch(url + new URLSearchParams(params)).then((res) => res.json());
 }
 
 export async function deleteCommentById(commentId) {
@@ -112,4 +105,14 @@ export async function updateComment(id, comment) {
     },
     body: JSON.stringify(comment),
   }).then((res) => res.status);
+}
+
+function getUrlWithQueryParams(url, params) {
+  let urlWithParams = `${url}?`;
+  params.entries.each((param, index) => {
+    if (index === 0) {
+      urlWithParams = `${urlWithParams}`;
+    } else {
+    }
+  });
 }

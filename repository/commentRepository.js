@@ -20,8 +20,11 @@ class CommentRepository {
     });
   }
 
-  async findAllByPostId(id) {
+  async findAllByPostId(id, params) {
+    const { skip, take } = params;
     return this.#prisma.comment.findMany({
+      skip,
+      take,
       where: {
         postId: Number(id),
       },
@@ -35,6 +38,14 @@ class CommentRepository {
       },
       orderBy: {
         created: 'desc',
+      },
+    });
+  }
+
+  async getCountByPostId(id) {
+    return this.#prisma.comment.count({
+      where: {
+        postId: Number(id),
       },
     });
   }

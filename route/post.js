@@ -5,7 +5,6 @@ const postService = new PostService();
 
 router.get('/', async (req, res, next) => {
   try {
-    const { page, size } = req.query;
     const posts = await postService.findAll(req.query);
     res.json(posts);
   } catch (e) {
@@ -45,7 +44,7 @@ router.put('/:postId', async (req, res, next) => {
 router.get('/:postId/comment', async (req, res, next) => {
   try {
     const { postId } = req.params;
-    const comments = await postService.findAllPostComments(postId);
+    const comments = await postService.findAllPostComments(postId, req.query);
     res.json(comments);
   } catch (e) {
     next(e);

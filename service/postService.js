@@ -44,10 +44,14 @@ class PostService {
     return this.#postRepository.delete(id);
   }
 
-  async findAllPostComments(id) {
+  async findAllPostComments(id, params) {
     isNumber(id);
     await this.#validateIfPostExists(id);
-    return this.#commentRepository.findAllByPostId(id);
+    const count = await this.#commentRepository.getCountByPostId(id);
+    const pageParams = getPageParams(params, count);
+    const pageCount = Math.ceil(count / pageParams.take);
+    const comments = await this.#commentRepository.findAllByPostId(id, pageParams);
+    return { comments, pageCount };
   }
 
   async savePostComment(id, comment) {

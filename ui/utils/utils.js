@@ -19,3 +19,7 @@ export function getFromLocalStorage(key) {
 export function removeFromLocalStorage(key) {
   window.localStorage.removeItem(key);
 }
+
+export function isPageExists(length, size , page) {
+  return Math.ceil(length / size) >= page;
+}

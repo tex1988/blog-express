@@ -1,47 +1,42 @@
 import { useContext, useEffect, useState } from 'react';
-import {
-  deleteCommentById,
-  fetchCommentById,
-  fetchCommentsByPostId,
-  savePostComment,
-  updateComment,
-} from '../api/api';
+import { deleteCommentById, fetchCommentsByPostId, savePostComment, updateComment } from '../api/api';
 import { useParams } from 'react-router-dom';
 import Comment from './Comment';
 import { UserContext } from '../App';
-import { isTheSameUser } from '../../utils/utils';
+import { isPageExists, isTheSameUser } from '../../utils/utils';
 import Editor from './Editor';
+import styled from 'styled-components';
+import Pagination from './Pagination';
 
 const Comments = (props) => {
+  const PAGE_SIZE = 3;
   const { user } = useContext(UserContext);
-  const { showComments, setCommentCount, setShowComments } = props;
+  const { showComments, commentCount, setCommentCount, setShowComments } = props;
   const { userId, postId } = useParams();
   const [comments, setComments] = useState([]);
+  const [pageCount, setPageCount] = useState(1);
+  const [page, setPage] = useState(1);
   const isCanLeftAComment = user && !isTheSameUser(user, userId);
 
   useEffect(() => {
-    fetchCommentsByPostId(postId).then((comments) => setComments(comments));
-  }, []);
+    fetchPostComments(postId, page);
+  }, [page]);
 
-  function getCommentProps(comment) {
-    return {
-      commentId: comment.commentId,
-      content: comment.content,
-      created: comment.created,
-      modified: comment.modified,
-      userId: comment.userId,
-      userName: `${comment.user.firstName} ${comment.user.lastName}`,
-      onCommentUpdate: (comment) => onCommentUpdate(comment),
-      onCommentDelete: (commentId) => onCommentDelete(commentId),
-    };
+  function fetchPostComments(postId, page) {
+    fetchCommentsByPostId(postId, { size: PAGE_SIZE, page }).then((res) => {
+      setComments(res.comments);
+      setPageCount(res.pageCount);
+    });
+  }
+
+  function onPageChange(pageNumber) {
+    setPage(pageNumber);
   }
 
   function onCommentUpdate(comment) {
     updateComment(comment.commentId, comment).then((code) => {
       if (code === 200) {
-        fetchCommentById(comment.commentId).then((updatedComment) => {
-          updateCommentsAfterUpdate(updatedComment);
-        });
+        fetchPostComments(postId, page);
       } else {
         alert('An error occurred please try again later');
       }
@@ -51,7 +46,7 @@ const Comments = (props) => {
   function onCommentDelete(commentId) {
     deleteCommentById(commentId).then((status) => {
       if (status === 200) {
-        updateCommentsAfterDelete(commentId);
+        afterDelete();
       } else {
         alert('An error occurred please try again later');
       }
@@ -66,33 +61,41 @@ const Comments = (props) => {
     };
     savePostComment(comment.postId, comment).then(async (res) => {
       if (res.status === 201) {
-        updateCommentsAfterSave(await res.json());
+        afterSave();
       } else {
         alert('An error occurred please try again later');
       }
     });
   }
 
-  function updateCommentsAfterSave(comment) {
-    const updatedComments = [comment, ...comments];
-    setComments(updatedComments);
+  function afterSave() {
+    fetchPostComments(postId, 1);
     setCommentCount((prev) => ++prev);
     setShowComments(true);
+    setPage(1)
   }
 
-  function updateCommentsAfterUpdate(comment) {
-    const index = comments.findIndex((element) => element.commentId === comment.commentId);
-    const updatedComments = [...comments];
-    updatedComments[index] = comment;
-    setComments(updatedComments);
+  function afterDelete() {
+    let newPage = page;
+    if(!isPageExists(commentCount - 1, PAGE_SIZE, page)) {
+      newPage--;
+    }
+    fetchPostComments(postId, newPage);
+    setCommentCount((prev) => --prev);
+    setPage(newPage);
   }
 
-  function updateCommentsAfterDelete(commentId) {
-    const index = comments.findIndex((comment) => comment.commentId === commentId);
-    const updatedComments = [...comments];
-    updatedComments.splice(index, 1);
-    setComments(updatedComments);
-    setCommentCount(prev => --prev);
+  function getCommentProps(comment) {
+    return {
+      commentId: comment.commentId,
+      content: comment.content,
+      created: comment.created,
+      modified: comment.modified,
+      userId: comment.userId,
+      userName: `${comment.user.firstName} ${comment.user.lastName}`,
+      onCommentUpdate: (comment) => onCommentUpdate(comment),
+      onCommentDelete: (commentId) => onCommentDelete(commentId),
+    };
   }
 
   function getEditorProps() {
@@ -100,7 +103,15 @@ const Comments = (props) => {
       onSave: (content) => onCommentSave(content),
       useTitle: false,
       useCancel: false,
-      saveLabel: 'Post a comment'
+      saveLabel: 'Post a comment',
+    };
+  }
+
+  function getPaginationProps() {
+    return {
+      pageCount: pageCount,
+      pageRangeDisplayed: PAGE_SIZE,
+      onPageChange: (pageNumber) => onPageChange(pageNumber),
     };
   }
 
@@ -111,13 +122,21 @@ const Comments = (props) => {
   }
 
   return (
-    <div className='flex-column' style={{ marginTop: '10px', marginLeft: '20px' }}>
+    <CommentsWrapper>
       {showComments && getComments()}
-      <div className='flex-column' style={{ width: '100%' }}>
+      {showComments && pageCount > 1 && <Pagination {...getPaginationProps()} />}
+      <div className="flex-column" style={{ width: '100%' }}>
         {isCanLeftAComment && <Editor {...getEditorProps()} />}
       </div>
-    </div>
+    </CommentsWrapper>
   );
 };
+
+const CommentsWrapper = styled.div.attrs({
+  className: 'flex-column',
+})`
+  margin-top: 10px;
+  margin-left: 20px;
+`;
 
 export default Comments;

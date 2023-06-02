@@ -99,7 +99,7 @@ const Post = () => {
           </div>
         )}
       </div>
-      <Comments {...{ showComments, setCommentCount, setShowComments }} />
+      <Comments {...{ showComments, commentCount, setCommentCount, setShowComments }} />
     </>
   );
 
