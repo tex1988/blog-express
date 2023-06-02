@@ -7,7 +7,7 @@ import styled, { css } from 'styled-components';
 const UserMenu = (props) => {
   const { showUserMenu } = props;
   const { user, setUser } = useContext(UserContext);
-  const { firstName, lastName, username, email } = user;
+  const { firstName, lastName, username, email } = user || {};
   const navigate = useNavigate();
 
   function logOut() {
