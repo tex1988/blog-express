@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import Pagination from './Pagination';
 
 const Comments = (props) => {
-  const PAGE_SIZE = 3;
+  const PAGE_SIZE = 10;
   const { user } = useContext(UserContext);
   const { showComments, commentCount, setCommentCount, setShowComments } = props;
   const { userId, postId } = useParams();
