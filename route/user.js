@@ -44,7 +44,7 @@ router.put('/:userId', async (req, res, next) => {
 router.get('/:userId/post', async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const posts = await userService.findAllUserPosts(userId);
+    const posts = await userService.findAllUserPosts(userId, req.query);
     res.json(posts);
   } catch (e) {
     next(e);

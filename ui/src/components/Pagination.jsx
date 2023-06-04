@@ -22,6 +22,10 @@ const PaginationWrapper = styled.div`
   justify-content: center;
   align-items: center;
   user-select: none;
+  
+  ul {
+    padding: 0;
+  }
 
   li {
     display: inline-block;
@@ -33,7 +37,7 @@ const PaginationWrapper = styled.div`
       line-height: 28px;
       border: 1px solid #4b4b4b;
       border-radius: 5px;
-      margin-right: 10px;
+      margin: 0 5px 0 5px;
       cursor: pointer;
       display: inline-block;
       color: #4b4b4b;

@@ -29,8 +29,11 @@ class PostRepository {
     return this.#prisma.post.count();
   }
 
-  async findAllByUserId(id) {
+  async findAllByUserId(id, params) {
+    const { skip, take } = params;
     return this.#prisma.post.findMany({
+      skip,
+      take,
       where: {
         userId: Number(id),
       },
@@ -41,6 +44,14 @@ class PostRepository {
       },
       orderBy: {
         created: 'desc',
+      },
+    });
+  }
+
+  async getCountByUserId(id) {
+    return this.#prisma.post.count({
+      where: {
+        userId: Number(id),
       },
     });
   }

@@ -1,8 +1,8 @@
 const BASE_URL = `${location.protocol}//${window.location.host}`;
 
-export function fetchPostsByPage(size, page) {
+export function fetchPosts(params) {
   const url = `${BASE_URL}/post?`;
-  return fetch(url + new URLSearchParams({size, page}))
+  return fetch(url + new URLSearchParams(params))
     .then((res) => res.json());
 }
 
@@ -47,9 +47,10 @@ export async function deletePostById(postId) {
   }).then((res) => res.status);
 }
 
-export async function fetchUserPosts(userId) {
-  const url = `${BASE_URL}/user/${userId}/post`;
-  return await fetch(url).then((res) => res.json());
+export async function fetchUserPosts(userId, params) {
+  const url = `${BASE_URL}/user/${userId}/post?`;
+  return await fetch(url + new URLSearchParams(params))
+    .then((res) => res.json());
 }
 
 export async function fetchUser(userId) {
@@ -65,7 +66,7 @@ export async function createUser(user) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(user),
-  }).then((res) => res.status);;
+  }).then((res) => res.status);
 }
 
 export async function fetchCommentById(commentId) {
@@ -75,7 +76,8 @@ export async function fetchCommentById(commentId) {
 
 export async function fetchCommentsByPostId(postId, params) {
   const url = `${BASE_URL}/post/${postId}/comment?`;
-  return fetch(url + new URLSearchParams(params)).then((res) => res.json());
+  return fetch(url + new URLSearchParams(params))
+    .then((res) => res.json());
 }
 
 export async function deleteCommentById(commentId) {
@@ -105,14 +107,4 @@ export async function updateComment(id, comment) {
     },
     body: JSON.stringify(comment),
   }).then((res) => res.status);
-}
-
-function getUrlWithQueryParams(url, params) {
-  let urlWithParams = `${url}?`;
-  params.entries.each((param, index) => {
-    if (index === 0) {
-      urlWithParams = `${urlWithParams}`;
-    } else {
-    }
-  });
 }

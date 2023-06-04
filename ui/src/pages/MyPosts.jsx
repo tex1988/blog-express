@@ -4,26 +4,39 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import PostPreview from '../components/PostPreview';
+import Pagination from '../components/Pagination';
 
 export const EditorContext = createContext(undefined);
 
 const MyPosts = () => {
+  const PAGE_SIZE = 5;
   const { user } = useContext(UserContext);
   const [posts, setPosts] = useState([]);
+  const [pageCount, setPageCount] = useState(1);
+  const [page, setPage] = useState(1);
   const [isEditorVisible, setEditorVisible] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (user !== undefined) {
-      fetchUserPosts(user.userId).then((posts) => {
-        if (posts.status) {
-          navigate('/error');
-        } else {
-          setPosts(posts);
-        }
-      });
+      fetchPostPage(page);
     }
-  }, []);
+  }, [page]);
+
+  function fetchPostPage(pageNumber) {
+    fetchUserPosts(user.userId, { size: PAGE_SIZE, page: pageNumber }).then((posts) => {
+      if (posts.status) {
+        navigate('/error');
+      } else {
+        setPageCount(posts.pageCount);
+        setPosts(posts.posts);
+      }
+    });
+  }
+
+  function onPageChange(pageNumber) {
+    setPage(pageNumber);
+  }
 
   function getPostProps(post) {
     return {
@@ -49,6 +62,14 @@ const MyPosts = () => {
     };
   }
 
+  function getPaginationProps() {
+    return {
+      pageCount: pageCount,
+      pageRangeDisplayed: PAGE_SIZE,
+      onPageChange: (pageNumber) => onPageChange(pageNumber),
+    };
+  }
+
   function getPosts() {
     if (posts.length > 0) {
       return posts.map((post) => (
@@ -69,17 +90,13 @@ const MyPosts = () => {
     };
     savePost(post).then(async (res) => {
       if (res.status === 201) {
-        updatePostsAfterSave(await res.json());
+        fetchPostPage(page);
+        setPage(1);
+        setEditorVisible(false);
       } else {
         alert('An error occurred please try again later');
       }
     });
-  }
-
-  function updatePostsAfterSave(post) {
-    const updatedPosts = [post, ...posts];
-    setPosts(updatedPosts);
-    setEditorVisible(false);
   }
 
   if (user === undefined) {
@@ -89,6 +106,7 @@ const MyPosts = () => {
   return (
     <div className="flex-column p-10">
       {getPosts()}
+      {pageCount > 1 && <Pagination {...getPaginationProps()} />}
       {isEditorVisible && <Editor {...getEditorProps()} />}
       <div
         className="flex-column"

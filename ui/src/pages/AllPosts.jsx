@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchPostsByPage } from '../api/api';
+import { fetchPosts } from '../api/api';
 import PostPreview from '../components/PostPreview';
 import Pagination from '../components/Pagination';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,7 @@ const AllPosts = () => {
   }, [page]);
 
   function fetchPostPage(pageNumber) {
-    fetchPostsByPage(PAGE_SIZE, pageNumber).then((posts) => {
+    fetchPosts({ size: PAGE_SIZE, page: pageNumber }).then((posts) => {
       if (posts.status) {
         navigate('/error');
       } else {
