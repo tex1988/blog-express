@@ -5,6 +5,7 @@ import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import PostPreview from '../components/PostPreview';
 import Pagination from '../components/Pagination';
+import styled from 'styled-components';
 
 export const EditorContext = createContext(undefined);
 
@@ -108,13 +109,19 @@ const MyPosts = () => {
       {getPosts()}
       {pageCount > 1 && <Pagination {...getPaginationProps()} />}
       {isEditorVisible && <Editor {...getEditorProps()} />}
-      <div
-        className="flex-column"
-        style={{ justifyContent: 'center', alignContent: 'center', flexWrap: 'wrap' }}>
+      <EditorWrapper>
         {!isEditorVisible && <button onClick={onAddPostClick}>Create post</button>}
-      </div>
+      </EditorWrapper>
     </div>
   );
 };
+
+const EditorWrapper = styled.div.attrs({
+  className: 'flex-column'
+})`
+  justify-content: center;
+  align-content: center;
+  flex-wrap: wrap;
+`;
 
 export default MyPosts;
