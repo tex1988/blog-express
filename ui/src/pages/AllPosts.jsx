@@ -60,7 +60,7 @@ const AllPosts = () => {
   }
 
   return (
-    <div className="flex-column" style={{ padding: '10px' }}>
+    <div className="flex-column p-10">
       {getPosts()}
       {pageCount > 1 && <Pagination {...getPaginationProps()} />}
     </div>

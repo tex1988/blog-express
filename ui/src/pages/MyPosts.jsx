@@ -87,7 +87,7 @@ const MyPosts = () => {
   }
 
   return (
-    <div className="flex-column" style={{ padding: '10px' }}>
+    <div className="flex-column p-10">
       {getPosts()}
       {isEditorVisible && <Editor {...getEditorProps()} />}
       <div
