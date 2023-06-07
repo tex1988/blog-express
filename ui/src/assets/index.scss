@@ -37,6 +37,7 @@ body {
   display: flex;
   flex-direction: row;
   flex-basis: 100%;
+  align-items: center;
 }
 
 .flex-row-center {
@@ -52,6 +53,11 @@ body {
 .flex-row-right {
   @extend .flex-row;
   justify-content: flex-end;
+}
+
+.flex-row-space-between {
+  @extend .flex-row;
+  justify-content: space-between;
 }
 
 .flex-column {
