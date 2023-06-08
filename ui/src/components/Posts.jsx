@@ -5,8 +5,8 @@ import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import PostPreview from '../components/PostPreview';
 import Pagination from '../components/Pagination';
-import styled from 'styled-components';
 import Sort from './Sort';
+import styled from 'styled-components';
 
 const Posts = (props) => {
   const PAGE_SIZE = 5;
@@ -26,9 +26,9 @@ const Posts = (props) => {
 
   function getPosts() {
     fetchPosts(getFetchParams())
-      .then((posts) => {
-        setPageCount(posts.pageCount);
-        setPosts(posts.posts);
+      .then((res) => {
+        setPageCount(res.pageCount);
+        setPosts(res.posts);
       })
       .catch(() => {
         navigate('/error');
@@ -39,10 +39,6 @@ const Posts = (props) => {
     const params = { order, sort, size: PAGE_SIZE, page };
     isMyPosts && (params.userId = user.userId);
     return params;
-  }
-
-  function onPageChange(pageNumber) {
-    setPage(pageNumber);
   }
 
   function getPostProps(post) {
@@ -72,7 +68,7 @@ const Posts = (props) => {
     return {
       pageCount: pageCount,
       pageRangeDisplayed: PAGE_SIZE,
-      onPageChange: (pageNumber) => onPageChange(pageNumber),
+      onPageChange: (pageNumber) => setPage(pageNumber),
     };
   }
 
@@ -82,10 +78,6 @@ const Posts = (props) => {
         <PostPreview key={`post_${post.postId}`} {...getPostProps(post)} />
       ));
     }
-  }
-
-  function onAddPostClick() {
-    setEditorVisible(true);
   }
 
   function onPostSave(title, content) {
@@ -113,7 +105,7 @@ const Posts = (props) => {
       {isMyPosts && isEditorVisible && <Editor {...getEditorProps()} />}
       {isMyPosts && (
         <ButtonWrapper>
-          {!isEditorVisible && <button onClick={onAddPostClick}>Create post</button>}
+          {!isEditorVisible && <button onClick={()=> setEditorVisible(true)}>Create post</button>}
         </ButtonWrapper>
       )}
     </div>
