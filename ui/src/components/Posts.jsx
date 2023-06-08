@@ -1,14 +1,12 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { fetchPosts, fetchUserPosts, savePost } from '../api/api';
+import { useContext, useEffect, useState } from 'react';
+import { fetchPosts, savePost } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import PostPreview from '../components/PostPreview';
 import Pagination from '../components/Pagination';
 import styled from 'styled-components';
-import Filter from '../components/Filter';
-
-export const EditorContext = createContext(undefined);
+import Sort from './Sort';
 
 const Posts = (props) => {
   const PAGE_SIZE = 5;
@@ -18,42 +16,29 @@ const Posts = (props) => {
   const [pageCount, setPageCount] = useState(1);
   const [page, setPage] = useState(1);
   const [isEditorVisible, setEditorVisible] = useState(false);
+  const [order, setOrder] = useState('desc');
+  const [sort, setSort] = useState('created');
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchPostPage(page);
-  }, [page]);
+    getPosts();
+  }, [page, order, sort]);
 
-  function fetchPostPage(pageNumber) {
-    if(isMyPosts) {
-      if (user !== undefined) {
-        fetchMyPostPage(pageNumber);
-      }
-    } else {
-      fetchAllPostPage(pageNumber)
-    }
-  }
-
-  function fetchMyPostPage(pageNumber) {
-    fetchUserPosts(user.userId, { size: PAGE_SIZE, page: pageNumber }).then((posts) => {
-      if (posts.status) {
-        navigate('/error');
-      } else {
+  function getPosts() {
+    fetchPosts(getFetchParams())
+      .then((posts) => {
         setPageCount(posts.pageCount);
         setPosts(posts.posts);
-      }
-    });
+      })
+      .catch(() => {
+        navigate('/error');
+      });
   }
 
-  function fetchAllPostPage(pageNumber) {
-    fetchPosts({ size: PAGE_SIZE, page: pageNumber }).then((posts) => {
-      if (posts.status) {
-        navigate('/error');
-      } else {
-        setPageCount(posts.pageCount);
-        setPosts(posts.posts);
-      }
-    });
+  function getFetchParams() {
+    const params = { order, sort, size: PAGE_SIZE, page };
+    isMyPosts && (params.userId = user.userId);
+    return params;
   }
 
   function onPageChange(pageNumber) {
@@ -63,20 +48,19 @@ const Posts = (props) => {
   function getPostProps(post) {
     return {
       postId: post.postId,
-      userName: `${user.firstName} ${user.lastName}`,
+      userName: `${post.user.firstName} ${post.user.lastName}`,
       userId: post.userId,
       title: post.title,
       content: post.content,
       created: post.created,
       modified: post.modified,
       commentsCount: post._count.comments,
-      setPosts: (value) => setPosts(value),
     };
   }
 
   function getEditorProps() {
     return {
-      onSave: (title, content) => onPostSave(content, title),
+      onSave: onPostSave,
       onCancel: () => setEditorVisible(false),
       initialTitle: '',
       initialContent: '',
@@ -92,7 +76,7 @@ const Posts = (props) => {
     };
   }
 
-  function getPosts() {
+  function getPostPreviews() {
     if (posts.length > 0) {
       return posts.map((post) => (
         <PostPreview key={`post_${post.postId}`} {...getPostProps(post)} />
@@ -110,27 +94,28 @@ const Posts = (props) => {
       title: title,
       content: content,
     };
-    savePost(post).then(async (res) => {
-      if (res.status === 201) {
-        fetchPostPage(page);
+    savePost(post)
+      .then(() => {
+        getPosts();
         setPage(1);
         setEditorVisible(false);
-      } else {
+      })
+      .catch(() => {
         alert('An error occurred please try again later');
-      }
-    });
+      });
   }
 
   return (
     <div className="flex-column p-10">
-      {getPosts()}
+      <Sort {...{ setOrder, setSort, defaultOrder: 'desc' }} />
+      {getPostPreviews()}
       {pageCount > 1 && <Pagination {...getPaginationProps()} />}
       {isMyPosts && isEditorVisible && <Editor {...getEditorProps()} />}
-      {isMyPosts &&
+      {isMyPosts && (
         <ButtonWrapper>
           {!isEditorVisible && <button onClick={onAddPostClick}>Create post</button>}
         </ButtonWrapper>
-      }
+      )}
     </div>
   );
 };

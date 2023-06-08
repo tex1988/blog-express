@@ -1,11 +1,11 @@
-const { isNumber } = require('../validator/validator');
+const { validateNumber } = require('../validator/validator');
 
 function getPageParams(params, count) {
   let page;
   let size;
   if (params?.page && params.size) {
-    isNumber(params.page);
-    isNumber(params.size);
+    validateNumber(params.page);
+    validateNumber(params.size);
     page = Number(params.page);
     size = Number(params.size);
   } else {

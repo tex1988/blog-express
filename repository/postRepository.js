@@ -8,25 +8,26 @@ class PostRepository {
     return PostRepository._instance;
   }
 
-  async findAll(params) {
-    const { skip, take } = params;
+  async findAll(searchParams, extraParams) {
+    const { skip, take, sortBy } = extraParams;
     return this.#prisma.post.findMany({
       skip,
       take,
+      where: searchParams,
       include: {
         user: true,
         _count: {
           select: { comments: true },
         },
       },
-      orderBy: {
-        created: 'desc',
-      },
+      orderBy: sortBy
     });
   }
 
-  async getCount() {
-    return this.#prisma.post.count();
+  async getCount(params) {
+    return this.#prisma.post.count({
+      where: params
+    });
   }
 
   async findAllByUserId(id, params) {
