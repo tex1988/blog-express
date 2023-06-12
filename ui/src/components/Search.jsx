@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 
-const Sort = (props) => {
+const Search = (props) => {
   const ASC = 'asc';
   const DESC = 'desc';
-  const { setOrder, setSort, defaultOrder, isMyPosts } = props;
+  const { setOrder, setSort, setSearch, defaultOrder, defaultSearch, isMyPosts } = props;
   const [selectedOrder, setSelectedOrder] = useState(defaultOrder);
+  const [searchField, setSearchField] = useState(defaultSearch)
+  const [searchValue, setSearchValue] = useState('');
 
   function onOrderChange(event) {
     setOrder(event.target.value);
@@ -16,31 +18,56 @@ const Sort = (props) => {
     setSort(event.target.value);
   }
 
+  function onSearchChange(event) {
+    setSearchField(event.target.value);
+  }
+
+  function onSearchInput(event) {
+    setSearchValue(event.target.value);
+  }
+
+  function onSearch() {
+    setSearch({[searchField]: searchValue});
+  }
+
   return (
-    <FilterWrapper>
+    <SearchWrapper>
       <div className="flex-row-left">
         <div className="flex-row-left">
           <span>Sort by:</span>
           <select id="sort" onChange={onSortChange}>
             <option value="created">creation date</option>
             <option value="modified">edit date</option>
-            {isMyPosts && <option value="author">author</option>}
+            {!isMyPosts && <option value="author">author</option>}
           </select>
         </div>
         <div className="flex-row-left">
           <span>Order: </span>
           <div className="flex-row-left" onChange={onOrderChange}>
-            <input checked={selectedOrder === ASC} type="radio" value={ASC} readOnly/>⇑
+            <input checked={selectedOrder === ASC} type="radio" value={ASC} readOnly />⇑
             <input checked={selectedOrder === DESC} type="radio" value={DESC} readOnly />⇓
           </div>
         </div>
       </div>
-    </FilterWrapper>
+      <div className="flex-row-left" >
+        <div className='flex-row-left'><span>Search by:</span>
+          <select id='search' onChange={onSearchChange}>
+            <option value='content'>content</option>
+            <option value='title'>title</option>
+            {!isMyPosts && <option value='author'>author</option>}
+          </select>
+        </div>
+        <div>
+          <input value={searchValue} onInput={onSearchInput} placeholder="Search" />
+          <button onClick={onSearch}>Search</button>
+        </div>
+      </div>
+    </SearchWrapper>
   );
 };
 
-const FilterWrapper = styled.div.attrs({
-  className: 'flex-row-center',
+const SearchWrapper = styled.div.attrs({
+  className: 'flex-row-space-between',
 })`
   align-content: center;
   padding: 5px 5px 10px 5px;
@@ -80,4 +107,4 @@ const FilterWrapper = styled.div.attrs({
   }
 `;
 
-export default Sort;
+export default Search;

@@ -5,7 +5,7 @@ import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import PostPreview from '../components/PostPreview';
 import Pagination from '../components/Pagination';
-import Sort from './Sort';
+import Search from './Search';
 import styled from 'styled-components';
 
 const Posts = (props) => {
@@ -18,11 +18,12 @@ const Posts = (props) => {
   const [isEditorVisible, setEditorVisible] = useState(false);
   const [order, setOrder] = useState('desc');
   const [sort, setSort] = useState('created');
+  const [search, setSearch] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     getPosts();
-  }, [page, order, sort]);
+  }, [page, order, sort, search]);
 
   function getPosts() {
     fetchPosts(getFetchParams())
@@ -37,8 +38,17 @@ const Posts = (props) => {
 
   function getFetchParams() {
     const params = { order, sort, size: PAGE_SIZE, page };
+    search && enrichWithSearch(params);
     isMyPosts && (params.userId = user.userId);
     return params;
+  }
+
+
+  function enrichWithSearch(params) {
+    Object.entries(search).forEach((entry) => {
+      const [key, value] = entry;
+      params[key] = value
+    });
   }
 
   function getPostProps(post) {
@@ -56,7 +66,7 @@ const Posts = (props) => {
 
   function getEditorProps() {
     return {
-      onSave: onPostSave,
+      onSave: (title, content) => onPostSave(content, title),
       onCancel: () => setEditorVisible(false),
       initialTitle: '',
       initialContent: '',
@@ -99,7 +109,7 @@ const Posts = (props) => {
 
   return (
     <div className="flex-column p-10">
-      <Sort {...{ setOrder, setSort, defaultOrder: 'desc' }} />
+      <Search {...{ setOrder, setSort, setSearch, defaultOrder: 'desc', defaultSearch: 'content',isMyPosts }} />
       {getPostPreviews()}
       {pageCount > 1 && <Pagination {...getPaginationProps()} />}
       {isMyPosts && isEditorVisible && <Editor {...getEditorProps()} />}

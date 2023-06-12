@@ -5,10 +5,12 @@ const { validateNumber } = require('../validator/validator');
 const { getPageParams } = require('./utils');
 
 class PostService {
+  #AUTHOR = 'author';
   #userService = new UserService();
   #postRepository = new PostRepository();
   #commentRepository = new CommentRepository();
-  #nonSearchParams = ['page', 'size', 'sort', 'order']
+  #nonSearchParams = ['page', 'size', 'sort', 'order'];
+  #textSearchParams = ['content', 'title', this.#AUTHOR];
 
   constructor() {
     if (!PostService._instance) {
@@ -76,7 +78,7 @@ class PostService {
   }
 
   #getSortParams(params) {
-    if(params.sort === 'author') {
+    if (params.sort === this.#AUTHOR) {
       return this.#getSortParamsForAuthor(params);
     }
     let key;
@@ -95,15 +97,32 @@ class PostService {
   }
 
   #getSearchParams(params) {
-    const searchParams = {... params};
-    this.#nonSearchParams.forEach(param => delete searchParams[param])
-    Object.entries(searchParams).forEach(entry => {
+    let searchParams = {};
+    Object.entries(params).forEach((entry) => {
       const [key, value] = entry;
-      if(!isNaN(value)) {
-        searchParams[key] = Number(value)
+      if (!this.#nonSearchParams.includes(key)) {
+        this.#enrichWithSearchParam(key, value, searchParams);
       }
-    })
+    });
     return searchParams;
+  }
+
+  #enrichWithSearchParam(key, value, searchParams) {
+    if (this.#textSearchParams.includes(key)) {
+      this.#enrichWithTextSearchParam(key, value, searchParams);
+    } else if (!isNaN(value)) {
+      searchParams[key] = Number(value);
+    } else {
+      searchParams[key] = value;
+    }
+  }
+
+  #enrichWithTextSearchParam(key, value, searchParams) {
+    if (key === this.#AUTHOR) {
+      searchParams.OR = [{ user: { firstName: value } }, { user: { lastName: value } }];
+    } else {
+      searchParams[key] = { search: value };
+    }
   }
 }
 
