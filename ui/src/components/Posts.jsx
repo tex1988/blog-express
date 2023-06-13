@@ -109,7 +109,7 @@ const Posts = (props) => {
 
   return (
     <div className="flex-column p-10">
-      <Search {...{ setOrder, setSort, setSearch, defaultOrder: 'desc', defaultSearch: 'content',isMyPosts }} />
+      <Search {...{ setOrder, setSort, setSearch, defaultSort: 'created', defaultOrder: 'desc', defaultSearch: 'content',isMyPosts }} />
       {getPostPreviews()}
       {pageCount > 1 && <Pagination {...getPaginationProps()} />}
       {isMyPosts && isEditorVisible && <Editor {...getEditorProps()} />}

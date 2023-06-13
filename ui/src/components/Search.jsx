@@ -1,10 +1,11 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import Select from './Select';
 
 const Search = (props) => {
   const ASC = 'asc';
   const DESC = 'desc';
-  const { setOrder, setSort, setSearch, defaultOrder, defaultSearch, isMyPosts } = props;
+  const { setOrder, setSort, setSearch, defaultSort, defaultOrder, defaultSearch, isMyPosts } = props;
   const [selectedOrder, setSelectedOrder] = useState(defaultOrder);
   const [searchField, setSearchField] = useState(defaultSearch)
   const [searchValue, setSearchValue] = useState('');
@@ -30,16 +31,32 @@ const Search = (props) => {
     setSearch({[searchField]: searchValue});
   }
 
+  function getSortItems() {
+    const items = {
+      created: 'creation date',
+      modified: 'edit date',
+    };
+    !isMyPosts && (items.author = 'author');
+    return items;
+  }
+
+  function getSearchItems() {
+    const items = {
+      content: 'content',
+      title: 'title',
+    };
+    !isMyPosts && (items.author = 'author');
+    return items;
+  }
+
   return (
     <SearchWrapper>
       <div className="flex-row-left">
         <div className="flex-row-left">
           <span>Sort by:</span>
-          <select id="sort" onChange={onSortChange}>
-            <option value="created">creation date</option>
-            <option value="modified">edit date</option>
-            {!isMyPosts && <option value="author">author</option>}
-          </select>
+          <Select
+            {...{ items: getSortItems(), defaultValue: defaultSort, onChange: onSortChange, width: '105px' }}
+          />
         </div>
         <div className="flex-row-left">
           <span>Order: </span>
@@ -49,13 +66,12 @@ const Search = (props) => {
           </div>
         </div>
       </div>
-      <div className="flex-row-left" >
-        <div className='flex-row-left'><span>Search by:</span>
-          <select id='search' onChange={onSearchChange}>
-            <option value='content'>content</option>
-            <option value='title'>title</option>
-            {!isMyPosts && <option value='author'>author</option>}
-          </select>
+      <div className="flex-row-left">
+        <div className="flex-row-left">
+          <span>Search by:</span>
+          <Select
+            {...{ items: getSearchItems(), defaultValue: defaultSearch, onChange: onSearchChange, width: '60px' }}
+          />
         </div>
         <div>
           <input value={searchValue} onInput={onSearchInput} placeholder="Search" />
@@ -84,7 +100,6 @@ const SearchWrapper = styled.div.attrs({
 
   div {
     flex-basis: auto;
-    margin-right: 10px;
   }
 
   select {
