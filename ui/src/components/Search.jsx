@@ -5,10 +5,11 @@ import Select from './Select';
 const Search = (props) => {
   const ASC = 'asc';
   const DESC = 'desc';
-  const { setOrder, setSort, setSearch, defaultSort, defaultOrder, defaultSearch, isMyPosts } = props;
+  const { setOrder, setSort, onSearch, defaultSort, defaultOrder, defaultSearch, isMyPosts } = props;
+  const [defaultSearchType, defaultSearchValue] = getDefaultSearch();
   const [selectedOrder, setSelectedOrder] = useState(defaultOrder);
-  const [searchField, setSearchField] = useState(defaultSearch)
-  const [searchValue, setSearchValue] = useState('');
+  const [searchField, setSearchField] = useState(defaultSearchType);
+  const [searchValue, setSearchValue] = useState(defaultSearchValue);
 
   function onOrderChange(event) {
     setOrder(event.target.value);
@@ -27,23 +28,37 @@ const Search = (props) => {
     setSearchValue(event.target.value);
   }
 
-  function onSearch() {
-    setSearch({[searchField]: searchValue});
+  function onSearchClick() {
+    if (searchValue.length > 0) {
+      onSearch({ [searchField]: searchValue });
+    }
+  }
+
+  function onInputKeyPress(event) {
+    if (event.key === 'Enter') {
+      onSearchClick(event);
+    }
+  }
+
+  function getDefaultSearch() {
+    return defaultSearch ? Object.entries(defaultSearch)[0] : ['content', ''];
   }
 
   function getSortOptions() {
     const options = [
       { value: 'created', label: 'creation date' },
-      { value: 'modified', label: 'edit date' }];
-    !isMyPosts && (options.push({label: 'author', value: 'author'}));
+      { value: 'modified', label: 'edit date' },
+    ];
+    !isMyPosts && options.push({ label: 'author', value: 'author' });
     return options;
   }
 
   function getSearchOptions() {
     const options = [
       { value: 'content', label: 'content' },
-      { value: 'title', label: 'title' }];
-    !isMyPosts && (options.push({label: 'author', value: 'author'}));
+      { value: 'title', label: 'title' },
+    ];
+    !isMyPosts && options.push({ label: 'author', value: 'author' });
     return options;
   }
 
@@ -71,15 +86,20 @@ const Search = (props) => {
         <div className="flex-row-left">
           <span>Search by:</span>
           <Select
-            defaultValue={defaultSearch}
+            defaultValue={defaultSearchType}
             options={getSearchOptions()}
             onChange={onSearchChange}
             style={{ width: '65px' }}
           />
         </div>
         <div>
-          <input value={searchValue} onInput={onSearchInput} placeholder="Search" />
-          <button onClick={onSearch}>Search</button>
+          <input
+            value={searchValue}
+            onInput={onSearchInput}
+            onKeyDown={onInputKeyPress}
+            placeholder="Search"
+          />
+          <button onClick={onSearchClick}>Search</button>
         </div>
       </div>
     </SearchWrapper>
