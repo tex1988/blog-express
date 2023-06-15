@@ -31,22 +31,20 @@ const Search = (props) => {
     setSearch({[searchField]: searchValue});
   }
 
-  function getSortItems() {
-    const items = {
-      created: 'creation date',
-      modified: 'edit date',
-    };
-    !isMyPosts && (items.author = 'author');
-    return items;
+  function getSortOptions() {
+    const options = [
+      { value: 'created', label: 'creation date' },
+      { value: 'modified', label: 'edit date' }];
+    !isMyPosts && (options.push({label: 'author', value: 'author'}));
+    return options;
   }
 
-  function getSearchItems() {
-    const items = {
-      content: 'content',
-      title: 'title',
-    };
-    !isMyPosts && (items.author = 'author');
-    return items;
+  function getSearchOptions() {
+    const options = [
+      { value: 'content', label: 'content' },
+      { value: 'title', label: 'title' }];
+    !isMyPosts && (options.push({label: 'author', value: 'author'}));
+    return options;
   }
 
   return (
@@ -55,7 +53,10 @@ const Search = (props) => {
         <div className="flex-row-left">
           <span>Sort by:</span>
           <Select
-            {...{ items: getSortItems(), defaultValue: defaultSort, onChange: onSortChange, width: '105px' }}
+            defaultValue={defaultSort}
+            options={getSortOptions()}
+            onChange={onSortChange}
+            style={{ width: '105px' }}
           />
         </div>
         <div className="flex-row-left">
@@ -70,7 +71,10 @@ const Search = (props) => {
         <div className="flex-row-left">
           <span>Search by:</span>
           <Select
-            {...{ items: getSearchItems(), defaultValue: defaultSearch, onChange: onSearchChange, width: '60px' }}
+            defaultValue={defaultSearch}
+            options={getSearchOptions()}
+            onChange={onSearchChange}
+            style={{ width: '65px' }}
           />
         </div>
         <div>

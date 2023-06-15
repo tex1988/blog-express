@@ -2,8 +2,8 @@ import styled, { css } from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 
 const Select = (props) => {
-  const { items = {}, defaultValue, onChange = null, width = null } = props;
-  const [value, setValue] = useState(defaultValue);
+  const { options = [], defaultValue, onChange = null, style = {} } = props;
+  const [index, setIndex] = useState(getIndex(defaultValue));
   const [showDropDown, setShowDropDown] = useState(false);
   const ref = useRef(null);
 
@@ -22,20 +22,27 @@ const Select = (props) => {
     setShowDropDown(!showDropDown)
   }
 
-  function onInputChange(event) {
+  function onInputChange(event, index) {
     setShowDropDown(false);
-    setValue(event.target.value);
+    setIndex(index);
     onChange && onChange(event);
   }
 
+  function getIndex(value) {
+    return options.findIndex(option => option.value === value)
+  }
+
   function getItems() {
-    const entries = Object.entries(items);
-    return entries.map((entry, index) => {
-      const [value, title] = entry;
-      const className = getItemClass(index, entries.length);
+    const length = options.length;
+    return options.map((item, index) => {
+      const className = getItemClass(index, length);
       return (
-        <option key={`input_${index}`} className={className} value={value} onClick={onInputChange}>
-          {title}
+        <option
+          key={`input_${index}`}
+          className={className}
+          value={item.value}
+          onClick={(event) => onInputChange(event, index)}>
+          {item.label}
         </option>
       );
     });
@@ -54,8 +61,8 @@ const Select = (props) => {
   }
 
   return (
-    <div ref={ref} className="flex-column">
-      <SelectWrapper onClick={toggleDropdownVisibility} width={width}>{items[value]}</SelectWrapper>
+    <div ref={ref} className="flex-column" style={style}>
+      <SelectWrapper onClick={toggleDropdownVisibility}>{options[index].label}</SelectWrapper>
       <DropdownWrapper showDropDown={showDropDown}>
         <div>{getItems()}</div>
       </DropdownWrapper>
@@ -120,10 +127,6 @@ const SelectWrapper = styled.div`
   padding: 5px 0 5px 5px;
   cursor: pointer;
   margin: 0;
-  
-  ${props => props.width && css`
-    width: ${props.width};
-  `}
 `;
 
 export default Select;

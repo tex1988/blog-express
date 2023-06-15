@@ -109,13 +109,21 @@ const Posts = (props) => {
 
   return (
     <div className="flex-column p-10">
-      <Search {...{ setOrder, setSort, setSearch, defaultSort: 'created', defaultOrder: 'desc', defaultSearch: 'content',isMyPosts }} />
+      <Search
+        defaultSort={sort}
+        defaultOrder={order}
+        defaultSearch="content"
+        setOrder={setOrder}
+        setSort={setSort}
+        setSearch={setSearch}
+        isMyPosts={isMyPosts}
+      />
       {getPostPreviews()}
       {pageCount > 1 && <Pagination {...getPaginationProps()} />}
       {isMyPosts && isEditorVisible && <Editor {...getEditorProps()} />}
       {isMyPosts && (
         <ButtonWrapper>
-          {!isEditorVisible && <button onClick={()=> setEditorVisible(true)}>Create post</button>}
+          {!isEditorVisible && <button onClick={() => setEditorVisible(true)}>Create post</button>}
         </ButtonWrapper>
       )}
     </div>
