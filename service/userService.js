@@ -1,16 +1,17 @@
+const AbstractQueryableService = require('./abstractQueryableService')
 const UserRepository = require('../repository/userRepository');
 const PostRepository = require('../repository/postRepository');
 const CommentRepository = require('../repository/commentRepository');
 const { validateNumber, validateParams } = require('../validator/validator');
-const { getPageParams } = require('./utils');
 
-class UserService {
+class UserService extends AbstractQueryableService {
   #userRepository = new UserRepository();
   #postRepository = new PostRepository();
   #commentRepository = new CommentRepository();
   #allowedParams = ['username', 'firstname', 'lastname', 'email'];
 
   constructor() {
+    super();
     if (!UserService._instance) {
       UserService._instance = this;
     }
@@ -40,7 +41,7 @@ class UserService {
     validateNumber(id);
     await this.validateIfUserExists(id);
     const count = await this.#postRepository.getCountByUserId(id);
-    const pageParams = getPageParams(params, count);
+    const pageParams = this.getPageParams(params, count);
     const pageCount = Math.ceil(count / pageParams.take);
     const posts = await this.#postRepository.findAllByUserId(id, pageParams);
     return { posts, pageCount };
