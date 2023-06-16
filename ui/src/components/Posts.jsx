@@ -8,9 +8,8 @@ import Pagination from '../components/Pagination';
 import Search from './Search';
 import styled from 'styled-components';
 
-const Posts = (props) => {
+const Posts = ({ isMyPosts }) => {
   const PAGE_SIZE = 5;
-  const { isMyPosts } = props;
   const { user } = useContext(UserContext);
   const [searchParams, setSearchParams] = useSearchParams();
   const { defaultPage, defaultSort, defaultOrder, defaultSearch } = getDefaultParams();
@@ -81,42 +80,10 @@ const Posts = (props) => {
     setPage(1);
   }
 
-  function getPostProps(post) {
-    return {
-      postId: post.postId,
-      userName: `${post.user.firstName} ${post.user.lastName}`,
-      userId: post.userId,
-      title: post.title,
-      content: post.content,
-      created: post.created,
-      modified: post.modified,
-      commentsCount: post._count.comments,
-    };
-  }
-
-  function getEditorProps() {
-    return {
-      onSave: (title, content) => onPostSave(content, title),
-      onCancel: () => setEditorVisible(false),
-      initialTitle: '',
-      initialContent: '',
-      useTitle: true,
-    };
-  }
-
-  function getPaginationProps() {
-    return {
-      initialPage: page - 1,
-      pageCount: pageCount,
-      pageRangeDisplayed: PAGE_SIZE,
-      onPageChange: (pageNumber) => setPage(pageNumber),
-    };
-  }
-
   function getPostPreviews() {
     if (posts.length > 0) {
       return posts.map((post) => (
-        <PostPreview key={`post_${post.postId}`} {...getPostProps(post)} />
+        <PostPreview key={`post_${post.postId}`} post={post} />
       ));
     }
   }
@@ -139,7 +106,7 @@ const Posts = (props) => {
   }
 
   return (
-    <div className="flex-column p-10">
+    <div className='flex-column p-10'>
       <Search
         defaultSort={sort}
         defaultOrder={order}
@@ -150,11 +117,27 @@ const Posts = (props) => {
         allowAuthorSearch={!isMyPosts}
       />
       {getPostPreviews()}
-      {pageCount > 1 && <Pagination {...getPaginationProps()} />}
-      {isMyPosts && isEditorVisible && <Editor {...getEditorProps()} />}
+      {pageCount > 1 &&
+        <Pagination
+          initialPage={page - 1}
+          pageCount={pageCount}
+          pageRangeDisplayed={PAGE_SIZE}
+          onPageChange={setPage}
+        />}
+      {isMyPosts && isEditorVisible &&
+        <Editor
+          onSave={(title, content) => onPostSave(content, title)}
+          onCancel={() => setEditorVisible(false)}
+          initialTitle=''
+          initialContent=''
+          useTitle={true}
+        />}
       {isMyPosts && (
         <ButtonWrapper>
-          {!isEditorVisible && <button onClick={() => setEditorVisible(true)}>Create post</button>}
+          {!isEditorVisible &&
+            <button onClick={() => setEditorVisible(true)}>
+              Create post
+            </button>}
         </ButtonWrapper>
       )}
     </div>

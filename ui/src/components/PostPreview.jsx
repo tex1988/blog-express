@@ -1,8 +1,10 @@
 import { getDate } from '../../utils/utils';
 import { useNavigate } from 'react-router-dom';
 
-const PostPreview = (props) => {
-  const { postId, title, content, userName, userId, created, modified, commentsCount } = props;
+const PostPreview = ({ post }) => {
+  const { postId, title, content, userId, created, modified } = post;
+  const commentsCount = post?._count?.comments;
+  const userName = `${post?.user?.firstName} ${post?.user?.lastName}`;
   const contentPreview = getContentPreview();
   const navigate = useNavigate();
 
