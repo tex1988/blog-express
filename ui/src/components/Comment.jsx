@@ -3,9 +3,10 @@ import { useContext, useState } from 'react';
 import { UserContext } from '../App';
 import Editor from './Editor';
 
-const Comment = (props) => {
+const Comment = ({ comment, onCommentUpdate, onCommentDelete }) => {
   const { user } = useContext(UserContext);
-  const { commentId, content, created, modified, userId, userName, onCommentDelete, onCommentUpdate } = props;
+  const { commentId, content, created, modified, userId } = comment;
+  const userName = `${comment?.user?.firstName} ${comment?.user?.lastName}`;
   const [editMode, setEditMode] = useState(false);
   const isEditable = isTheSameUser(user, userId);
 
@@ -22,7 +23,7 @@ const Comment = (props) => {
     const comment = {
       commentId: commentId,
       content: content,
-    }
+    };
     onCommentUpdate(comment);
     setEditMode(false);
   }
@@ -30,7 +31,9 @@ const Comment = (props) => {
   const commentElement = (
     <>
       <div className="info">
-        <span>{userName}, {getDate(created)}</span>
+        <span>
+          {userName}, {getDate(created)}
+        </span>
         {modified && <span>Edited {getDate(modified)}</span>}
       </div>
       <span className="content">{content}</span>

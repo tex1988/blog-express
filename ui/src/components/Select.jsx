@@ -29,7 +29,8 @@ const Select = (props) => {
   }
 
   function getIndex(value) {
-    return options.findIndex(option => option.value === value)
+    const index = options.findIndex((option) => option.value === value);
+    return index && index >= 0 ? index : 0;
   }
 
   function getItems() {
@@ -62,7 +63,9 @@ const Select = (props) => {
 
   return (
     <div ref={ref} className="flex-column" style={style}>
-      <SelectWrapper onClick={toggleDropdownVisibility}>{options[index].label}</SelectWrapper>
+      <SelectWrapper onClick={toggleDropdownVisibility}>
+        {options[index].label}
+      </SelectWrapper>
       <DropdownWrapper showDropDown={showDropDown}>
         <div>{getItems()}</div>
       </DropdownWrapper>

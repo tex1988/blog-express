@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import Pagination from './Pagination';
 
 const Comments = (props) => {
-  const PAGE_SIZE = 10;
+  const PAGE_SIZE = 5;
   const { user } = useContext(UserContext);
   const { showComments, commentCount, setCommentCount, setShowComments } = props;
   const { userId, postId } = useParams();
@@ -85,48 +85,40 @@ const Comments = (props) => {
     setPage(newPage);
   }
 
-  function getCommentProps(comment) {
-    return {
-      commentId: comment.commentId,
-      content: comment.content,
-      created: comment.created,
-      modified: comment.modified,
-      userId: comment.userId,
-      userName: `${comment.user.firstName} ${comment.user.lastName}`,
-      onCommentUpdate: (comment) => onCommentUpdate(comment),
-      onCommentDelete: (commentId) => onCommentDelete(commentId),
-    };
-  }
-
-  function getEditorProps() {
-    return {
-      onSave: (content) => onCommentSave(content),
-      useTitle: false,
-      useCancel: false,
-      saveLabel: 'Post a comment',
-    };
-  }
-
-  function getPaginationProps() {
-    return {
-      pageCount: pageCount,
-      pageRangeDisplayed: PAGE_SIZE,
-      onPageChange: (pageNumber) => onPageChange(pageNumber),
-    };
-  }
-
   function getComments() {
     return comments.map((comment) => (
-      <Comment key={`comment_${comment.commentId}`} {...getCommentProps(comment)} />
+      <Comment
+        key={`comment_${comment.commentId}`}
+        comment={{...comment}}
+        onCommentUpdate={onCommentUpdate}
+        onCommentDelete={onCommentDelete}
+      />
     ));
   }
 
   return (
     <CommentsWrapper>
-      {showComments && getComments()}
-      {showComments && pageCount > 1 && <Pagination {...getPaginationProps()} />}
+      {showComments && (
+        <>
+          {getComments()}
+          {pageCount > 1 && (
+            <Pagination
+              pageCount={pageCount}
+              pageRangeDisplayed={PAGE_SIZE}
+              onPageChange={(pageNumber) => onPageChange(pageNumber)}
+            />
+          )}
+        </>
+      )}
       <div className="flex-column" style={{ width: '100%' }}>
-        {isCanLeftAComment && <Editor {...getEditorProps()} />}
+        {isCanLeftAComment && (
+          <Editor
+            onSave={(content) => onCommentSave(content)}
+            useTitle={false}
+            useCancel={false}
+            saveLabel={'Post a comment'}
+          />
+        )}
       </div>
     </CommentsWrapper>
   );

@@ -147,7 +147,7 @@ const Posts = (props) => {
         setOrder={setOrder}
         setSort={setSort}
         onSearch={onSearch}
-        isMyPosts={isMyPosts}
+        allowAuthorSearch={!isMyPosts}
       />
       {getPostPreviews()}
       {pageCount > 1 && <Pagination {...getPaginationProps()} />}

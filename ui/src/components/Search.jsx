@@ -5,19 +5,28 @@ import Select from './Select';
 const Search = (props) => {
   const ASC = 'asc';
   const DESC = 'desc';
-  const { setOrder, setSort, onSearch, defaultSort, defaultOrder, defaultSearch, isMyPosts } = props;
+  const {
+    setOrder,
+    setSort,
+    onSearch,
+    defaultSort = 'created',
+    defaultOrder = DESC,
+    defaultSearch,
+    allowAuthorSearch = true,
+  } = props;
   const [defaultSearchType, defaultSearchValue] = getDefaultSearch();
   const [selectedOrder, setSelectedOrder] = useState(defaultOrder);
   const [searchField, setSearchField] = useState(defaultSearchType);
   const [searchValue, setSearchValue] = useState(defaultSearchValue);
 
   function onOrderChange(event) {
-    setOrder(event.target.value);
-    setSelectedOrder(event.target.value);
+    setOrder && (
+      setOrder(event.target.value),
+      setSelectedOrder(event.target.value));
   }
 
   function onSortChange(event) {
-    setSort(event.target.value);
+    setSort && setSort(event.target.value);
   }
 
   function onSearchChange(event) {
@@ -29,7 +38,7 @@ const Search = (props) => {
   }
 
   function onSearchClick() {
-    if (searchValue.length > 0) {
+    if (searchValue.length > 0 && onSearch) {
       onSearch({ [searchField]: searchValue });
     }
   }
@@ -49,7 +58,7 @@ const Search = (props) => {
       { value: 'created', label: 'creation date' },
       { value: 'modified', label: 'edit date' },
     ];
-    !isMyPosts && options.push({ label: 'author', value: 'author' });
+    allowAuthorSearch && options.push({ label: 'author', value: 'author' });
     return options;
   }
 
@@ -58,7 +67,7 @@ const Search = (props) => {
       { value: 'content', label: 'content' },
       { value: 'title', label: 'title' },
     ];
-    !isMyPosts && options.push({ label: 'author', value: 'author' });
+    allowAuthorSearch && options.push({ label: 'author', value: 'author' });
     return options;
   }
 
