@@ -20,13 +20,14 @@ class CommentRepository {
     });
   }
 
-  async findAllByPostId(id, params) {
-    const { skip, take } = params;
+  async findAllByPostId(id, searchParams, extraParams) {
+    const { skip, take, sortBy } = extraParams;
     return this.#prisma.comment.findMany({
       skip,
       take,
       where: {
         postId: Number(id),
+        ...searchParams
       },
       include: {
         user: {
@@ -36,9 +37,7 @@ class CommentRepository {
           },
         },
       },
-      orderBy: {
-        created: 'desc',
-      },
+      orderBy: sortBy,
     });
   }
 

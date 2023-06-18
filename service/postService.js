@@ -9,7 +9,8 @@ class PostService extends AbstractQueryableService {
   #postRepository = new PostRepository();
   #commentRepository = new CommentRepository();
   #nonSearchParams = ['page', 'size', 'sort', 'order'];
-  #textSearchParams = ['content', 'title', this.AUTHOR];
+  #postTextSearchParams = ['content', 'title', this.AUTHOR];
+  #commentTextSearchParams = ['content', this.AUTHOR];
 
   constructor() {
     super();
@@ -20,7 +21,7 @@ class PostService extends AbstractQueryableService {
   }
 
   async findAll(params) {
-    const searchParams = this.getSearchParams(params, this.#nonSearchParams, this.#textSearchParams);
+    const searchParams = this.getSearchParams(params, this.#nonSearchParams, this.#postTextSearchParams);
     const count = await this.#postRepository.getCount(searchParams);
     const pageParams = this.getPageParams(params, count);
     const pageCount = Math.ceil(count / pageParams.take);
@@ -53,10 +54,13 @@ class PostService extends AbstractQueryableService {
   async findAllPostComments(id, params) {
     validateNumber(id);
     await this.#validateIfPostExists(id);
+    const searchParams = this.getSearchParams(params, this.#nonSearchParams, this.#commentTextSearchParams);
     const count = await this.#commentRepository.getCountByPostId(id);
     const pageParams = this.getPageParams(params, count);
     const pageCount = Math.ceil(count / pageParams.take);
-    const comments = await this.#commentRepository.findAllByPostId(id, pageParams);
+    const sortParams = this.getSortParams(params);
+    const additionalParams = { ...pageParams, ...sortParams };
+    const comments = await this.#commentRepository.findAllByPostId(id, searchParams, additionalParams);
     return { comments, pageCount };
   }
 
