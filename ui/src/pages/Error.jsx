@@ -1,11 +1,17 @@
 import styled from 'styled-components';
+import { useErrorBoundary } from 'react-error-boundary';
 
-const Error = () => {
+const Error = ({ error }) => {
+  const { resetBoundary } = useErrorBoundary();
+
   return (
     <ErrorWrapper>
       <div>Oops...</div>
-      <div>An error occurred.</div>
-      <div>Please try again later.</div>
+      <div>Something went wrong:</div>
+      <div style={{ color: "red" }}>{error.message}</div>
+      <div>
+        <button onClick={resetBoundary}>Try again</button>
+      </div>
     </ErrorWrapper>
   );
 };

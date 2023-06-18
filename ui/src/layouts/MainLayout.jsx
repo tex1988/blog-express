@@ -9,7 +9,7 @@ const MainLayout = () => {
     <>
       <div className="container">
         <Navbar />
-        <ErrorBoundary fallbackRender={Error}>
+        <ErrorBoundary FallbackComponent={Error}>
           <Outlet />
         </ErrorBoundary>
         <Footer />
