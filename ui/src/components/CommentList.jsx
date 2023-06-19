@@ -17,8 +17,7 @@ import Search from './Search';
 const CommentList = (props) => {
   const PAGE_SIZE = 5;
   const { user } = useContext(UserContext);
-  const { showComments, showCommentsSearch, commentCount, setCommentCount, setShowComments } =
-    props;
+  const { showComments, showCommentsSearch, commentCount, setCommentCount, setShowComments } = props;
   const { defaultPage, defaultSort, defaultOrder, defaultSearch } = getDefaultParams();
   const { userId, postId } = useParams();
   const [comments, setComments] = useState([]);
@@ -85,7 +84,7 @@ const CommentList = (props) => {
       userId: user.userId,
       postId: postId,
     };
-    savePostComment(comment.postId, comment).then(async () => {
+    savePostComment(comment.postId, comment).then(() => {
       afterSave();
     });
   }
@@ -165,7 +164,7 @@ const CommentList = (props) => {
             onSave={(content) => onCommentSave(content)}
             useTitle={false}
             useCancel={false}
-            saveLabel={'Post a comment'}
+            saveLabel={'Left a comment'}
           />
         )}
       </div>
