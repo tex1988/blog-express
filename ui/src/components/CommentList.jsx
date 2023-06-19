@@ -17,7 +17,8 @@ import Search from './Search';
 const CommentList = (props) => {
   const PAGE_SIZE = 5;
   const { user } = useContext(UserContext);
-  const { showComments, commentCount, setCommentCount, setShowComments } = props;
+  const { showComments, showCommentsSearch, commentCount, setCommentCount, setShowComments } =
+    props;
   const { defaultPage, defaultSort, defaultOrder, defaultSearch } = getDefaultParams();
   const { userId, postId } = useParams();
   const [comments, setComments] = useState([]);
@@ -57,7 +58,7 @@ const CommentList = (props) => {
       defaultPage: 1,
       defaultSort: 'created',
       defaultOrder: 'desc',
-      defaultSearch: null
+      defaultSearch: null,
     };
   }
 
@@ -68,14 +69,14 @@ const CommentList = (props) => {
 
   function onCommentUpdate(comment) {
     updateComment(comment.commentId, comment).then(() => {
-        fetchPostComments(postId, page);
-      });
+      fetchPostComments(postId, page);
+    });
   }
 
   function onCommentDelete(commentId) {
     deleteCommentById(commentId).then(() => {
-        afterDelete();
-      });
+      afterDelete();
+    });
   }
 
   function onCommentSave(content) {
@@ -85,8 +86,8 @@ const CommentList = (props) => {
       postId: postId,
     };
     savePostComment(comment.postId, comment).then(async () => {
-        afterSave();
-      });
+      afterSave();
+    });
   }
 
   function afterSave() {
@@ -135,16 +136,18 @@ const CommentList = (props) => {
     <CommentsWrapper>
       {showComments && (
         <>
-          <Search
-            sortOptions={getSortOptions()}
-            searchOptions={getSearchOptions()}
-            defaultSort={sort}
-            defaultOrder={order}
-            defaultSearch={defaultSearch}
-            setOrder={setOrder}
-            setSort={setSort}
-            onSearch={onSearch}
-          />
+          {showCommentsSearch && (
+            <Search
+              sortOptions={getSortOptions()}
+              searchOptions={getSearchOptions()}
+              defaultSort={sort}
+              defaultOrder={order}
+              defaultSearch={defaultSearch}
+              setOrder={setOrder}
+              setSort={setSort}
+              onSearch={onSearch}
+            />
+          )}
           {getComments()}
           {pageCount > 1 && (
             <Pagination

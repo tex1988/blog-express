@@ -15,6 +15,7 @@ const Post = () => {
   const [editMode, setEditMode] = useState(false);
   const isEditable = isTheSameUser(loggedInUser, userId);
   const [showComments, setShowComments] = useState(false);
+  const [showCommentsSearch, setShowCommentsSearch] = useState(false);
   const hasComments = commentCount > 0;
   const navigate = useNavigate();
 
@@ -81,13 +82,25 @@ const Post = () => {
       </div>
       <span className="content">{content}</span>
       <div className="info" style={{ textAlign: 'right' }}>
-        <span
-          className={hasComments ? 'action-link' : ''}
-          onClick={hasComments ? () => setShowComments(!showComments) : () => {}}
-          aria-disabled={hasComments}
-          style={hasComments ? {} : { textDecoration: 'none' }}>
-          Comments: {commentCount}
-        </span>
+        <div>
+          <span
+            className={hasComments ? 'action-link' : ''}
+            onClick={hasComments ? () => setShowComments(!showComments) : () => {}}
+            aria-disabled={hasComments}
+            style={hasComments ? {} : { textDecoration: 'none' }}>
+            Comments: {commentCount}
+          </span>
+          {showComments && (
+            <>
+              <span>, </span>
+              <span
+                className="action-link"
+                onClick={() => setShowCommentsSearch(!showCommentsSearch)}>
+                {showCommentsSearch ? 'Hide' : 'Show'} search
+              </span>
+            </>
+          )}
+        </div>
         {isEditable && (
           <div className="flex-row-left" style={{ flexBasis: 'auto' }}>
             <span className="action-link" onClick={() => setEditMode(true)}>
@@ -99,7 +112,9 @@ const Post = () => {
           </div>
         )}
       </div>
-      <CommentList {...{ showComments, commentCount, setCommentCount, setShowComments }} />
+      <CommentList
+        {...{ showComments, showCommentsSearch, commentCount, setCommentCount, setShowComments }}
+      />
     </>
   );
 
