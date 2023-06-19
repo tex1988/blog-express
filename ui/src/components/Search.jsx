@@ -6,13 +6,14 @@ const Search = (props) => {
   const ASC = 'asc';
   const DESC = 'desc';
   const {
+    sortOptions,
+    searchOptions,
     setOrder,
     setSort,
     onSearch,
     defaultSort = 'created',
     defaultOrder = DESC,
     defaultSearch,
-    allowAuthorSearch = true,
   } = props;
   const [defaultSearchType, defaultSearchValue] = getDefaultSearch();
   const [selectedOrder, setSelectedOrder] = useState(defaultOrder);
@@ -53,24 +54,6 @@ const Search = (props) => {
     return defaultSearch ? Object.entries(defaultSearch)[0] : ['content', ''];
   }
 
-  function getSortOptions() {
-    const options = [
-      { value: 'created', label: 'creation date' },
-      { value: 'modified', label: 'edit date' },
-    ];
-    allowAuthorSearch && options.push({ label: 'author', value: 'author' });
-    return options;
-  }
-
-  function getSearchOptions() {
-    const options = [
-      { value: 'content', label: 'content' },
-      { value: 'title', label: 'title' },
-    ];
-    allowAuthorSearch && options.push({ label: 'author', value: 'author' });
-    return options;
-  }
-
   return (
     <SearchWrapper>
       <div className="flex-row-left">
@@ -78,7 +61,7 @@ const Search = (props) => {
           <span>Sort by:</span>
           <Select
             defaultValue={defaultSort}
-            options={getSortOptions()}
+            options={sortOptions}
             onChange={onSortChange}
             style={{ width: '105px' }}
           />
@@ -96,7 +79,7 @@ const Search = (props) => {
           <span>Search by:</span>
           <Select
             defaultValue={defaultSearchType}
-            options={getSearchOptions()}
+            options={searchOptions}
             onChange={onSearchChange}
             style={{ width: '65px' }}
           />

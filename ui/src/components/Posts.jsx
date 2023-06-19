@@ -80,6 +80,24 @@ const Posts = ({ isMyPosts }) => {
     setPage(1);
   }
 
+  function getSortOptions() {
+    const options = [
+      { value: 'created', label: 'creation date' },
+      { value: 'modified', label: 'edit date' },
+    ];
+    !isMyPosts && options.push({ label: 'author', value: 'author' });
+    return options;
+  }
+
+  function getSearchOptions() {
+    const options = [
+      { value: 'content', label: 'content' },
+      { value: 'title', label: 'title' },
+    ];
+    !isMyPosts && options.push({ label: 'author', value: 'author' });
+    return options;
+  }
+
   function getPostPreviews() {
     if (posts.length > 0) {
       return posts.map((post) => (
@@ -108,13 +126,14 @@ const Posts = ({ isMyPosts }) => {
   return (
     <div className='flex-column p-10'>
       <Search
+        sortOptions={getSortOptions()}
+        searchOptions={getSearchOptions()}
         defaultSort={sort}
         defaultOrder={order}
         defaultSearch={defaultSearch}
         setOrder={setOrder}
         setSort={setSort}
         onSearch={onSearch}
-        allowAuthorSearch={!isMyPosts}
       />
       {getPostPreviews()}
       {pageCount > 1 &&
