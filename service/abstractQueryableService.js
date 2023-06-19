@@ -62,10 +62,11 @@ class AbstractQueryableService {
   }
 
   #enrichWithTextSearchParam(key, value, searchParams) {
+    const newValue = value.trim().split(" ").join(" & ")
     if (key === this.AUTHOR) {
-      searchParams.OR = [{ user: { firstName: value } }, { user: { lastName: value } }];
+      searchParams.OR = [{ user: { firstName: newValue } }, { user: { lastName: newValue } }];
     } else {
-      searchParams[key] = { search: value };
+      searchParams[key] = { search: newValue };
     }
   }
 }
