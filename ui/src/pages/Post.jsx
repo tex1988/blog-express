@@ -4,7 +4,7 @@ import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import { getDate, isTheSameUser } from '../../utils/utils';
 import { useNavigate, useParams } from 'react-router-dom';
-import Comments from '../components/Comments';
+import CommentList from '../components/CommentList';
 
 const Post = () => {
   const { user: loggedInUser } = useContext(UserContext);
@@ -99,7 +99,7 @@ const Post = () => {
           </div>
         )}
       </div>
-      <Comments {...{ showComments, commentCount, setCommentCount, setShowComments }} />
+      <CommentList {...{ showComments, commentCount, setCommentCount, setShowComments }} />
     </>
   );
 

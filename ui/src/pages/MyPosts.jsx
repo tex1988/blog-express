@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { UserContext } from '../App';
-import Posts from '../components/Posts';
+import PostList from '../components/PostList';
 
 export const EditorContext = createContext(undefined);
 
@@ -12,7 +12,7 @@ const MyPosts = () => {
     return <Navigate to="/login" />;
   }
 
-  return <Posts isMyPosts={true} />;
+  return <PostList isMyPosts={true} />;
 };
 
 export default MyPosts;

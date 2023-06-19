@@ -1,5 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
-import { deleteCommentById, fetchCommentsByPostId, savePostComment, updateComment } from '../api/api';
+import {
+  deleteCommentById,
+  fetchCommentsByPostId,
+  savePostComment,
+  updateComment,
+} from '../api/api';
 import { useParams } from 'react-router-dom';
 import Comment from './Comment';
 import { UserContext } from '../App';
@@ -7,50 +12,70 @@ import { isPageExists, isTheSameUser } from '../../utils/utils';
 import Editor from './Editor';
 import styled from 'styled-components';
 import Pagination from './Pagination';
+import Search from './Search';
 
-const Comments = (props) => {
+const CommentList = (props) => {
   const PAGE_SIZE = 5;
   const { user } = useContext(UserContext);
   const { showComments, commentCount, setCommentCount, setShowComments } = props;
+  const { defaultPage, defaultSort, defaultOrder, defaultSearch } = getDefaultParams();
   const { userId, postId } = useParams();
   const [comments, setComments] = useState([]);
   const [pageCount, setPageCount] = useState(1);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(defaultPage);
+  const [order, setOrder] = useState(defaultOrder);
+  const [sort, setSort] = useState(defaultSort);
+  const [search, setSearch] = useState(defaultSearch);
   const isCanLeftAComment = user && !isTheSameUser(user, userId);
 
   useEffect(() => {
     fetchPostComments(postId, page);
-  }, [page]);
+  }, [page, order, sort, search]);
 
   function fetchPostComments(postId, page) {
-    fetchCommentsByPostId(postId, { size: PAGE_SIZE, page }).then((res) => {
+    fetchCommentsByPostId(postId, getFetchParams(page)).then((res) => {
       setComments(res.comments);
       setPageCount(res.pageCount);
     });
   }
 
-  function onPageChange(pageNumber) {
-    setPage(pageNumber);
+  function getFetchParams(page) {
+    const params = { order, sort, size: PAGE_SIZE, page };
+    search && enrichWithSearch(params);
+    return params;
+  }
+
+  function enrichWithSearch(params) {
+    Object.entries(search).forEach((entry) => {
+      const [key, value] = entry;
+      params[key] = value;
+    });
+  }
+
+  function getDefaultParams() {
+    return {
+      defaultPage: 1,
+      defaultSort: 'created',
+      defaultOrder: 'desc',
+      defaultSearch: null
+    };
+  }
+
+  function onSearch(search) {
+    setSearch(search);
+    setPage(1);
   }
 
   function onCommentUpdate(comment) {
-    updateComment(comment.commentId, comment).then((code) => {
-      if (code === 200) {
+    updateComment(comment.commentId, comment).then(() => {
         fetchPostComments(postId, page);
-      } else {
-        alert('An error occurred please try again later');
-      }
-    });
+      });
   }
 
   function onCommentDelete(commentId) {
-    deleteCommentById(commentId).then((status) => {
-      if (status === 200) {
+    deleteCommentById(commentId).then(() => {
         afterDelete();
-      } else {
-        alert('An error occurred please try again later');
-      }
-    });
+      });
   }
 
   function onCommentSave(content) {
@@ -59,25 +84,21 @@ const Comments = (props) => {
       userId: user.userId,
       postId: postId,
     };
-    savePostComment(comment.postId, comment).then(async (res) => {
-      if (res.status === 201) {
+    savePostComment(comment.postId, comment).then(async () => {
         afterSave();
-      } else {
-        alert('An error occurred please try again later');
-      }
-    });
+      });
   }
 
   function afterSave() {
     fetchPostComments(postId, 1);
     setCommentCount((prev) => ++prev);
     setShowComments(true);
-    setPage(1)
+    setPage(1);
   }
 
   function afterDelete() {
     let newPage = page;
-    if(!isPageExists(commentCount - 1, PAGE_SIZE, page)) {
+    if (!isPageExists(commentCount - 1, PAGE_SIZE, page)) {
       newPage--;
     }
     fetchPostComments(postId, newPage);
@@ -85,11 +106,25 @@ const Comments = (props) => {
     setPage(newPage);
   }
 
+  function getSortOptions() {
+    return [
+      { value: 'created', label: 'creation date' },
+      { label: 'author', value: 'author' },
+    ];
+  }
+
+  function getSearchOptions() {
+    return [
+      { value: 'content', label: 'content' },
+      { label: 'author', value: 'author' },
+    ];
+  }
+
   function getComments() {
     return comments.map((comment) => (
       <Comment
         key={`comment_${comment.commentId}`}
-        comment={{...comment}}
+        comment={{ ...comment }}
         onCommentUpdate={onCommentUpdate}
         onCommentDelete={onCommentDelete}
       />
@@ -100,12 +135,23 @@ const Comments = (props) => {
     <CommentsWrapper>
       {showComments && (
         <>
+          <Search
+            sortOptions={getSortOptions()}
+            searchOptions={getSearchOptions()}
+            defaultSort={sort}
+            defaultOrder={order}
+            defaultSearch={defaultSearch}
+            setOrder={setOrder}
+            setSort={setSort}
+            onSearch={onSearch}
+          />
           {getComments()}
           {pageCount > 1 && (
             <Pagination
+              initialPage={page - 1}
               pageCount={pageCount}
               pageRangeDisplayed={PAGE_SIZE}
-              onPageChange={(pageNumber) => onPageChange(pageNumber)}
+              onPageChange={setPage}
             />
           )}
         </>
@@ -131,4 +177,4 @@ const CommentsWrapper = styled.div.attrs({
   margin-left: 20px;
 `;
 
-export default Comments;
+export default CommentList;

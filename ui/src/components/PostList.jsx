@@ -8,7 +8,7 @@ import Pagination from '../components/Pagination';
 import Search from './Search';
 import styled from 'styled-components';
 
-const Posts = ({ isMyPosts }) => {
+const PostList = ({ isMyPosts }) => {
   const PAGE_SIZE = 5;
   const { user } = useContext(UserContext);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -171,4 +171,4 @@ const ButtonWrapper = styled.div.attrs({
   flex-wrap: wrap;
 `;
 
-export default Posts;
+export default PostList;

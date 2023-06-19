@@ -1,7 +1,7 @@
-import Posts from '../components/Posts';
+import PostList from '../components/PostList';
 
 const AllPosts = () => {
-  return <Posts isMyPosts={false} />;
+  return <PostList isMyPosts={false} />;
 };
 
 export default AllPosts;
