@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { fetchPosts, savePost } from '../api/api';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import PostPreview from '../components/PostPreview';
@@ -20,7 +20,6 @@ const PostList = ({ isMyPosts }) => {
   const [order, setOrder] = useState(defaultOrder);
   const [sort, setSort] = useState(defaultSort);
   const [search, setSearch] = useState(defaultSearch);
-  const navigate = useNavigate();
 
   useEffect(() => {
     getPosts();
@@ -28,14 +27,10 @@ const PostList = ({ isMyPosts }) => {
   }, [page, order, sort, search]);
 
   function getPosts() {
-    fetchPosts(getFetchParams())
-      .then((res) => {
-        setPageCount(res.pageCount);
-        setPosts(res.posts);
-      })
-      .catch(() => {
-        navigate('/error');
-      });
+    fetchPosts(getFetchParams()).then((res) => {
+      setPageCount(res.pageCount);
+      setPosts(res.posts);
+    });
   }
 
   function getFetchParams() {
@@ -112,15 +107,11 @@ const PostList = ({ isMyPosts }) => {
       title: title,
       content: content,
     };
-    savePost(post)
-      .then(() => {
-        getPosts();
-        setPage(1);
-        setEditorVisible(false);
-      })
-      .catch(() => {
-        alert('An error occurred please try again later');
-      });
+    savePost(post).then(() => {
+      getPosts();
+      setPage(1);
+      setEditorVisible(false);
+    });
   }
 
   return (
