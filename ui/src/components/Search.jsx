@@ -1,53 +1,40 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import Select from './Select';
+import SearchInput from './SearchInput';
 
 const Search = (props) => {
   const ASC = 'asc';
   const DESC = 'desc';
   const {
-    sortOptions,
-    searchOptions,
-    setOrder,
-    setSort,
-    onSearch,
+    sortOptions = [],
+    searchOptions = [],
+    setOrder = (value) => {},
+    setSort = (value) => {},
+    onSearch = (value) => {},
     defaultSort = 'created',
     defaultOrder = DESC,
-    defaultSearch,
+    defaultSearch = null,
   } = props;
   const [defaultSearchType, defaultSearchValue] = getDefaultSearch();
   const [selectedOrder, setSelectedOrder] = useState(defaultOrder);
   const [searchField, setSearchField] = useState(defaultSearchType);
-  const [searchValue, setSearchValue] = useState(defaultSearchValue);
 
   function onOrderChange(event) {
-    setOrder && (
-      setOrder(event.target.value),
-      setSelectedOrder(event.target.value));
+    setOrder(event.target.value);
+    setSelectedOrder(event.target.value);
   }
 
   function onSortChange(event) {
-    setSort && setSort(event.target.value);
+    setSort(event.target.value);
   }
 
-  function onSearchChange(event) {
+  function onSearchTypeChange(event) {
     setSearchField(event.target.value);
   }
 
-  function onSearchInput(event) {
-    setSearchValue(event.target.value);
-  }
-
-  function onSearchClick() {
-    if (searchValue.length > 0 && onSearch) {
-      onSearch({ [searchField]: searchValue });
-    }
-  }
-
-  function onInputKeyPress(event) {
-    if (event.key === 'Enter') {
-      onSearchClick(event);
-    }
+  function onSearchClick(value) {
+    value ? onSearch({ [searchField]: value }) : onSearch(null);
   }
 
   function getDefaultSearch() {
@@ -80,19 +67,14 @@ const Search = (props) => {
           <Select
             defaultValue={defaultSearchType}
             options={searchOptions}
-            onChange={onSearchChange}
+            onChange={onSearchTypeChange}
             style={{ width: '65px' }}
           />
         </div>
-        <div>
-          <input
-            value={searchValue}
-            onInput={onSearchInput}
-            onKeyDown={onInputKeyPress}
-            placeholder="Search"
-          />
-          <button onClick={onSearchClick}>Search</button>
-        </div>
+        <SearchInput
+          defaultValue={defaultSearchValue}
+          onSearch={onSearchClick}
+        />
       </div>
     </SearchWrapper>
   );
