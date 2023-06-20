@@ -5,7 +5,7 @@ import {
   savePostComment,
   updateComment,
 } from '../api/api';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import Comment from './Comment';
 import { UserContext } from '../App';
 import { isPageExists, isTheSameUser } from '../../utils/utils';
@@ -17,6 +17,7 @@ import Search from './Search';
 const CommentList = (props) => {
   const PAGE_SIZE = 5;
   const { user } = useContext(UserContext);
+  const [searchParams, setSearchParams] = useSearchParams();
   const { showComments, showCommentsSearch, commentCount, setCommentCount, setShowComments } = props;
   const { defaultPage, defaultSort, defaultOrder, defaultSearch } = getDefaultParams();
   const { userId, postId } = useParams();
@@ -30,12 +31,22 @@ const CommentList = (props) => {
 
   useEffect(() => {
     fetchPostComments(postId, page);
+    setSearchParams(getSearchParams());
   }, [page, order, sort, search]);
 
   function fetchPostComments(postId, page) {
     fetchCommentsByPostId(postId, getFetchParams(page)).then((res) => {
       setComments(res.comments);
       setPageCount(res.pageCount);
+    });
+  }
+
+  function getSearchParams() {
+    let params = Object.fromEntries(searchParams);
+    return new URLSearchParams({
+      comments: params.comments,
+      search: params.search,
+      ...getFetchParams(page),
     });
   }
 
@@ -53,12 +64,26 @@ const CommentList = (props) => {
   }
 
   function getDefaultParams() {
-    return {
-      defaultPage: 1,
-      defaultSort: 'created',
-      defaultOrder: 'desc',
-      defaultSearch: null,
-    };
+    const params = Object.fromEntries(searchParams);
+    const { page, sort, order } = params;
+    const defaultSearch = getSearchParam(params);
+    const defaultParams = {};
+    Object.assign(defaultParams,
+      page ? { defaultPage: Number(page) } : { defaultPage: 1 },
+      sort ? { defaultSort: sort } : { defaultSort: 'created' },
+      order ? { defaultOrder: order } : { defaultOrder: 'desc' },
+      defaultSearch ? {defaultSearch} : null);
+    return defaultParams;
+  }
+
+  function getSearchParam(params) {
+    const nonSearchParams = ['sort', 'order', 'page', 'size', 'comments', 'search'];
+    let searchParams = { ...params };
+    nonSearchParams.forEach((param) => delete searchParams[param]);
+    if (Object.keys(searchParams).length === 0) {
+      searchParams = null;
+    }
+    return searchParams;
   }
 
   function onSearch(search) {

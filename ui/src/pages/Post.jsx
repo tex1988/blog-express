@@ -3,29 +3,27 @@ import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import { getDate, isTheSameUser } from '../../utils/utils';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import CommentList from '../components/CommentList';
 
 const Post = () => {
   const { user: loggedInUser } = useContext(UserContext);
   const { userId, postId } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { defaultShowComments, defaultShowCommentsSearch } = getDefaultParams();
   const [post, setPost] = useState({});
   const { title, content, created, modified, user, _count } = post;
   const [commentCount, setCommentCount] = useState(0);
   const [editMode, setEditMode] = useState(false);
   const isEditable = isTheSameUser(loggedInUser, userId);
-  const [showComments, setShowComments] = useState(false);
-  const [showCommentsSearch, setShowCommentsSearch] = useState(false);
+  const [showComments, setShowComments] = useState(defaultShowComments);
+  const [showCommentsSearch, setShowCommentsSearch] = useState(defaultShowCommentsSearch);
   const hasComments = commentCount > 0;
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchPostById(postId).then((post) => {
-      if (post.status) {
-        navigate('/error');
-      } else {
-        setPost(post);
-      }
+      setPost(post);
     });
   }, []);
 
@@ -33,24 +31,32 @@ const Post = () => {
     setCommentCount(_count ? _count.comments : 0);
   }, [post]);
 
-  function onDeleteClick() {
-    deletePostById(postId).then((status) => {
-      if (status === 200) {
-        navigate(`/user/${userId}/post`);
-      } else {
-        alert('An error occurred please try again later');
-      }
+  useEffect(()=> {
+    setSearchParams(getSearchParams());
+  }, [showComments, showCommentsSearch])
+
+  function getSearchParams() {
+    return new URLSearchParams({
+      ...Object.fromEntries(searchParams),
+      comments: showComments,
+      search: showCommentsSearch,
     });
   }
 
-  function getEditorProps() {
-    return {
-      onSave: (content, title) => onPostEdit(content, title),
-      onCancel: () => setEditMode(false),
-      initialTitle: title,
-      initialContent: content,
-      useTitle: true,
-    };
+  function getDefaultParams() {
+    const params = Object.fromEntries(searchParams);
+    const { comments, search } = params;
+    const defaultParams = {};
+    Object.assign(defaultParams,
+      comments ? { defaultShowComments: comments } : { defaultShowComments: false },
+      search ? { defaultShowCommentsSearch: search } : { defaultShowCommentsSearch: false });
+    return defaultParams;
+  }
+
+  function onDeleteClick() {
+    deletePostById(postId).then(() => {
+      navigate(`/user/${userId}/post`);
+    });
   }
 
   function onPostEdit(content, title) {
@@ -60,14 +66,10 @@ const Post = () => {
       content: content,
     };
     updatePost(postId, post).then((code) => {
-      if (code === 200) {
-        fetchPostById(postId).then((post) => {
-          setPost(post);
-          setEditMode(false);
-        });
-      } else {
-        alert('An error occurred please try again later');
-      }
+      fetchPostById(postId).then((post) => {
+        setPost(post);
+        setEditMode(false);
+      });
     });
   }
 
@@ -120,7 +122,17 @@ const Post = () => {
 
   return (
     <div className="flex-column" style={{ padding: '10px' }}>
-      {editMode ? <Editor {...getEditorProps()} /> : postElement}
+      {editMode ? (
+        <Editor
+          onSave={(content, title) => onPostEdit(content, title)}
+          onCancel={() => setEditMode(false)}
+          initialTitle={title}
+          initialContent={content}
+          useTitle={true}
+        />
+      ) : (
+        postElement
+      )}
     </div>
   );
 };

@@ -25,6 +25,10 @@ const SearchInput = (props) => {
   }
 
   function onSearchInput(event) {
+    const value = event.target.value;
+    if (value.length === 0) {
+      onSearch(null);
+    }
     setValue(event.target.value);
   }
 

@@ -10,15 +10,6 @@ const Comment = ({ comment, onCommentUpdate, onCommentDelete }) => {
   const [editMode, setEditMode] = useState(false);
   const isEditable = isTheSameUser(user, userId);
 
-  function getEditorProps() {
-    return {
-      onSave: (content) => onUpdate(content),
-      onCancel: () => setEditMode(false),
-      initialContent: content,
-      useTitle: false,
-    };
-  }
-
   function onUpdate(content) {
     const comment = {
       commentId: commentId,
@@ -57,7 +48,16 @@ const Comment = ({ comment, onCommentUpdate, onCommentDelete }) => {
 
   return (
     <div className="flex-column">
-      {editMode ? <Editor {...getEditorProps()} /> : commentElement}
+      {editMode ? (
+        <Editor
+          onSave={(content) => onUpdate(content)}
+          onCancel={() => setEditMode(false)}
+          initialContent={initialContent}
+          useTitle={false}
+        />
+      ) : (
+        commentElement
+      )}
     </div>
   );
 };
