@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import { fetchPosts, savePost } from '../api/api';
 import { useSearchParams } from 'react-router-dom';
 import { UserContext } from '../App';
 import Editor from '../components/Editor';
@@ -7,31 +6,24 @@ import PostPreview from '../components/PostPreview';
 import Pagination from '../components/Pagination';
 import Search from './Search';
 import styled from 'styled-components';
+import usePostListQuery from '../hooks/usePostListQuery';
 
 const PostList = ({ isMyPosts }) => {
   const PAGE_SIZE = 5;
   const { user } = useContext(UserContext);
   const [searchParams, setSearchParams] = useSearchParams();
   const { defaultPage, defaultSort, defaultOrder, defaultSearch } = getDefaultParams();
-  const [posts, setPosts] = useState([]);
-  const [pageCount, setPageCount] = useState(1);
   const [page, setPage] = useState(defaultPage);
   const [isEditorVisible, setEditorVisible] = useState(false);
   const [order, setOrder] = useState(defaultOrder);
   const [sort, setSort] = useState(defaultSort);
   const [search, setSearch] = useState(defaultSearch);
+  const fetchParams = getFetchParams();
+  const { isSuccess, isLoading, saveError, posts, pageCount, createPost } = usePostListQuery(fetchParams);
 
   useEffect(() => {
-    getPosts();
     setSearchParams(new URLSearchParams(getFetchParams()));
   }, [page, order, sort, search]);
-
-  function getPosts() {
-    fetchPosts(getFetchParams()).then((res) => {
-      setPageCount(res.pageCount);
-      setPosts(res.posts);
-    });
-  }
 
   function getFetchParams() {
     const params = { order, sort, size: PAGE_SIZE, page };
@@ -45,11 +37,13 @@ const PostList = ({ isMyPosts }) => {
     const { page, sort, order } = params;
     const defaultSearch = getSearchParam(params);
     const defaultParams = {};
-    Object.assign(defaultParams,
+    Object.assign(
+      defaultParams,
       page ? { defaultPage: Number(page) } : { defaultPage: 1 },
       sort ? { defaultSort: sort } : { defaultSort: 'created' },
       order ? { defaultOrder: order } : { defaultOrder: 'desc' },
-      defaultSearch ? {defaultSearch} : null);
+      defaultSearch ? { defaultSearch } : null,
+    );
     return defaultParams;
   }
 
@@ -94,10 +88,8 @@ const PostList = ({ isMyPosts }) => {
   }
 
   function getPostPreviews() {
-    if (posts.length > 0) {
-      return posts.map((post) => (
-        <PostPreview key={`post_${post.postId}`} post={post} />
-      ));
+    if (isSuccess && posts.length > 0) {
+      return posts.map((post) => <PostPreview key={`post_${post.postId}`} post={post} />);
     }
   }
 
@@ -107,15 +99,11 @@ const PostList = ({ isMyPosts }) => {
       title: title,
       content: content,
     };
-    savePost(post).then(() => {
-      getPosts();
-      setPage(1);
-      setEditorVisible(false);
-    });
+    createPost(post);
   }
 
   return (
-    <div className='flex-column p-10'>
+    <div className="flex-column p-10">
       <Search
         sortOptions={getSortOptions()}
         searchOptions={getSearchOptions()}
@@ -127,27 +115,26 @@ const PostList = ({ isMyPosts }) => {
         onSearch={onSearch}
       />
       {getPostPreviews()}
-      {pageCount > 1 &&
+      {pageCount > 1 && (
         <Pagination
           page={page - 1}
           pageCount={pageCount}
           pageRangeDisplayed={PAGE_SIZE}
           onPageChange={setPage}
-        />}
-      {isMyPosts && isEditorVisible &&
+        />
+      )}
+      {isMyPosts && isEditorVisible && (
         <Editor
           onSave={(title, content) => onPostSave(content, title)}
           onCancel={() => setEditorVisible(false)}
-          initialTitle=''
-          initialContent=''
+          initialTitle=""
+          initialContent=""
           useTitle={true}
-        />}
+        />
+      )}
       {isMyPosts && (
         <ButtonWrapper>
-          {!isEditorVisible &&
-            <button onClick={() => setEditorVisible(true)}>
-              Create post
-            </button>}
+          {!isEditorVisible && <button onClick={() => setEditorVisible(true)}>Create post</button>}
         </ButtonWrapper>
       )}
     </div>

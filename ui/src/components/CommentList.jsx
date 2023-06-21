@@ -1,10 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import {
-  deleteCommentById,
-  fetchCommentsByPostId,
-  savePostComment,
-  updateComment,
-} from '../api/api';
 import { useParams, useSearchParams } from 'react-router-dom';
 import Comment from './Comment';
 import { UserContext } from '../App';
@@ -13,6 +7,7 @@ import Editor from './Editor';
 import styled from 'styled-components';
 import Pagination from './Pagination';
 import Search from './Search';
+import useCommentListQuery from '../hooks/useCommentListQuery';
 
 const CommentList = (props) => {
   const PAGE_SIZE = 5;
@@ -21,32 +16,51 @@ const CommentList = (props) => {
   const { showComments, showCommentsSearch, commentCount, setCommentCount, setShowComments } = props;
   const { defaultPage, defaultSort, defaultOrder, defaultSearch } = getDefaultParams();
   const { userId, postId } = useParams();
-  const [comments, setComments] = useState([]);
-  const [pageCount, setPageCount] = useState(1);
   const [page, setPage] = useState(defaultPage);
   const [order, setOrder] = useState(defaultOrder);
   const [sort, setSort] = useState(defaultSort);
   const [search, setSearch] = useState(defaultSearch);
+  const fetchParams = getFetchParams(page);
   const isCanLeftAComment = user && !isTheSameUser(user, userId);
+  const {
+    isSuccess,
+    isLoading,
+    saveError,
+    comments,
+    pageCount,
+    saveComment,
+    isSaveSuccess,
+    editComment,
+    isEditSuccess,
+    deleteComment,
+    isDeleteSuccess,
+  } = useCommentListQuery(postId, fetchParams);
+
+  const a = 0;
 
   useEffect(() => {
-    fetchPostComments(postId, page);
-    setSearchParams(getSearchParams());
+    // fetchPostComments(postId, page);
+    setSearchParams(new URLSearchParams(getSearchParams()));
   }, [page, order, sort, search]);
 
-  function fetchPostComments(postId, page) {
-    fetchCommentsByPostId(postId, getFetchParams(page)).then((res) => {
-      setComments(res.comments);
-      setPageCount(res.pageCount);
-    });
-  }
+  useEffect(() => {
+    if (isSaveSuccess === true) {
+      afterSave();
+    }
+  }, [isSaveSuccess]);
+
+  useEffect(() => {
+    if (isDeleteSuccess === true) {
+      afterDelete();
+    }
+  }, [isDeleteSuccess]);
 
   function getSearchParams() {
     let params = Object.fromEntries(searchParams);
     return new URLSearchParams({
       comments: params.comments,
       search: params.search,
-      ...getFetchParams(page),
+      ...fetchParams,
     });
   }
 
@@ -68,11 +82,13 @@ const CommentList = (props) => {
     const { page, sort, order } = params;
     const defaultSearch = getSearchParam(params);
     const defaultParams = {};
-    Object.assign(defaultParams,
+    Object.assign(
+      defaultParams,
       page ? { defaultPage: Number(page) } : { defaultPage: 1 },
       sort ? { defaultSort: sort } : { defaultSort: 'created' },
       order ? { defaultOrder: order } : { defaultOrder: 'desc' },
-      defaultSearch ? {defaultSearch} : null);
+      defaultSearch ? { defaultSearch } : null,
+    );
     return defaultParams;
   }
 
@@ -91,31 +107,16 @@ const CommentList = (props) => {
     setPage(1);
   }
 
-  function onCommentUpdate(comment) {
-    updateComment(comment.commentId, comment).then(() => {
-      fetchPostComments(postId, page);
-    });
-  }
-
-  function onCommentDelete(commentId) {
-    deleteCommentById(commentId).then(() => {
-      afterDelete();
-    });
-  }
-
   function onCommentSave(content) {
     const comment = {
       content: content,
       userId: user.userId,
       postId: postId,
     };
-    savePostComment(comment.postId, comment).then(() => {
-      afterSave();
-    });
+    saveComment(comment);
   }
 
   function afterSave() {
-    fetchPostComments(postId, 1);
     setCommentCount((prev) => ++prev);
     setShowComments(true);
     setPage(1);
@@ -126,7 +127,6 @@ const CommentList = (props) => {
     if (!isPageExists(commentCount - 1, PAGE_SIZE, page)) {
       newPage--;
     }
-    fetchPostComments(postId, newPage);
     setCommentCount((prev) => --prev);
     setPage(newPage);
   }
@@ -146,14 +146,16 @@ const CommentList = (props) => {
   }
 
   function getComments() {
-    return comments.map((comment) => (
-      <Comment
-        key={`comment_${comment.commentId}`}
-        comment={{ ...comment }}
-        onCommentUpdate={onCommentUpdate}
-        onCommentDelete={onCommentDelete}
-      />
-    ));
+    if (isSuccess && comments.length > 0) {
+      return comments.map((comment) => (
+        <Comment
+          key={`comment_${comment.commentId}`}
+          comment={{ ...comment }}
+          onCommentUpdate={editComment}
+          onCommentDelete={deleteComment}
+        />
+      ));
+    }
   }
 
   return (

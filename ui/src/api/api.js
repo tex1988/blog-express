@@ -1,9 +1,10 @@
 const BASE_URL = `${location.protocol}//${window.location.host}`;
 
-export function fetchPosts(params) {
+export async function fetchPosts(params) {
   const url = `${BASE_URL}/post?`;
-  return fetch(url + new URLSearchParams(params))
-    .then((res) => res.json());
+  const res = await fetch(url + new URLSearchParams(params));
+  if(!res.ok) throw new Error(`Error: ${res.status}/n ${res.statusMessage}`)
+  return res.json();
 }
 
 export function fetchPostById(id) {
@@ -20,13 +21,15 @@ export async function fetchUserByUsername(username) {
 
 export async function savePost(post) {
   const url = `${BASE_URL}/post`;
-  return fetch(url, {
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(post),
   });
+  if(!res.ok) throw new Error(`Error: ${res.status}/n ${res.statusMessage}`)
+  return res.json();
 }
 
 export async function updatePost(id, post) {
@@ -76,15 +79,18 @@ export async function fetchCommentById(commentId) {
 
 export async function fetchCommentsByPostId(postId, params) {
   const url = `${BASE_URL}/post/${postId}/comment?`;
-  return fetch(url + new URLSearchParams(params))
-    .then((res) => res.json());
+  const res = await fetch(url + new URLSearchParams(params));
+  if(!res.ok) throw new Error(`Error: ${res.status}/n ${res.statusMessage}`)
+  return res.json();
 }
 
 export async function deleteCommentById(commentId) {
   const url = `${BASE_URL}/comment/${commentId}`;
-  return fetch(url, {
+  const res = await fetch(url, {
     method: 'DELETE',
-  }).then((res) => res.status);
+  });
+  if(!res.ok) throw new Error(`Error: ${res.status}/n ${res.statusMessage}`)
+  return res.json();
 }
 
 export async function savePostComment(postId, comment) {
@@ -100,11 +106,13 @@ export async function savePostComment(postId, comment) {
 
 export async function updateComment(id, comment) {
   const url = `${BASE_URL}/comment/${id}`;
-  return fetch(url, {
+  const res = await fetch(url, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(comment),
-  }).then((res) => res.status);
+  });
+  if(!res.ok) throw new Error(`Error: ${res.status}/n ${res.statusMessage}`)
+  return res.json();
 }
