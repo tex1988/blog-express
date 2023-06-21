@@ -2,12 +2,11 @@ import ReactPaginate from 'react-paginate';
 import styled from 'styled-components';
 
 const Pagination = (props) => {
-  const {initialPage, page, pageCount, onPageChange, pageRangeDisplayed } = props;
+  const {page, pageCount, onPageChange, pageRangeDisplayed } = props;
 
   return (
     <PaginationWrapper>
       <ReactPaginate
-        initialPage={initialPage}
         forcePage={page}
         previousLabel={'<'}
         nextLabel={'>'}

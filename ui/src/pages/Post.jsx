@@ -65,7 +65,7 @@ const Post = () => {
       title: title,
       content: content,
     };
-    updatePost(postId, post).then((code) => {
+    updatePost(postId, post).then(() => {
       fetchPostById(postId).then((post) => {
         setPost(post);
         setEditMode(false);

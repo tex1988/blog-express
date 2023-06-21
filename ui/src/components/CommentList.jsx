@@ -175,7 +175,7 @@ const CommentList = (props) => {
           {getComments()}
           {pageCount > 1 && (
             <Pagination
-              initialPage={page - 1}
+              page={page - 1}
               pageCount={pageCount}
               pageRangeDisplayed={PAGE_SIZE}
               onPageChange={setPage}
