@@ -52,7 +52,7 @@ const Comment = ({ comment, onCommentUpdate, onCommentDelete }) => {
         <Editor
           onSave={(content) => onUpdate(content)}
           onCancel={() => setEditMode(false)}
-          initialContent={initialContent}
+          initialContent={content}
           useTitle={false}
         />
       ) : (
