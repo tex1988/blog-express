@@ -41,7 +41,7 @@ const UserMenuWrapper = styled.div`
 
   ${props => props.showUserMenu && css`
     opacity: 1;
-    z-index: 1;
+    z-index: 100;
   `}
 
   div {
