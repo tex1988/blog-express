@@ -1,18 +1,22 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import {
-  deleteCommentById,
-  fetchCommentsByPostId,
-  savePostComment,
-  updateComment,
-} from '../api/api';
+import { deleteCommentById, fetchCommentsByPostId, savePostComment, updateComment, } from '../api/api';
 import { useErrorBoundary } from 'react-error-boundary';
 
-export default function useCommentListQuery(postId, fetchParams) {
+export default function useCommentListQuery(props) {
+  const {
+    postId,
+    fetchParams,
+    afterSave = () => {},
+    afterEdit = () => {},
+    afterDelete = () => {},
+    isFetch,
+  } = props;
   const queryKey = `post/${postId}/comment?${JSON.stringify(fetchParams)}`;
   const { isSuccess, isLoading, error, data } = useQuery({
     queryFn: () => fetchCommentsByPostId(postId, fetchParams),
     queryKey,
     staleTime: 1000 * 5,
+    enabled: isFetch,
   });
 
   const { comments = null, pageCount = 1 } = data || {};
@@ -23,7 +27,8 @@ export default function useCommentListQuery(postId, fetchParams) {
     isSuccess: isSaveSuccess,
   } = useMutation({
     mutationFn: (comment) => savePostComment(postId, comment),
-    onSuccess: () => client.invalidateQueries({ queryKey }),
+    onSuccess: () => client.invalidateQueries({ queryKey })
+      .then(() => afterSave()),
   });
 
   const {
@@ -32,7 +37,8 @@ export default function useCommentListQuery(postId, fetchParams) {
     isSuccess: isEditSuccess,
   } = useMutation({
     mutationFn: (comment) => updateComment(comment.commentId, comment),
-    onSuccess: () => client.invalidateQueries({ queryKey }),
+    onSuccess: () => client.invalidateQueries({ queryKey })
+      .then(() => afterEdit()),
   });
 
   const {
@@ -41,7 +47,8 @@ export default function useCommentListQuery(postId, fetchParams) {
     isSuccess: isDeleteSuccess,
   } = useMutation({
     mutationFn: deleteCommentById,
-    onSuccess: () => client.invalidateQueries({ queryKey }),
+    onSuccess: () => client.invalidateQueries({ queryKey })
+      .then(() => afterDelete()),
   });
 
   const { showBoundary } = useErrorBoundary();

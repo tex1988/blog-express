@@ -3,13 +3,15 @@ const BASE_URL = `${location.protocol}//${window.location.host}`;
 export async function fetchPosts(params) {
   const url = `${BASE_URL}/post?`;
   const res = await fetch(url + new URLSearchParams(params));
-  if(!res.ok) throw new Error(`Error: ${res.status}/n ${res.statusMessage}`)
+  validateResponse(res);
   return res.json();
 }
 
-export function fetchPostById(id) {
+export async function fetchPostById(id) {
   const url = `${BASE_URL}/post/${id}`;
-  return fetch(url).then((res) => res.json());
+  const res = await fetch(url);
+  validateResponse(res);
+  return res.json();
 }
 
 export async function fetchUserByUsername(username) {
@@ -28,7 +30,7 @@ export async function savePost(post) {
     },
     body: JSON.stringify(post),
   });
-  if(!res.ok) throw new Error(`Error: ${res.status}/n ${res.statusMessage}`)
+  validateResponse(res);
   return res.json();
 }
 
@@ -45,9 +47,9 @@ export async function updatePost(id, post) {
 
 export async function deletePostById(postId) {
   const url = `${BASE_URL}/post/${postId}`;
-  return fetch(url, {
-    method: 'DELETE',
-  }).then((res) => res.status);
+  const res = await fetch(url, { method: 'DELETE' });
+  validateResponse(res);
+  return res.json();
 }
 
 export async function fetchUserPosts(userId, params) {
@@ -80,7 +82,7 @@ export async function fetchCommentById(commentId) {
 export async function fetchCommentsByPostId(postId, params) {
   const url = `${BASE_URL}/post/${postId}/comment?`;
   const res = await fetch(url + new URLSearchParams(params));
-  if(!res.ok) throw new Error(`Error: ${res.status}/n ${res.statusMessage}`)
+  validateResponse(res);
   return res.json();
 }
 
@@ -89,7 +91,7 @@ export async function deleteCommentById(commentId) {
   const res = await fetch(url, {
     method: 'DELETE',
   });
-  if(!res.ok) throw new Error(`Error: ${res.status}/n ${res.statusMessage}`)
+  validateResponse(res);
   return res.json();
 }
 
@@ -113,6 +115,12 @@ export async function updateComment(id, comment) {
     },
     body: JSON.stringify(comment),
   });
-  if(!res.ok) throw new Error(`Error: ${res.status}/n ${res.statusMessage}`)
+  validateResponse(res);
   return res.json();
+}
+
+function validateResponse(res) {
+  if (!res.ok) {
+    throw new Error(`Error: ${res.status}/n ${res.statusMessage}`);
+  }
 }

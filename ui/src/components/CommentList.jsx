@@ -25,43 +25,30 @@ const CommentList = (props) => {
   const {
     isSuccess,
     isLoading,
-    saveError,
     comments,
     pageCount,
     saveComment,
-    isSaveSuccess,
     editComment,
-    isEditSuccess,
     deleteComment,
-    isDeleteSuccess,
-  } = useCommentListQuery(postId, fetchParams);
-
-  const a = 0;
+  } = useCommentListQuery({ postId, fetchParams, showComments, afterDelete, afterSave });
 
   useEffect(() => {
-    // fetchPostComments(postId, page);
     setSearchParams(new URLSearchParams(getSearchParams()));
   }, [page, order, sort, search]);
 
-  useEffect(() => {
-    if (isSaveSuccess === true) {
-      afterSave();
-    }
-  }, [isSaveSuccess]);
-
-  useEffect(() => {
-    if (isDeleteSuccess === true) {
-      afterDelete();
-    }
-  }, [isDeleteSuccess]);
-
   function getSearchParams() {
-    let params = Object.fromEntries(searchParams);
-    return new URLSearchParams({
-      comments: params.comments,
-      search: params.search,
-      ...fetchParams,
-    });
+    const { comments, search } = Object.fromEntries(searchParams);
+    const newSearchParams = { ...fetchParams };
+    Object.assign(
+      newSearchParams,
+      comments === 'true' || comments === 'false'
+        ? { comments: JSON.parse(comments.toLocaleLowerCase()) }
+        : { comments: false },
+      search === 'true' || search === 'false'
+        ? { search: JSON.parse(search.toLocaleLowerCase()) }
+        : { search: false },
+    );
+    return new URLSearchParams(newSearchParams);
   }
 
   function getFetchParams(page) {
@@ -79,11 +66,17 @@ const CommentList = (props) => {
 
   function getDefaultParams() {
     const params = Object.fromEntries(searchParams);
-    const { page, sort, order } = params;
+    const { page, sort, order, comments, search } = params;
     const defaultSearch = getSearchParam(params);
     const defaultParams = {};
     Object.assign(
       defaultParams,
+      (comments === 'true' || comments === 'false')
+        ? { defaultShowComments: JSON.parse(comments.toLocaleLowerCase()) }
+        : { defaultShowComments: false },
+      (search === 'true' || search === 'false')
+        ? { defaultShowCommentsSearch: JSON.parse(search.toLocaleLowerCase()) }
+        : { defaultShowCommentsSearch: false },
       page ? { defaultPage: Number(page) } : { defaultPage: 1 },
       sort ? { defaultSort: sort } : { defaultSort: 'created' },
       order ? { defaultOrder: order } : { defaultOrder: 'desc' },
@@ -162,7 +155,7 @@ const CommentList = (props) => {
     <CommentsWrapper>
       {showComments && (
         <>
-          {showCommentsSearch && (
+          {showCommentsSearch && commentCount > 0 && (
             <Search
               sortOptions={getSortOptions()}
               searchOptions={getSearchOptions()}

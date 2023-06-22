@@ -19,7 +19,7 @@ const PostList = ({ isMyPosts }) => {
   const [sort, setSort] = useState(defaultSort);
   const [search, setSearch] = useState(defaultSearch);
   const fetchParams = getFetchParams();
-  const { isSuccess, isLoading, saveError, posts, pageCount, createPost } = usePostListQuery(fetchParams);
+  const { isSuccess, isLoading, posts, pageCount, createPost } = usePostListQuery(fetchParams);
 
   useEffect(() => {
     setSearchParams(new URLSearchParams(getFetchParams()));

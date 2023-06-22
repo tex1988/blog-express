@@ -5,7 +5,13 @@ import App from './App';
 import { HashRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-const client = new QueryClient();
+const client = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(

@@ -33,7 +33,11 @@ class PostService extends AbstractQueryableService {
 
   async findById(id) {
     validateNumber(id);
-    return this.#postRepository.findById(id);
+    const post = await this.#postRepository.findById(id);
+    const commentCount = post._count.comments;
+    delete post._count;
+    post.commentCount = commentCount;
+    return post;
   }
 
   async save(post) {

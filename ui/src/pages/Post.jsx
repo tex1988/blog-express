@@ -1,62 +1,44 @@
-import { deletePostById, fetchPostById, updatePost } from '../api/api';
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import { getDate, isTheSameUser } from '../../utils/utils';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import CommentList from '../components/CommentList';
+import usePostQuery from '../hooks/usePostQuery';
 
 const Post = () => {
   const { user: loggedInUser } = useContext(UserContext);
   const { userId, postId } = useParams();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const { defaultShowComments, defaultShowCommentsSearch } = getDefaultParams();
-  const [post, setPost] = useState({});
-  const { title, content, created, modified, user, _count } = post;
-  const [commentCount, setCommentCount] = useState(0);
   const [editMode, setEditMode] = useState(false);
   const isEditable = isTheSameUser(loggedInUser, userId);
   const [showComments, setShowComments] = useState(defaultShowComments);
   const [showCommentsSearch, setShowCommentsSearch] = useState(defaultShowCommentsSearch);
+  const { post, editPost, deletePost } = usePostQuery(postId, userId);
+  const { title, content, created, modified, user, commentCount: count } = post;
+  const [commentCount, setCommentCount] = useState(0);
   const hasComments = commentCount > 0;
-  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchPostById(postId).then((post) => {
-      setPost(post);
-    });
-  }, []);
-
-  useEffect(() => {
-    setCommentCount(_count ? _count.comments : 0);
+    setEditMode(false);
+    setCommentCount(count);
   }, [post]);
-
-  useEffect(()=> {
-    setSearchParams(getSearchParams());
-  }, [showComments, showCommentsSearch])
-
-  function getSearchParams() {
-    return new URLSearchParams({
-      ...Object.fromEntries(searchParams),
-      comments: showComments,
-      search: showCommentsSearch,
-    });
-  }
 
   function getDefaultParams() {
     const params = Object.fromEntries(searchParams);
     const { comments, search } = params;
     const defaultParams = {};
-    Object.assign(defaultParams,
-      comments ? { defaultShowComments: comments } : { defaultShowComments: false },
-      search ? { defaultShowCommentsSearch: search } : { defaultShowCommentsSearch: false });
+    Object.assign(
+      defaultParams,
+      (comments === 'true' || comments === 'false')
+        ? { defaultShowComments: JSON.parse(comments.toLocaleLowerCase()) }
+        : { defaultShowComments: false },
+      (search === 'true' || search === 'false')
+        ? { defaultShowCommentsSearch: JSON.parse(search.toLocaleLowerCase()) }
+        : { defaultShowCommentsSearch: false },
+    );
     return defaultParams;
-  }
-
-  function onDeleteClick() {
-    deletePostById(postId).then(() => {
-      navigate(`/user/${userId}/post`);
-    });
   }
 
   function onPostEdit(content, title) {
@@ -65,12 +47,7 @@ const Post = () => {
       title: title,
       content: content,
     };
-    updatePost(postId, post).then(() => {
-      fetchPostById(postId).then((post) => {
-        setPost(post);
-        setEditMode(false);
-      });
-    });
+    editPost(post);
   }
 
   const postElement = (
@@ -92,7 +69,7 @@ const Post = () => {
             style={hasComments ? {} : { textDecoration: 'none' }}>
             Comments: {commentCount}
           </span>
-          {showComments && (
+          {showComments && hasComments && (
             <>
               <span>, </span>
               <span
@@ -108,7 +85,10 @@ const Post = () => {
             <span className="action-link" onClick={() => setEditMode(true)}>
               Edit
             </span>
-            <span className="action-link" onClick={onDeleteClick} style={{ marginLeft: '5px' }}>
+            <span
+              className="action-link"
+              onClick={() => deletePost(postId)}
+              style={{ marginLeft: '5px' }}>
               Delete
             </span>
           </div>
