@@ -13,11 +13,7 @@ export const Register = () => {
   function onSubmit(event) {
     event.preventDefault();
     createUser(user).then((res) => {
-      if (res === 201) {
-        navigate('/login');
-      } else {
-        alert('An error occurred. Please try again later');
-      }
+      navigate('/login');
     });
   }
 

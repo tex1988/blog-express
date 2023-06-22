@@ -16,9 +16,10 @@ export async function fetchPostById(id) {
 
 export async function fetchUserByUsername(username) {
   const url = `${BASE_URL}/user?username=${username}`;
-  return fetch(url)
-    .then((res) => res.json())
-    .then((json) => json[0]);
+  const res = await fetch(url);
+  validateResponse(res);
+  const json = await res.json();
+  return json[0];
 }
 
 export async function savePost(post) {
@@ -36,13 +37,15 @@ export async function savePost(post) {
 
 export async function updatePost(id, post) {
   const url = `${BASE_URL}/post/${id}`;
-  return fetch(url, {
+  const res = await fetch(url, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(post),
-  }).then((res) => res.status);
+  });
+  validateResponse(res);
+  return res;
 }
 
 export async function deletePostById(postId) {
@@ -54,29 +57,22 @@ export async function deletePostById(postId) {
 
 export async function fetchUserPosts(userId, params) {
   const url = `${BASE_URL}/user/${userId}/post?`;
-  return await fetch(url + new URLSearchParams(params))
-    .then((res) => res.json());
-}
-
-export async function fetchUser(userId) {
-  const url = `${BASE_URL}/user/${userId}`;
-  return fetch(url).then((res) => res.json());
+  const res = await fetch(url + new URLSearchParams(params));
+  validateResponse(res);
+  return res;
 }
 
 export async function createUser(user) {
   const url = `${BASE_URL}/user`;
-  return fetch(url, {
+  const res = fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(user),
-  }).then((res) => res.status);
-}
-
-export async function fetchCommentById(commentId) {
-  const url = `${BASE_URL}/comment/${commentId}`;
-  return fetch(url).then((res) => res.json());
+  });
+  validateResponse(res);
+  return res;
 }
 
 export async function fetchCommentsByPostId(postId, params) {
@@ -97,13 +93,15 @@ export async function deleteCommentById(commentId) {
 
 export async function savePostComment(postId, comment) {
   const url = `${BASE_URL}/post/${postId}/comment`;
-  return fetch(url, {
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(comment),
   });
+  validateResponse(res);
+  return res;
 }
 
 export async function updateComment(id, comment) {
