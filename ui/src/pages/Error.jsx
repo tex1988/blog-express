@@ -8,7 +8,7 @@ const Error = ({ error }) => {
     <ErrorWrapper>
       <div>Oops...</div>
       <div>Something went wrong:</div>
-      <div style={{ color: "red" }}>{error.message}</div>
+      <div style={{ color: "red", whiteSpace: 'pre-line', textAlign: 'center' }}>{error.message}</div>
       <div>
         <button onClick={resetBoundary}>Try again</button>
       </div>
