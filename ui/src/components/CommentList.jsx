@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { forwardRef, useContext, useImperativeHandle } from 'react';
+import { useParams } from 'react-router-dom';
 import Comment from './Comment';
 import { UserContext } from '../App';
 import { isPageExists, isTheSameUser } from '../../utils/utils';
@@ -8,18 +8,27 @@ import styled from 'styled-components';
 import Pagination from './Pagination';
 import Search from './Search';
 import useCommentListQuery from '../hooks/useCommentListQuery';
+import useCommentListSearchParams from '../hooks/useCommentListSearchParams';
 
-const CommentList = (props) => {
-  const PAGE_SIZE = 5;
+const NON_SEARCH_PARAMS = ['sort', 'order', 'page', 'size', 'comments', 'search'];
+const PAGE_SIZE = 5;
+
+const CommentList = forwardRef((props, ref) => {
   const { user } = useContext(UserContext);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { showComments, showCommentsSearch, commentCount, setCommentCount, setShowComments } = props;
-  const { defaultPage, defaultSort, defaultOrder, defaultSearch } = getDefaultParams();
+  const { commentCount, setCommentCount, showComments, showCommentsSearch } = props;
+  const {
+    page,
+    setPage,
+    sort,
+    setSort,
+    order,
+    setOrder,
+    searchQuery,
+    setSearchQuery,
+    setCommentsSearchParam,
+    setSearch
+  } = useCommentListSearchParams(NON_SEARCH_PARAMS);
   const { userId, postId } = useParams();
-  const [page, setPage] = useState(defaultPage);
-  const [order, setOrder] = useState(defaultOrder);
-  const [sort, setSort] = useState(defaultSort);
-  const [search, setSearch] = useState(defaultSearch);
   const fetchParams = getFetchParams(page);
   const isCanLeftAComment = user && !isTheSameUser(user, userId);
   const {
@@ -32,72 +41,22 @@ const CommentList = (props) => {
     deleteComment,
   } = useCommentListQuery({ postId, fetchParams, showComments, afterDelete, afterSave });
 
-  useEffect(() => {
-    setSearchParams(new URLSearchParams(getSearchParams()));
-  }, [page, order, sort, search]);
-
-  function getSearchParams() {
-    const { comments, search } = Object.fromEntries(searchParams);
-    const newSearchParams = { ...fetchParams };
-    Object.assign(
-      newSearchParams,
-      comments === 'true' || comments === 'false'
-        ? { comments: JSON.parse(comments.toLocaleLowerCase()) }
-        : { comments: false },
-      search === 'true' || search === 'false'
-        ? { search: JSON.parse(search.toLocaleLowerCase()) }
-        : { search: false },
-    );
-    return new URLSearchParams(newSearchParams);
-  }
+  useImperativeHandle(ref, () => ({
+    setCommentsSearchParam,
+    setSearch,
+  }));
 
   function getFetchParams(page) {
     const params = { order, sort, size: PAGE_SIZE, page };
-    search && enrichWithSearch(params);
+    searchQuery && enrichWithSearch(params);
     return params;
   }
 
   function enrichWithSearch(params) {
-    Object.entries(search).forEach((entry) => {
+    Object.entries(searchQuery).forEach((entry) => {
       const [key, value] = entry;
       params[key] = value;
     });
-  }
-
-  function getDefaultParams() {
-    const params = Object.fromEntries(searchParams);
-    const { page, sort, order, comments, search } = params;
-    const defaultSearch = getSearchParam(params);
-    const defaultParams = {};
-    Object.assign(
-      defaultParams,
-      (comments === 'true' || comments === 'false')
-        ? { defaultShowComments: JSON.parse(comments.toLocaleLowerCase()) }
-        : { defaultShowComments: false },
-      (search === 'true' || search === 'false')
-        ? { defaultShowCommentsSearch: JSON.parse(search.toLocaleLowerCase()) }
-        : { defaultShowCommentsSearch: false },
-      page ? { defaultPage: Number(page) } : { defaultPage: 1 },
-      sort ? { defaultSort: sort } : { defaultSort: 'created' },
-      order ? { defaultOrder: order } : { defaultOrder: 'desc' },
-      defaultSearch ? { defaultSearch } : null,
-    );
-    return defaultParams;
-  }
-
-  function getSearchParam(params) {
-    const nonSearchParams = ['sort', 'order', 'page', 'size', 'comments', 'search'];
-    let searchParams = { ...params };
-    nonSearchParams.forEach((param) => delete searchParams[param]);
-    if (Object.keys(searchParams).length === 0) {
-      searchParams = null;
-    }
-    return searchParams;
-  }
-
-  function onSearch(search) {
-    setSearch(search);
-    setPage(1);
   }
 
   function onCommentSave(content) {
@@ -111,7 +70,7 @@ const CommentList = (props) => {
 
   function afterSave() {
     setCommentCount((prev) => ++prev);
-    setShowComments(true);
+    setCommentsSearchParam(true);
     setPage(1);
   }
 
@@ -161,10 +120,10 @@ const CommentList = (props) => {
               searchOptions={getSearchOptions()}
               defaultSort={sort}
               defaultOrder={order}
-              defaultSearch={defaultSearch}
+              defaultSearch={searchQuery}
               setOrder={setOrder}
               setSort={setSort}
-              onSearch={onSearch}
+              onSearch={setSearchQuery}
             />
           )}
           {getComments()}
@@ -190,7 +149,7 @@ const CommentList = (props) => {
       </div>
     </CommentsWrapper>
   );
-};
+});
 
 const CommentsWrapper = styled.div.attrs({
   className: 'flex-column',

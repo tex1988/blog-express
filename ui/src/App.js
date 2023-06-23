@@ -9,7 +9,7 @@ import Register from './pages/Register';
 import { getFromLocalStorage } from '../utils/utils';
 import Error from './pages/Error';
 
-export const UserContext = createContext(undefined);
+export const UserContext = createContext(null);
 export const USER_KEY = 'user';
 
 function App() {

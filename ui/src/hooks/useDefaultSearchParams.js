@@ -2,9 +2,15 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { forEachObjectEntry } from '../utils/utils';
 import { useEffect } from 'react';
 
-export default function usePostListSearchParams(defaultSearchParams) {
+const defaultSearchParams = {
+  page: '1',
+  sort: 'created',
+  order: 'desc',
+};
+
+export default function useDefaultSearchParams(nonSearchParams) {
   const [searchParams, setSearchParams] = useSearchParams(defaultSearchParams);
-  const { page, sort, order, search } = getParams();
+  const { page, sort, order, searchQuery } = getParams();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,14 +20,13 @@ export default function usePostListSearchParams(defaultSearchParams) {
   function getParams() {
     const params = Object.fromEntries(searchParams);
     const { page, sort, order } = params;
-    const search = getSearchParam(params);
+    const searchQuery = getSearchParam(params);
     const defaultParams = { page: Number(page), sort, order };
-    Object.assign(defaultParams, search ? { search } : { search: null });
+    Object.assign(defaultParams, searchQuery ? { searchQuery } : { search: null });
     return defaultParams;
   }
 
   function getSearchParam(params) {
-    const nonSearchParams = ['sort', 'order', 'page', 'size'];
     let searchParams = { ...params };
     nonSearchParams.forEach((param) => delete searchParams[param]);
     if (Object.keys(searchParams).length === 0) {
@@ -30,30 +35,30 @@ export default function usePostListSearchParams(defaultSearchParams) {
     return searchParams;
   }
 
-  function setPage(page) {
-    searchParams.set('page', page);
+  function setPage(value) {
+    searchParams.set('page', value);
     setSearchParams(searchParams);
   }
 
-  function setOrder(order) {
-    searchParams.set('order', order);
+  function setOrder(value) {
+    searchParams.set('order', value);
     setSearchParams(searchParams);
   }
 
-  function setSort(sort) {
-    searchParams.set('sort', sort);
+  function setSort(value) {
+    searchParams.set('sort', value);
     setSearchParams(searchParams);
   }
 
-  function setSearch(searchValue) {
-    if (searchValue) {
-      forEachObjectEntry(searchValue, (key, value) => searchParams.set(key, value));
+  function setSearchQuery(searchQueryValue) {
+    if (searchQueryValue) {
+      forEachObjectEntry(searchQueryValue, (key, value) => searchParams.set(key, value));
     } else {
-      forEachObjectEntry(search, (key) => searchParams.delete(key));
+      forEachObjectEntry(searchQuery, (key) => searchParams.delete(key));
     }
     searchParams.set('page', '1');
     setSearchParams(searchParams);
   }
 
-  return { page, setPage, sort, setSort, order, setOrder, search, setSearch };
+  return { page, setPage, sort, setSort, order, setOrder, searchQuery, setSearchQuery: setSearchQuery };
 }

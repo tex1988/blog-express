@@ -6,32 +6,28 @@ import Pagination from '../components/Pagination';
 import Search from './Search';
 import styled from 'styled-components';
 import usePostListQuery from '../hooks/usePostListQuery';
-import usePostListSearchParams from '../hooks/usePostListSearchParams';
+import useDefaultSearchParams from '../hooks/useDefaultSearchParams';
 
-const defaultSearchParams = {
-  page: '1',
-  sort: 'created',
-  order: 'desc',
-};
+const NON_SEARCH_PARAMS = ['sort', 'order', 'page', 'size'];
 const PAGE_SIZE = 5;
 
 const PostList = ({ isMyPosts }) => {
   const { user } = useContext(UserContext);
-  const { page, setPage, sort, setSort, order, setOrder, search, setSearch } =
-    usePostListSearchParams(defaultSearchParams);
+  const { page, setPage, sort, setSort, order, setOrder, searchQuery, setSearchQuery } =
+    useDefaultSearchParams(NON_SEARCH_PARAMS);
   const [isEditorVisible, setEditorVisible] = useState(false);
   const fetchParams = getFetchParams();
   const { isSuccess, isLoading, posts, pageCount, createPost } = usePostListQuery(fetchParams);
 
   function getFetchParams() {
     const params = { order, sort, size: PAGE_SIZE, page };
-    search && enrichWithSearch(params);
+    searchQuery && enrichWithSearch(params);
     isMyPosts && (params.userId = user.userId);
     return params;
   }
 
   function enrichWithSearch(params) {
-    Object.entries(search).forEach((entry) => {
+    Object.entries(searchQuery).forEach((entry) => {
       const [key, value] = entry;
       params[key] = value;
     });
@@ -77,10 +73,10 @@ const PostList = ({ isMyPosts }) => {
         searchOptions={getSearchOptions()}
         defaultSort={sort}
         defaultOrder={order}
-        defaultSearch={search}
+        defaultSearch={searchQuery}
         setOrder={setOrder}
         setSort={setSort}
-        onSearch={setSearch}
+        onSearch={setSearchQuery}
       />
       {getPostPreviews()}
       {pageCount > 1 && (

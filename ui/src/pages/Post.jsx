@@ -1,45 +1,28 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import { getDate, isTheSameUser } from '../../utils/utils';
 import { useParams, useSearchParams } from 'react-router-dom';
 import CommentList from '../components/CommentList';
 import usePostQuery from '../hooks/usePostQuery';
+import usePostAdditionalParams from '../hooks/usePostAdditionalParams';
 
 const Post = () => {
   const { user: loggedInUser } = useContext(UserContext);
   const { userId, postId } = useParams();
-  const [searchParams] = useSearchParams();
-  const { defaultShowComments, defaultShowCommentsSearch } = getDefaultParams();
   const [editMode, setEditMode] = useState(false);
-  const isEditable = isTheSameUser(loggedInUser, userId);
-  const [showComments, setShowComments] = useState(defaultShowComments);
-  const [showCommentsSearch, setShowCommentsSearch] = useState(defaultShowCommentsSearch);
+  const { showComments, showCommentsSearch } = usePostAdditionalParams();
   const { post, editPost, deletePost } = usePostQuery(postId, userId);
   const { title, content, created, modified, user, commentCount: count } = post;
   const [commentCount, setCommentCount] = useState(0);
   const hasComments = commentCount > 0;
+  const isEditable = isTheSameUser(loggedInUser, userId);
+  const ref = useRef();
 
   useEffect(() => {
     setEditMode(false);
     setCommentCount(count);
   }, [post]);
-
-  function getDefaultParams() {
-    const params = Object.fromEntries(searchParams);
-    const { comments, search } = params;
-    const defaultParams = {};
-    Object.assign(
-      defaultParams,
-      (comments === 'true' || comments === 'false')
-        ? { defaultShowComments: JSON.parse(comments.toLocaleLowerCase()) }
-        : { defaultShowComments: false },
-      (search === 'true' || search === 'false')
-        ? { defaultShowCommentsSearch: JSON.parse(search.toLocaleLowerCase()) }
-        : { defaultShowCommentsSearch: false },
-    );
-    return defaultParams;
-  }
 
   function onPostEdit(content, title) {
     const post = {
@@ -64,7 +47,7 @@ const Post = () => {
         <div>
           <span
             className={hasComments ? 'action-link' : ''}
-            onClick={hasComments ? () => setShowComments(!showComments) : () => {}}
+            onClick={hasComments ? () => ref.current.setCommentsSearchParam(!showComments) : () => {}}
             aria-disabled={hasComments}
             style={hasComments ? {} : { textDecoration: 'none' }}>
             Comments: {commentCount}
@@ -74,7 +57,7 @@ const Post = () => {
               <span>, </span>
               <span
                 className="action-link"
-                onClick={() => setShowCommentsSearch(!showCommentsSearch)}>
+                onClick={() => ref.current.setSearch(!showCommentsSearch)}>
                 {showCommentsSearch ? 'Hide' : 'Show'} search
               </span>
             </>
@@ -94,9 +77,9 @@ const Post = () => {
           </div>
         )}
       </div>
-      <CommentList
-        {...{ showComments, showCommentsSearch, commentCount, setCommentCount, setShowComments }}
-      />
+        <CommentList ref={ref}
+          {...{ showComments, showCommentsSearch, commentCount, setCommentCount }}
+        />
     </>
   );
 
