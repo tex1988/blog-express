@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Select from './Select';
 import SearchInput from './SearchInput';
 
@@ -19,6 +19,11 @@ const Search = (props) => {
   const [defaultSearchType, defaultSearchValue] = getDefaultSearch();
   const [selectedOrder, setSelectedOrder] = useState(defaultOrder);
   const [searchField, setSearchField] = useState(defaultSearchType);
+  const [searchInputValue, setSearchInputValue] = useState(defaultSearchValue);
+
+  useEffect(() => {
+    setSearchInputValue(defaultSearchValue);
+  }, [defaultSearchValue])
 
   function onOrderChange(event) {
     setOrder(event.target.value);
@@ -35,6 +40,10 @@ const Search = (props) => {
 
   function onSearchClick(value) {
     value ? onSearch({ [searchField]: value }) : onSearch(null);
+  }
+
+  function onSearchInput(value) {
+    setSearchInputValue(value);
   }
 
   function getDefaultSearch() {
@@ -72,8 +81,9 @@ const Search = (props) => {
           />
         </div>
         <SearchInput
-          defaultValue={defaultSearchValue}
+          value={searchInputValue}
           onSearch={onSearchClick}
+          onInput={onSearchInput}
         />
       </div>
     </SearchWrapper>

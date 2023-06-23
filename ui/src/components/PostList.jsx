@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useContext, useState } from 'react';
 import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import PostPreview from '../components/PostPreview';
@@ -7,23 +6,22 @@ import Pagination from '../components/Pagination';
 import Search from './Search';
 import styled from 'styled-components';
 import usePostListQuery from '../hooks/usePostListQuery';
+import usePostListSearchParams from '../hooks/usePostListSearchParams';
+
+const defaultSearchParams = {
+  page: '1',
+  sort: 'created',
+  order: 'desc',
+};
+const PAGE_SIZE = 5;
 
 const PostList = ({ isMyPosts }) => {
-  const PAGE_SIZE = 5;
   const { user } = useContext(UserContext);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { defaultPage, defaultSort, defaultOrder, defaultSearch } = getDefaultParams();
-  const [page, setPage] = useState(defaultPage);
+  const { page, setPage, sort, setSort, order, setOrder, search, setSearch } =
+    usePostListSearchParams(defaultSearchParams);
   const [isEditorVisible, setEditorVisible] = useState(false);
-  const [order, setOrder] = useState(defaultOrder);
-  const [sort, setSort] = useState(defaultSort);
-  const [search, setSearch] = useState(defaultSearch);
   const fetchParams = getFetchParams();
   const { isSuccess, isLoading, posts, pageCount, createPost } = usePostListQuery(fetchParams);
-
-  useEffect(() => {
-    setSearchParams(new URLSearchParams(getFetchParams()));
-  }, [page, order, sort, search]);
 
   function getFetchParams() {
     const params = { order, sort, size: PAGE_SIZE, page };
@@ -32,41 +30,11 @@ const PostList = ({ isMyPosts }) => {
     return params;
   }
 
-  function getDefaultParams() {
-    const params = Object.fromEntries(searchParams);
-    const { page, sort, order } = params;
-    const defaultSearch = getSearchParam(params);
-    const defaultParams = {};
-    Object.assign(
-      defaultParams,
-      page ? { defaultPage: Number(page) } : { defaultPage: 1 },
-      sort ? { defaultSort: sort } : { defaultSort: 'created' },
-      order ? { defaultOrder: order } : { defaultOrder: 'desc' },
-      defaultSearch ? { defaultSearch } : null,
-    );
-    return defaultParams;
-  }
-
-  function getSearchParam(params) {
-    const nonSearchParams = ['sort', 'order', 'page', 'size'];
-    let searchParams = { ...params };
-    nonSearchParams.forEach((param) => delete searchParams[param]);
-    if (Object.keys(searchParams).length === 0) {
-      searchParams = null;
-    }
-    return searchParams;
-  }
-
   function enrichWithSearch(params) {
     Object.entries(search).forEach((entry) => {
       const [key, value] = entry;
       params[key] = value;
     });
-  }
-
-  function onSearch(search) {
-    setSearch(search);
-    setPage(1);
   }
 
   function getSortOptions() {
@@ -109,10 +77,10 @@ const PostList = ({ isMyPosts }) => {
         searchOptions={getSearchOptions()}
         defaultSort={sort}
         defaultOrder={order}
-        defaultSearch={defaultSearch}
+        defaultSearch={search}
         setOrder={setOrder}
         setSort={setSort}
-        onSearch={onSearch}
+        onSearch={setSearch}
       />
       {getPostPreviews()}
       {pageCount > 1 && (
@@ -142,7 +110,7 @@ const PostList = ({ isMyPosts }) => {
 };
 
 const ButtonWrapper = styled.div.attrs({
-  className: 'flex-column'
+  className: 'flex-column',
 })`
   justify-content: center;
   align-content: center;

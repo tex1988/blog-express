@@ -1,14 +1,12 @@
-import { useState } from 'react';
 import styled, { css } from 'styled-components';
 
 const SearchInput = (props) => {
   const {
-    defaultValue = '',
+    value = '',
     onInput = (value) => {},
     onSearch = (value) => {},
     placeholder = 'Search',
   } = props;
-  const [value, setValue] = useState(defaultValue);
 
   function onInputKeyPress(event) {
     if (event.key === 'Enter') {
@@ -29,11 +27,10 @@ const SearchInput = (props) => {
     if (value.length === 0) {
       onSearch(null);
     }
-    setValue(event.target.value);
+    onInput(event.target.value);
   }
 
   function clearSearch() {
-    setValue('');
     onInput('');
     onSearch(null);
   }
