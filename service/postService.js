@@ -59,7 +59,7 @@ class PostService extends AbstractQueryableService {
     validateNumber(id);
     await this.#validateIfPostExists(id);
     const searchParams = this.getSearchParams(params, this.#nonSearchParams, this.#commentTextSearchParams);
-    const count = await this.#commentRepository.getCountByPostId(id);
+    const count = await this.#commentRepository.getCountByPostId(id, searchParams);
     const pageParams = this.getPageParams(params, count);
     const pageCount = Math.ceil(count / pageParams.take);
     const sortParams = this.getSortParams(params);

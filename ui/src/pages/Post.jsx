@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { UserContext } from '../App';
 import Editor from '../components/Editor';
 import { getDate, isTheSameUser } from '../../utils/utils';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import CommentList from '../components/CommentList';
 import usePostQuery from '../hooks/usePostQuery';
 import usePostAdditionalParams from '../hooks/usePostAdditionalParams';

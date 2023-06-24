@@ -27,7 +27,7 @@ class CommentRepository {
       take,
       where: {
         postId: Number(id),
-        ...searchParams
+        ...searchParams,
       },
       include: {
         user: {
@@ -41,10 +41,11 @@ class CommentRepository {
     });
   }
 
-  async getCountByPostId(id) {
+  async getCountByPostId(id, params) {
     return this.#prisma.comment.count({
       where: {
         postId: Number(id),
+        ...params
       },
     });
   }
