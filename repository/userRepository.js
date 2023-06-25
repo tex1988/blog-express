@@ -32,12 +32,7 @@ class UserRepository {
 
   async save(user) {
     return this.#prisma.user.create({
-      data: {
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-      },
+      data: user,
     });
   }
 

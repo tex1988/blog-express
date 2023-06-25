@@ -2,6 +2,7 @@ const AbstractQueryableService = require('./abstractQueryableService')
 const UserRepository = require('../repository/userRepository');
 const PostRepository = require('../repository/postRepository');
 const CommentRepository = require('../repository/commentRepository');
+const bcrypt = require('bcrypt')
 const { validateNumber, validateParams } = require('../validator/validator');
 
 class UserService extends AbstractQueryableService {
@@ -29,6 +30,8 @@ class UserService extends AbstractQueryableService {
   }
 
   async save(user) {
+    this.#validatePassword(user.password)
+    user.password = await bcrypt.hash(user.password, 10);
     return this.#userRepository.save(user);
   }
 
@@ -58,6 +61,14 @@ class UserService extends AbstractQueryableService {
     if (!user) {
       const error = new Error(`User with id:${id} not found`);
       error.status = 404;
+      throw error;
+    }
+  }
+
+  #validatePassword(password) {
+    if(!password || password.length < 4) {
+      const error = new Error(`Password length must be not less that '4' characters`);
+      error.status = 400;
       throw error;
     }
   }

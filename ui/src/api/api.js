@@ -64,7 +64,7 @@ export async function fetchUserPosts(userId, params) {
 
 export async function createUser(user) {
   const url = `${BASE_URL}/user`;
-  const res = fetch(url, {
+  const res = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
