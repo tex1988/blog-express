@@ -12,6 +12,10 @@ const Select = (props) => {
     return () => document.removeEventListener('click', handleClickOutside, true);
   }, []);
 
+  useEffect(() => {
+    setIndex(getIndex(defaultValue));
+  }, [defaultValue])
+
   function handleClickOutside(event) {
     if (ref.current && !ref.current?.contains(event.target)) {
       setShowDropDown(false);

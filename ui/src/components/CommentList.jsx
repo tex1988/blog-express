@@ -72,6 +72,9 @@ const CommentList = forwardRef((props, ref) => {
     setCommentCount((prev) => ++prev);
     setCommentsSearchParam(true);
     setPage(1);
+    setSort('created');
+    setOrder('desc');
+    setSearchQuery(null);
   }
 
   function afterDelete() {

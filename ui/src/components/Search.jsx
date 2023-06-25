@@ -25,6 +25,14 @@ const Search = (props) => {
     setSearchInputValue(defaultSearchValue);
   }, [defaultSearchValue])
 
+  useEffect(() => {
+    setSelectedOrder(defaultOrder);
+  }, [defaultOrder])
+
+  useEffect(() => {
+    setSearchField(defaultSearchType);
+  }, [defaultSearchType])
+
   function onOrderChange(event) {
     setOrder(event.target.value);
     setSelectedOrder(event.target.value);
