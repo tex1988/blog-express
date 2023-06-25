@@ -1,4 +1,4 @@
-import { getDate, isTheSameUser } from '../../utils/utils';
+import { getDate, isTheSameUser } from '../utils/utils';
 import { useContext, useState } from 'react';
 import { UserContext } from '../App';
 import Editor from './Editor';

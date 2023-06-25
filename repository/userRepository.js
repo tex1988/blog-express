@@ -22,10 +22,10 @@ class UserRepository {
     });
   }
 
-  async findByUserName(username) {
+  async findByUsername(username) {
     return this.#prisma.user.findUnique({
       where: {
-        username: Number(username),
+        username: username,
       },
     });
   }

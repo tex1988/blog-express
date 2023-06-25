@@ -5,6 +5,7 @@ const indexRouter = require('./route/index');
 const userRouter = require('./route/user');
 const postRouter = require('./route/post');
 const commentRouter = require('./route/comment');
+const loginRouter = require('./route/login');
 const app = express();
 const { errorLogger, errorResponder, invalidPathHandler } = require('./middleware/errorHandler');
 
@@ -15,6 +16,7 @@ app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/post', postRouter);
 app.use('/comment', commentRouter);
+app.use('/login', loginRouter);
 
 app.use(errorLogger);
 app.use(errorResponder);

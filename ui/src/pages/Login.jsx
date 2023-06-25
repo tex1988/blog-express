@@ -1,29 +1,27 @@
 import { useContext, useState } from 'react';
 import { USER_KEY, UserContext } from '../App';
-import { fetchUserByUsername } from '../api/api';
+import { logInUser } from '../api/api';
 import { Link, useNavigate } from 'react-router-dom';
-import { saveToLocalStorage } from '../../utils/utils';
+import { saveToLocalStorage } from '../utils/utils';
 
 const Login = () => {
-  const [input, setInput] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const credentials = {username, password};
   const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
-  function onInput(event) {
-    setInput(event.target.value);
-  }
-
   function onSignIn(event) {
     event.preventDefault();
-    fetchUserByUsername(input).then((user) => {
-      if (user) {
+    logInUser(credentials)
+      .then((user) => {
         saveToLocalStorage(USER_KEY, user);
         setUser(user);
         navigate(`/user/${user.userId}/post`);
-      } else {
-        alert(`User '${input}' not found`);
-      }
-    });
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
   }
 
   function onInputKeyPress(event) {
@@ -44,11 +42,22 @@ const Login = () => {
           <input
             id="username"
             autoComplete="nickname"
-            value={input}
-            onInput={onInput}
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
             onKeyDown={onInputKeyPress}
           />
-          <button type="submit" disabled={input.length < 1}>
+          <label className="input-label" htmlFor="password">
+            Password
+          </label>
+          <input
+            id="password"
+            autoComplete="password"
+            type="password"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            onKeyDown={onInputKeyPress}
+          />
+          <button type="submit" disabled={username.length < 4 || password.length < 4}>
             Sign in
           </button>
         </form>

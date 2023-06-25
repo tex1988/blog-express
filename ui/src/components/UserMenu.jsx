@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { USER_KEY, UserContext } from '../App';
 import { useNavigate } from 'react-router-dom';
-import { removeFromLocalStorage } from '../../utils/utils';
+import { removeFromLocalStorage } from '../utils/utils';
 import styled, { css } from 'styled-components';
 
 const UserMenu = (props) => {

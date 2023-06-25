@@ -1,4 +1,4 @@
-import { getDate } from '../../utils/utils';
+import { getDate } from '../utils/utils';
 import { useNavigate } from 'react-router-dom';
 
 const PostPreview = ({ post }) => {

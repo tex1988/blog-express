@@ -30,7 +30,8 @@ class UserService extends AbstractQueryableService {
   }
 
   async save(user) {
-    this.#validatePassword(user.password)
+    this.#validatePassword(user.password);
+    this.#validateUsername(user.username);
     user.password = await bcrypt.hash(user.password, 10);
     return this.#userRepository.save(user);
   }
@@ -38,6 +39,13 @@ class UserService extends AbstractQueryableService {
   async update(id, user) {
     validateNumber(id);
     return this.#userRepository.update(id, user);
+  }
+
+  async logInUser(username, password) {
+    const user = await this.#userRepository.findByUsername(username);
+    await this.#validateCredentials(user, password);
+    delete user.password;
+    return user;
   }
 
   async findAllUserPosts(id, params) {
@@ -66,11 +74,31 @@ class UserService extends AbstractQueryableService {
   }
 
   #validatePassword(password) {
-    if(!password || password.length < 4) {
+    if (!password || password.length < 4) {
       const error = new Error(`Password length must be not less that '4' characters`);
       error.status = 400;
       throw error;
     }
+  }
+
+  #validateUsername(username) {
+    if (!username || username.length < 4) {
+      const error = new Error(`Password length must be not less that '4' characters`);
+      error.status = 400;
+      throw error;
+    }
+  }
+
+  async #validateCredentials(user, password) {
+    if (user) {
+      const isPasswordMatch = await bcrypt.compare(password, user.password);
+      if (isPasswordMatch) {
+        return;
+      }
+    }
+    const error = new Error(`No such combination of user and password`);
+    error.status = 401;
+    throw error;
   }
 }
 

@@ -2,7 +2,7 @@ import { forwardRef, useContext, useImperativeHandle } from 'react';
 import { useParams } from 'react-router-dom';
 import Comment from './Comment';
 import { UserContext } from '../App';
-import { isPageExists, isTheSameUser } from '../../utils/utils';
+import { isPageExists, isTheSameUser } from '../utils/utils';
 import Editor from './Editor';
 import styled from 'styled-components';
 import Pagination from './Pagination';

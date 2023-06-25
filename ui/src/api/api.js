@@ -45,7 +45,7 @@ export async function updatePost(id, post) {
     body: JSON.stringify(post),
   });
   await validateResponse(res);
-  return res;
+  return res.json();
 }
 
 export async function deletePostById(postId) {
@@ -59,7 +59,20 @@ export async function fetchUserPosts(userId, params) {
   const url = `${BASE_URL}/user/${userId}/post?`;
   const res = await fetch(url + new URLSearchParams(params));
   await validateResponse(res);
-  return res;
+  return res.json();
+}
+
+export async function logInUser(credentials) {
+  const url = `${BASE_URL}/login`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(credentials),
+  });
+  await validateResponse(res);
+  return res.json();
 }
 
 export async function createUser(user) {
@@ -72,7 +85,7 @@ export async function createUser(user) {
     body: JSON.stringify(user),
   });
   await validateResponse(res);
-  return res;
+  return res.json();
 }
 
 export async function fetchCommentsByPostId(postId, params) {
@@ -101,7 +114,7 @@ export async function savePostComment(postId, comment) {
     body: JSON.stringify(comment),
   });
   await validateResponse(res);
-  return res;
+  return res.json();
 }
 
 export async function updateComment(id, comment) {

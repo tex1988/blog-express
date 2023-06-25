@@ -6,7 +6,7 @@ import MyPosts from './pages/MyPosts';
 import Post from './pages/Post';
 import AllPosts from './pages/AllPosts';
 import Register from './pages/Register';
-import { getFromLocalStorage } from '../utils/utils';
+import { getFromLocalStorage } from './utils/utils';
 import Error from './pages/Error';
 
 export const UserContext = createContext(null);
