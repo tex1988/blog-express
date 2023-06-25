@@ -39,7 +39,7 @@ const CommentList = forwardRef((props, ref) => {
     saveComment,
     editComment,
     deleteComment,
-  } = useCommentListQuery({ postId, fetchParams, showComments, afterDelete, afterSave });
+  } = useCommentListQuery({ postId, fetchParams, isFetch: showComments, afterDelete, afterSave });
 
   useImperativeHandle(ref, () => ({
     setCommentsSearchParam,

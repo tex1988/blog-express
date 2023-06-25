@@ -1,7 +1,8 @@
-import { createContext, useContext } from 'react';
+import { createContext, Suspense, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { UserContext } from '../App';
 import PostList from '../components/PostList';
+import Loading from '../components/Loading';
 
 export const EditorContext = createContext(undefined);
 
@@ -12,7 +13,11 @@ const MyPosts = () => {
     return <Navigate to="/login" />;
   }
 
-  return <PostList isMyPosts={true} />;
+  return (
+    <Suspense fallback={<Loading />}>
+      <PostList isMyPosts={true} />
+    </Suspense>
+  );
 };
 
 export default MyPosts;

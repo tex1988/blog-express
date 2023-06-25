@@ -1,13 +1,13 @@
 import { Route, Routes } from 'react-router-dom';
 import Login from './pages/Login';
-import { createContext, useState } from 'react';
+import { createContext, Suspense, useState } from 'react';
 import MainLayout from './layouts/MainLayout';
 import MyPosts from './pages/MyPosts';
 import Post from './pages/Post';
 import AllPosts from './pages/AllPosts';
 import Register from './pages/Register';
 import { getFromLocalStorage } from './utils/utils';
-import Error from './pages/Error';
+import Loading from './components/Loading';
 
 export const UserContext = createContext(null);
 export const USER_KEY = 'user';
@@ -27,8 +27,14 @@ function App() {
         }>
         <Route path="/" element={<AllPosts />} />
         <Route path="/user/:userId/post" element={<MyPosts />} />
-        <Route path={'/user/:userId/post/:postId'} element={<Post />} />
-        <Route path="/error" element={<Error />} />
+        <Route
+          path={'/user/:userId/post/:postId'}
+          element={
+            <Suspense fallback={<Loading />}>
+              <Post />
+            </Suspense>
+          }
+        />
       </Route>
       <Route
         path="/login"

@@ -9,6 +9,7 @@ const client = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
+      suspense: true
     },
   },
 })

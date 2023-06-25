@@ -1,12 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { deletePostById, fetchPostById, updatePost } from '../api/api';
-import { useErrorBoundary } from 'react-error-boundary';
 import { useNavigate } from 'react-router-dom';
 
 export default function usePostQuery(postId, userId) {
   const navigate = useNavigate();
   const queryKey = `post/${postId}`;
-  const { isSuccess, isLoading, error, data } = useQuery({
+  const { isSuccess, isLoading, data } = useQuery({
     queryFn: () => fetchPostById(postId),
     queryKey,
     staleTime: 1000 * 5,
@@ -29,9 +28,6 @@ export default function usePostQuery(postId, userId) {
     mutationFn: deletePostById,
     onSuccess: () => navigate(`/user/${userId}/post`),
   });
-  const { showBoundary } = useErrorBoundary();
-
-  if (error) showBoundary(error);
 
   return {
     isSuccess,
