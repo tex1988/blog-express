@@ -69,8 +69,8 @@ const CommentList = forwardRef((props, ref) => {
   }
 
   function afterSave() {
-    setCommentCount((prev) => ++prev);
     setCommentsSearchParam(true);
+    setCommentCount((prev) => ++prev);
     setPage(1);
     setSort('created');
     setOrder('desc');

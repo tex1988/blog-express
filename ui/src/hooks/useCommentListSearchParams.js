@@ -1,9 +1,18 @@
 import useDefaultSearchParams from './useDefaultSearchParams';
-import { useSearchParams } from 'react-router-dom';
 
 export default function useCommentListSearchParams(nonSearchParams)  {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { page, setPage, sort, setSort, order, setOrder, searchQuery, setSearchQuery } = useDefaultSearchParams(nonSearchParams);
+  const {
+    page,
+    setPage,
+    sort,
+    setSort,
+    order,
+    setOrder,
+    searchQuery,
+    setSearchQuery,
+    searchParams,
+    setSearchParams,
+  } = useDefaultSearchParams(nonSearchParams);
   const { search, commentsSearchParam } = getAdditionalParams();
 
   function getAdditionalParams() {
@@ -12,9 +21,7 @@ export default function useCommentListSearchParams(nonSearchParams)  {
     const additionalParams = {};
     Object.assign(
       additionalParams,
-      search === 'true' || search === 'false' 
-        ? { search }
-        : { search: false },
+      search === 'true' || search === 'false' ? { search } : { search: false },
       comments === 'true' || comments === 'false'
         ? { commentsSearchParam: comments }
         : { commentsSearchParam: false },
@@ -54,6 +61,6 @@ export default function useCommentListSearchParams(nonSearchParams)  {
     commentsSearchParam,
     setCommentsSearchParam,
     search,
-    setSearch
+    setSearch,
   };
 }

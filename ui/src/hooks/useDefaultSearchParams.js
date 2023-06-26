@@ -60,5 +60,5 @@ export default function useDefaultSearchParams(nonSearchParams) {
     setSearchParams(searchParams);
   }
 
-  return { page, setPage, sort, setSort, order, setOrder, searchQuery, setSearchQuery: setSearchQuery };
+  return { page, setPage, sort, setSort, order, setOrder, searchQuery, setSearchQuery: setSearchQuery, searchParams, setSearchParams };
 }
