@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import usePostListQuery from '../hooks/usePostListQuery';
 import useDefaultSearchParams from '../hooks/useDefaultSearchParams';
 import useUserContext from '../hooks/useUserContext';
+import Empty from './Empty';
 
 const NON_SEARCH_PARAMS = ['sort', 'order', 'page', 'size'];
 const PAGE_SIZE = 5;
@@ -17,7 +18,7 @@ const PostList = ({ isMyPosts }) => {
     useDefaultSearchParams(NON_SEARCH_PARAMS);
   const [isEditorVisible, setEditorVisible] = useState(false);
   const fetchParams = getFetchParams();
-  const { isSuccess, isLoading, posts, pageCount, createPost } = usePostListQuery(fetchParams);
+  const { isSuccess, posts, pageCount, createPost } = usePostListQuery(fetchParams);
 
   function getFetchParams() {
     const params = { order, sort, size: PAGE_SIZE, page };
@@ -78,7 +79,7 @@ const PostList = ({ isMyPosts }) => {
         setSort={setSort}
         onSearch={setSearchQuery}
       />
-      {getPostPreviews()}
+      {posts.length > 0 ? getPostPreviews() : <Empty/>}
       {pageCount > 1 && (
         <Pagination
           page={page - 1}

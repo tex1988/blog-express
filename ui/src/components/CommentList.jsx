@@ -9,6 +9,7 @@ import Search from './Search';
 import useCommentListQuery from '../hooks/useCommentListQuery';
 import useCommentListSearchParams from '../hooks/useCommentListSearchParams';
 import useUserContext from '../hooks/useUserContext';
+import Empty from './Empty';
 
 const NON_SEARCH_PARAMS = ['sort', 'order', 'page', 'size', 'comments', 'search'];
 const PAGE_SIZE = 5;
@@ -26,20 +27,13 @@ const CommentList = forwardRef((props, ref) => {
     searchQuery,
     setSearchQuery,
     setCommentsSearchParam,
-    setSearch
+    setSearch,
   } = useCommentListSearchParams(NON_SEARCH_PARAMS);
   const { userId, postId } = useParams();
   const fetchParams = getFetchParams(page);
   const isCanLeftAComment = user && !isTheSameUser(user, userId);
-  const {
-    isSuccess,
-    isLoading,
-    comments,
-    pageCount,
-    saveComment,
-    editComment,
-    deleteComment,
-  } = useCommentListQuery({ postId, fetchParams, isFetch: showComments, afterDelete, afterSave });
+  const { isSuccess, comments, pageCount, saveComment, editComment, deleteComment } =
+    useCommentListQuery({ postId, fetchParams, isFetch: showComments, afterDelete, afterSave });
 
   useImperativeHandle(ref, () => ({
     setCommentsSearchParam,
@@ -129,7 +123,7 @@ const CommentList = forwardRef((props, ref) => {
               onSearch={setSearchQuery}
             />
           )}
-          {getComments()}
+          {comments.length > 0 ? getComments() : <Empty />}
           {pageCount > 1 && (
             <Pagination
               page={page - 1}
