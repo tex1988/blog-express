@@ -1,7 +1,6 @@
-import { forwardRef, useContext, useImperativeHandle } from 'react';
+import { forwardRef, useImperativeHandle } from 'react';
 import { useParams } from 'react-router-dom';
 import Comment from './Comment';
-import { UserContext } from '../App';
 import { isPageExists, isTheSameUser } from '../utils/utils';
 import Editor from './Editor';
 import styled from 'styled-components';
@@ -9,12 +8,13 @@ import Pagination from './Pagination';
 import Search from './Search';
 import useCommentListQuery from '../hooks/useCommentListQuery';
 import useCommentListSearchParams from '../hooks/useCommentListSearchParams';
+import useUserContext from '../hooks/useUserContext';
 
 const NON_SEARCH_PARAMS = ['sort', 'order', 'page', 'size', 'comments', 'search'];
 const PAGE_SIZE = 5;
 
 const CommentList = forwardRef((props, ref) => {
-  const { user } = useContext(UserContext);
+  const { user } = useUserContext();
   const { commentCount, setCommentCount, showComments, showCommentsSearch } = props;
   const {
     page,

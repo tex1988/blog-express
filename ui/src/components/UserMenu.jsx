@@ -1,18 +1,15 @@
-import { useContext } from 'react';
-import { USER_KEY, UserContext } from '../App';
 import { useNavigate } from 'react-router-dom';
-import { removeFromLocalStorage } from '../utils/utils';
 import styled, { css } from 'styled-components';
+import useUserContext from '../hooks/useUserContext';
 
 const UserMenu = (props) => {
   const { showUserMenu } = props;
-  const { user, setUser } = useContext(UserContext);
+  const { user, signOut } = useUserContext();
   const { firstName, lastName, username, email } = user || {};
   const navigate = useNavigate();
 
   function logOut() {
-    removeFromLocalStorage(USER_KEY);
-    setUser(undefined);
+    signOut();
     navigate('/');
   }
 

@@ -1,22 +1,20 @@
-import { useContext, useState } from 'react';
-import { USER_KEY, UserContext } from '../App';
+import { useState } from 'react';
 import { logInUser } from '../api/api';
 import { Link, useNavigate } from 'react-router-dom';
-import { saveToLocalStorage } from '../utils/utils';
+import useUserContext from '../hooks/useUserContext';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const credentials = {username, password};
-  const { setUser } = useContext(UserContext);
+  const { signIn } = useUserContext();
   const navigate = useNavigate();
 
   function onSignIn(event) {
     event.preventDefault();
     logInUser(credentials)
       .then((user) => {
-        saveToLocalStorage(USER_KEY, user);
-        setUser(user);
+        signIn(user)
         navigate(`/user/${user.userId}/post`);
       })
       .catch((error) => {

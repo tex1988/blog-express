@@ -8,18 +8,6 @@ export function isTheSameUser(user, userId) {
   return Number(userId) === Number(user.userId);
 }
 
-export function saveToLocalStorage(key, value) {
-  window.localStorage.setItem(key, JSON.stringify(value));
-}
-
-export function getFromLocalStorage(key) {
-  return JSON.parse(window.localStorage.getItem(key));
-}
-
-export function removeFromLocalStorage(key) {
-  window.localStorage.removeItem(key);
-}
-
 export function isPageExists(length, size , page) {
   return Math.ceil(length / size) >= page;
 }

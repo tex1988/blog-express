@@ -1,29 +1,24 @@
 import { Route, Routes } from 'react-router-dom';
 import Login from './pages/Login';
-import { createContext, Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import MainLayout from './layouts/MainLayout';
 import MyPosts from './pages/MyPosts';
 import Post from './pages/Post';
 import AllPosts from './pages/AllPosts';
 import Register from './pages/Register';
-import { getFromLocalStorage } from './utils/utils';
 import Loading from './components/Loading';
-
-export const UserContext = createContext(null);
-export const USER_KEY = 'user';
+import { UserContextProvider } from './context/UserContext';
 
 function App() {
-  const [user, setUser] = useState(getFromLocalStorage(USER_KEY));
-  const value = { user: user, setUser: setUser };
 
   return (
     <Routes>
       <Route
         path="/"
         element={
-          <UserContext.Provider value={value}>
+          <UserContextProvider>
             <MainLayout />
-          </UserContext.Provider>
+          </UserContextProvider>
         }>
         <Route path="/" element={<AllPosts />} />
         <Route path="/user/:userId/post" element={<MyPosts />} />
@@ -39,9 +34,9 @@ function App() {
       <Route
         path="/login"
         element={
-          <UserContext.Provider value={value}>
+          <UserContextProvider>
             <Login />
-          </UserContext.Provider>
+          </UserContextProvider>
         }
       />
       <Route path="/register" element={<Register />} />

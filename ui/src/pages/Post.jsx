@@ -1,5 +1,4 @@
-import { Suspense, useContext, useEffect, useRef, useState } from 'react';
-import { UserContext } from '../App';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import Editor from '../components/Editor';
 import { getDate, isTheSameUser } from '../utils/utils';
 import { useParams } from 'react-router-dom';
@@ -7,9 +6,10 @@ import CommentList from '../components/CommentList';
 import usePostQuery from '../hooks/usePostQuery';
 import usePostAdditionalParams from '../hooks/usePostAdditionalParams';
 import Loading from '../components/Loading';
+import useUserContext from '../hooks/useUserContext';
 
 const Post = () => {
-  const { user: loggedInUser } = useContext(UserContext);
+  const { user: loggedInUser } = useUserContext();
   const { userId, postId } = useParams();
   const [editMode, setEditMode] = useState(false);
   const { showComments, showCommentsSearch } = usePostAdditionalParams();

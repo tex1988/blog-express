@@ -1,5 +1,4 @@
-import { useContext, useState } from 'react';
-import { UserContext } from '../App';
+import { useState } from 'react';
 import Editor from '../components/Editor';
 import PostPreview from '../components/PostPreview';
 import Pagination from '../components/Pagination';
@@ -7,12 +6,13 @@ import Search from './Search';
 import styled from 'styled-components';
 import usePostListQuery from '../hooks/usePostListQuery';
 import useDefaultSearchParams from '../hooks/useDefaultSearchParams';
+import useUserContext from '../hooks/useUserContext';
 
 const NON_SEARCH_PARAMS = ['sort', 'order', 'page', 'size'];
 const PAGE_SIZE = 5;
 
 const PostList = ({ isMyPosts }) => {
-  const { user } = useContext(UserContext);
+  const { user } = useUserContext();
   const { page, setPage, sort, setSort, order, setOrder, searchQuery, setSearchQuery } =
     useDefaultSearchParams(NON_SEARCH_PARAMS);
   const [isEditorVisible, setEditorVisible] = useState(false);
