@@ -22,7 +22,7 @@ const PostPreview = ({ post }) => {
 
   return (
     <div className="flex-column">
-      <h3 onClick={navigateToPost} style={{ cursor: 'pointer' }}>
+      <h3 onClick={navigateToPost} style={{ cursor: 'pointer', width: 'fit-content' }}>
         {title}
       </h3>
       <span className="info">

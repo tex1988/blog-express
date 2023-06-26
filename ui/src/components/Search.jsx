@@ -98,7 +98,7 @@ const Search = (props) => {
   );
 };
 
-const SearchWrapper = styled.div.attrs({
+export const SearchWrapper = styled.div.attrs({
   className: 'flex-row-space-between',
 })`
   align-content: center;

@@ -13,7 +13,7 @@ const SpinnerWrapper = styled.div.attrs({
   className: 'flex-row-center',
 })`
 
-  min-width: 300px;
+  min-height: 300px;
 
   circle {
     fill: transparent;

@@ -1,8 +1,8 @@
 import { createContext, Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
 import PostList from '../components/PostList';
-import Loading from '../components/Loading';
 import useUserContext from '../hooks/useUserContext';
+import PostListSkeleton from '../components/skeleton/PostListSkeleton';
 
 export const EditorContext = createContext(undefined);
 
@@ -14,7 +14,7 @@ const MyPosts = () => {
   }
 
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<PostListSkeleton />}>
       <PostList isMyPosts={true} />
     </Suspense>
   );

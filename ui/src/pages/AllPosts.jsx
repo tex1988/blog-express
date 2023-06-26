@@ -1,10 +1,10 @@
 import PostList from '../components/PostList';
-import Loading from '../components/Loading';
 import { Suspense } from 'react';
+import PostListSkeleton from '../components/skeleton/PostListSkeleton';
 
 const AllPosts = () => {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<PostListSkeleton />}>
       <PostList isMyPosts={false} />
     </Suspense>
   );
