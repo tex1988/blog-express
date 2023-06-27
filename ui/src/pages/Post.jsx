@@ -1,10 +1,10 @@
 import { Suspense } from 'react';
-import Loading from '../components/Loading';
 import FullPost from '../components/FullPost';
+import FullPostSkeleton from '../components/skeleton/FullPostSkeleton';
 
 const Post = () => {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<FullPostSkeleton />}>
       <FullPost />
     </Suspense>
   );

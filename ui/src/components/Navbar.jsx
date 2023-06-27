@@ -37,7 +37,7 @@ const Navbar = () => {
       <div className="nav-group">
         <NavLink className="logo" to="/">BLOG-EXPRESS</NavLink>
         {user && <NavLink to={`/user/${user.userId}/post`}>My posts</NavLink>}
-        <NavLink to="/">All posts</NavLink>
+        <NavLink to="/post">All posts</NavLink>
       </div>
       <div className="user-info" ref={ref} onClick={toggleMenuVisibility}>
         {userName}
