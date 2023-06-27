@@ -1,11 +1,11 @@
 import React, { createContext, useCallback, useMemo } from 'react';
 import useLocalStorage from '../hooks/useLocalStorage';
 
-const UserContext = createContext(null);
+const AuthContext = createContext(null);
 
 export const USER_CONTEXT_KEY = 'user';
 
-const UserContextProvider = ({ children }) => {
+const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useLocalStorage(USER_CONTEXT_KEY);
 
   function signIn(user) {
@@ -23,10 +23,10 @@ const UserContextProvider = ({ children }) => {
   }), [user, signIn, signOut])
 
   return (
-    <UserContext.Provider value={contextValue}>
+    <AuthContext.Provider value={contextValue}>
       {children}
-    </UserContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
-export { UserContext, UserContextProvider };
+export { AuthContext, AuthContextProvider };
