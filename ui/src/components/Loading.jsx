@@ -4,7 +4,14 @@ const Loading = () => {
 
   return (
     <SpinnerWrapper>
-      <svg><circle cx="20" cy="20" r="18" strokeWidth="3" fill="none"/></svg>
+      <div className='flex-column'>
+        <div className='flex-row-center'>
+          <svg>
+            <circle cx='20' cy='20' r='18' strokeWidth='3' fill='none' />
+          </svg>
+        </div>
+        <div className='flex-row-center'>Loading...</div>
+      </div>
     </SpinnerWrapper>
   );
 }
@@ -14,6 +21,13 @@ const SpinnerWrapper = styled.div.attrs({
 })`
 
   min-height: 300px;
+  
+  div {
+    color: royalblue;
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 14px;
+  }
 
   circle {
     fill: transparent;
