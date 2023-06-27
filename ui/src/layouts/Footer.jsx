@@ -31,6 +31,6 @@ const StyledFooter = styled.div`
   a {
     color: royalblue;
   }
-`
+`;
 
 export default Footer;
