@@ -5,8 +5,8 @@ import { useParams } from 'react-router-dom';
 import CommentList from '../components/CommentList';
 import usePostQuery from '../hooks/usePostQuery';
 import usePostAdditionalParams from '../hooks/usePostAdditionalParams';
-import Loading from '../components/Loading';
 import useUserContext from '../hooks/useUserContext';
+import CommentListSkeleton from './skeleton/CommentListSkeleton';
 
 const FullPost = () => {
   const { user: loggedInUser } = useUserContext();
@@ -78,7 +78,7 @@ const FullPost = () => {
           </div>
         )}
       </div>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<CommentListSkeleton />}>
         <CommentList ref={ref}
                      {...{ showComments, showCommentsSearch, commentCount, setCommentCount }}
         />

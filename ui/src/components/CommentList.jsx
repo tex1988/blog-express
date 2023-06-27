@@ -108,7 +108,7 @@ const CommentList = forwardRef((props, ref) => {
   }
 
   return (
-    <CommentsWrapper>
+    <CommentListWrapper>
       {showComments && (
         <>
           {showCommentsSearch && commentCount > 0 && (
@@ -144,11 +144,11 @@ const CommentList = forwardRef((props, ref) => {
           />
         )}
       </div>
-    </CommentsWrapper>
+    </CommentListWrapper>
   );
 });
 
-const CommentsWrapper = styled.div.attrs({
+export const CommentListWrapper = styled.div.attrs({
   className: 'flex-column',
 })`
   margin-top: 10px;
