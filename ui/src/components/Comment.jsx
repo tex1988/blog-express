@@ -1,10 +1,10 @@
 import { getDate, isTheSameUser } from '../utils/utils';
 import { useState } from 'react';
 import Editor from './Editor';
-import useUserContext from '../hooks/useUserContext';
+import useAuthContext from '../hooks/useAuthContext';
 
 const Comment = ({ comment, onCommentUpdate, onCommentDelete }) => {
-  const { user } = useUserContext();
+  const { user } = useAuthContext();
   const { commentId, content, created, modified, userId } = comment;
   const userName = `${comment?.user?.firstName} ${comment?.user?.lastName}`;
   const [editMode, setEditMode] = useState(false);

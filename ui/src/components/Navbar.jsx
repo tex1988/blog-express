@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import UserMenu from './UserMenu';
 import styled from 'styled-components';
-import useUserContext from '../hooks/useUserContext';
+import useAuthContext from '../hooks/useAuthContext';
 
 const Navbar = () => {
-  const { user } = useUserContext();
+  const { user } = useAuthContext();
   const userName = user ? user.username : 'Sign in';
   const location = useLocation();
   const [showUserMenu, setShowUserMenu] = useState(false);

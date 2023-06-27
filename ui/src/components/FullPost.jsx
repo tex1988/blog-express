@@ -5,11 +5,11 @@ import { useParams } from 'react-router-dom';
 import CommentList from '../components/CommentList';
 import usePostQuery from '../hooks/usePostQuery';
 import usePostAdditionalParams from '../hooks/usePostAdditionalParams';
-import useUserContext from '../hooks/useUserContext';
+import useAuthContext from '../hooks/useAuthContext';
 import CommentListSkeleton from './skeleton/CommentListSkeleton';
 
 const FullPost = () => {
-  const { user: loggedInUser } = useUserContext();
+  const { user: loggedInUser } = useAuthContext();
   const { userId, postId } = useParams();
   const [editMode, setEditMode] = useState(false);
   const { showComments, showCommentsSearch } = usePostAdditionalParams();

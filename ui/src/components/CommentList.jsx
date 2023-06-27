@@ -8,14 +8,14 @@ import Pagination from './Pagination';
 import Search from './Search';
 import useCommentListQuery from '../hooks/useCommentListQuery';
 import useCommentListSearchParams from '../hooks/useCommentListSearchParams';
-import useUserContext from '../hooks/useUserContext';
+import useAuthContext from '../hooks/useAuthContext';
 import Empty from './Empty';
 
 const NON_SEARCH_PARAMS = ['sort', 'order', 'page', 'size', 'comments', 'search'];
 const PAGE_SIZE = 5;
 
 const CommentList = forwardRef((props, ref) => {
-  const { user } = useUserContext();
+  const { user } = useAuthContext();
   const { commentCount, setCommentCount, showComments, showCommentsSearch } = props;
   const {
     page,

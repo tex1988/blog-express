@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
-import useUserContext from '../hooks/useUserContext';
+import useAuthContext from '../hooks/useAuthContext';
 
 const UserMenu = (props) => {
   const { showUserMenu } = props;
-  const { user, signOut } = useUserContext();
+  const { user, signOut } = useAuthContext();
   const { firstName, lastName, username, email } = user || {};
   const navigate = useNavigate();
 

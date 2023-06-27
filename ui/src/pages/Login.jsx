@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { logInUser } from '../api/api';
 import { Link, useNavigate } from 'react-router-dom';
-import useUserContext from '../hooks/useUserContext';
+import useAuthContext from '../hooks/useAuthContext';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const credentials = {username, password};
-  const { signIn } = useUserContext();
+  const { signIn } = useAuthContext();
   const navigate = useNavigate();
 
   function onSignIn(event) {
