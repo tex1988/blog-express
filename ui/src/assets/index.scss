@@ -85,6 +85,10 @@ button {
   &:hover:enabled {
     background-color: #4f79ff;
   }
+
+  &:hover:enabled:active {
+    background-color: #3454B4;
+  }
 }
 
 input {
@@ -208,7 +212,7 @@ html, body, #root, .centered-wrapper {
       background-color: #26a641;
     }
 
-    &:active {
+    &:hover:enabled:active {
       background-color: #016401;
     }
   }
