@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import Editor from '../components/Editor';
 import PostPreview from '../components/PostPreview';
-import Pagination from '../components/Pagination';
+import Pagination from './ui/Pagination';
 import Search from './Search';
 import styled from 'styled-components';
 import usePostListQuery from '../hooks/usePostListQuery';
 import useDefaultSearchParams from '../hooks/useDefaultSearchParams';
 import useAuthContext from '../hooks/useAuthContext';
-import Empty from './Empty';
+import Empty from './ui/Empty';
 
 const NON_SEARCH_PARAMS = ['sort', 'order', 'page', 'size'];
 const PAGE_SIZE = 5;

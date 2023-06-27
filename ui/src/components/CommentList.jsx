@@ -4,12 +4,12 @@ import Comment from './Comment';
 import { isPageExists, isTheSameUser } from '../utils/utils';
 import Editor from './Editor';
 import styled from 'styled-components';
-import Pagination from './Pagination';
+import Pagination from './ui/Pagination';
 import Search from './Search';
 import useCommentListQuery from '../hooks/useCommentListQuery';
 import useCommentListSearchParams from '../hooks/useCommentListSearchParams';
 import useAuthContext from '../hooks/useAuthContext';
-import Empty from './Empty';
+import Empty from './ui/Empty';
 
 const NON_SEARCH_PARAMS = ['sort', 'order', 'page', 'size', 'comments', 'search'];
 const PAGE_SIZE = 5;

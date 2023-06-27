@@ -1,19 +1,17 @@
-import Navbar from '../components/Navbar';
+import Navbar from './Navbar';
 import { Outlet } from 'react-router-dom';
-import Footer from '../components/Footer';
+import Footer from './Footer';
 import { QueryBoundaries } from '../components/errorHandling/QueryBoundaries';
 
 const MainLayout = () => {
   return (
-    <>
-      <div className="container">
-        <Navbar />
-        <QueryBoundaries>
-          <Outlet />
-        </QueryBoundaries>
-        <Footer />
-      </div>
-    </>
+    <div className="container">
+      <Navbar />
+      <QueryBoundaries>
+        <Outlet />
+      </QueryBoundaries>
+      <Footer />
+    </div>
   );
 };
 

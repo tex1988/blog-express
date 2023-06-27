@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import Select from './Select';
-import SearchInput from './SearchInput';
+import Select from './ui/Select';
+import SearchInput from './ui/SearchInput';
 
 const Search = (props) => {
   const ASC = 'asc';

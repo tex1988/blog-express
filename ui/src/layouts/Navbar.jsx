@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import UserMenu from './UserMenu';
+import UserMenu from '../components/UserMenu';
 import styled from 'styled-components';
 import useAuthContext from '../hooks/useAuthContext';
 
