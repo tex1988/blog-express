@@ -9,7 +9,7 @@ const Button = ({
   loadingLabel = null,
 }) => {
   return (
-    <button onClick={onClick} disabled={disabled}>
+    <button onClick={onClick} disabled={disabled || loading}>
       <div className="flex-row-center">
         {loading && (
           <span style={{ marginRight: '5px' }}>
