@@ -43,8 +43,8 @@ const Header = () => {
           {user && <NavLink to={`/user/${user.userId}/post`}>My posts</NavLink>}
           <NavLink to="/post">All posts</NavLink>
         </div>
-        <div className="user-info" ref={ref} onClick={toggleMenuVisibility}>
-          {userName}
+        <div className="user-info" ref={ref} >
+          <span onClick={toggleMenuVisibility}>{userName}</span>
           <UserMenu showUserMenu={showUserMenu} />
         </div>
       </nav>
