@@ -3,12 +3,13 @@ import styled, { css } from 'styled-components';
 import useAuthContext from '../hooks/useAuthContext';
 
 const UserMenu = (props) => {
-  const { showUserMenu } = props;
+  const { showUserMenu, setShowUserMenu } = props;
   const { user, signOut } = useAuthContext();
   const { firstName, lastName, username, email } = user || {};
   const navigate = useNavigate();
 
   function logOut() {
+    setShowUserMenu(false);
     signOut();
     navigate('/');
   }
@@ -16,11 +17,15 @@ const UserMenu = (props) => {
   return (
     <UserMenuWrapper showUserMenu={showUserMenu}>
       <div>
-        <span>Signed in as <b>{username}</b></span>
+        <span>
+          Signed in as <b>{username}</b>
+        </span>
         <span>{`${firstName} ${lastName}`}</span>
         <span>{email}</span>
         <span className="action">Edit</span>
-        <span className="action no-border" onClick={logOut}>Sign out</span>
+        <span className="action no-border" onClick={logOut}>
+          Sign out
+        </span>
       </div>
     </UserMenuWrapper>
   );
@@ -33,14 +38,15 @@ const UserMenuWrapper = styled.div`
   top: -10px;
   right: 50px;
   opacity: 0;
-  z-index: -1;
-  transition: all 200ms linear;
+  visibility: hidden;
+  transition: visibility 0s, opacity 200ms linear;
 
-  ${props => props.showUserMenu && css`
-    opacity: 1;
-    z-index: 100;
-  `}
-
+  ${(props) =>
+    props.showUserMenu &&
+    css`
+      opacity: 1;
+      visibility: visible;
+    `}
   div {
     display: flex;
     flex-direction: column;
@@ -64,7 +70,7 @@ const UserMenuWrapper = styled.div`
     text-decoration: underline;
     cursor: pointer;
   }
-  
+
   .no-border {
     border-bottom: none;
   }
