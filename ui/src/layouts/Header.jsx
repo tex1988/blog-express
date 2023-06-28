@@ -1,21 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import UserMenu from '../components/UserMenu';
 import styled from 'styled-components';
 import useAuthContext from '../hooks/useAuthContext';
 
-const Navbar = () => {
+const Header = () => {
   const { user } = useAuthContext();
-  const userName = user ? user.username : 'Sign in';
-  const location = useLocation();
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const userName = user ? user.username : 'Sign in';
   const ref = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);
 
-    return () => document.removeEventListener('click', handleClickOutside, true);
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true);
+    };
   }, []);
 
   function handleClickOutside(event) {
@@ -33,30 +34,41 @@ const Navbar = () => {
   }
 
   return (
-    <Nav currentLocation={location.pathname}>
-      <div className="nav-group">
-        <NavLink className="logo" to="/">BLOG-EXPRESS</NavLink>
-        {user && <NavLink to={`/user/${user.userId}/post`}>My posts</NavLink>}
-        <NavLink to="/post">All posts</NavLink>
-      </div>
-      <div className="user-info" ref={ref} onClick={toggleMenuVisibility}>
-        {userName}
-        <UserMenu showUserMenu={showUserMenu} />
-      </div>
-    </Nav>
+    <HeaderWrapper>
+      <nav>
+        <div className="nav-group">
+          <NavLink className="logo" to="/">
+            BLOG-EXPRESS
+          </NavLink>
+          {user && <NavLink to={`/user/${user.userId}/post`}>My posts</NavLink>}
+          <NavLink to="/post">All posts</NavLink>
+        </div>
+        <div className="user-info" ref={ref} onClick={toggleMenuVisibility}>
+          {userName}
+          <UserMenu showUserMenu={showUserMenu} />
+        </div>
+      </nav>
+    </HeaderWrapper>
   );
 };
 
-const Nav = styled.nav`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  background-color: #282828;
-  font-family: Arial, sans-serif;
-  font-size: 15px;
-  height: 55px;
-  border-bottom: 1px solid #4b4b4b;
+const HeaderWrapper = styled.header.attrs({
+  className: 'container',
+})`
+  nav {
+    position: fixed;
+    width: inherit;
+    max-width: inherit;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #282828;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    height: 55px;
+    border-bottom: 1px solid #4b4b4b;
+    z-index: 2;
+  }
 
   a {
     display: inline-block;
@@ -72,6 +84,10 @@ const Nav = styled.nav`
   .active {
     border-bottom: 3px solid RoyalBlue;
     color: white;
+  }
+
+  .sticky {
+    position: fixed;
   }
 
   .logo {
@@ -96,4 +112,4 @@ const Nav = styled.nav`
   }
 `;
 
-export default Navbar;
+export default Header;
