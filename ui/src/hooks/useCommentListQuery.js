@@ -24,6 +24,7 @@ export default function useCommentListQuery(props) {
     mutate: saveComment,
     error: saveError,
     isSuccess: isSaveSuccess,
+    isLoading: isSaveLoading,
   } = useMutation({
     mutationFn: (comment) => savePostComment(postId, comment),
     onSuccess: () => client.invalidateQueries({ queryKey })
@@ -34,6 +35,7 @@ export default function useCommentListQuery(props) {
     mutate: editComment,
     error: editError,
     isSuccess: isEditSuccess,
+    isLoading: isEditLoading,
   } = useMutation({
     mutationFn: (comment) => updateComment(comment.commentId, comment),
     onSuccess: () => client.invalidateQueries({ queryKey })
@@ -44,6 +46,7 @@ export default function useCommentListQuery(props) {
     mutate: deleteComment,
     error: deleteError,
     isSuccess: isDeleteSuccess,
+    isLoading: isDeleteLoading,
   } = useMutation({
     mutationFn: deleteCommentById,
     onSuccess: () => client.invalidateQueries({ queryKey })
@@ -57,12 +60,15 @@ export default function useCommentListQuery(props) {
     comments,
     pageCount,
     saveComment,
+    isSaveLoading,
     isSaveSuccess,
     editComment,
     editError,
+    isEditLoading,
     isEditSuccess,
     deleteComment,
     deleteError,
+    isDeleteLoading,
     isDeleteSuccess,
   };
 }

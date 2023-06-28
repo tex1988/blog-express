@@ -32,7 +32,7 @@ const CommentList = forwardRef((props, ref) => {
   const { userId, postId } = useParams();
   const fetchParams = getFetchParams(page);
   const isCanLeftAComment = user && !isTheSameUser(user, userId);
-  const { isSuccess, comments, pageCount, saveComment, editComment, deleteComment } =
+  const { isSuccess, comments, pageCount, saveComment, isSaveLoading, editComment, isEditLoading, deleteComment } =
     useCommentListQuery({ postId, fetchParams, isFetch: showComments, afterDelete, afterSave });
 
   useImperativeHandle(ref, () => ({
@@ -141,6 +141,7 @@ const CommentList = forwardRef((props, ref) => {
             useTitle={false}
             useCancel={false}
             saveLabel={'Left a comment'}
+            loading={isSaveLoading}
           />
         )}
       </div>

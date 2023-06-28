@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
+import Button from './ui/Button';
 
 const Editor = (props) => {
   const {
@@ -10,6 +11,8 @@ const Editor = (props) => {
     initialContent = '',
     useTitle = false,
     useCancel = true,
+    loading = false,
+    loadingLabel = 'Loading'
   } = props;
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
@@ -31,10 +34,10 @@ const Editor = (props) => {
   return (
     <div className="flex-column">
       {useTitle && <input onChange={onHeaderInput} value={title} placeholder="Post title" />}
-      <textarea className="text-area" value={content} onChange={onContentInput}></textarea>
+      <textarea className="text-area" value={content} onChange={onContentInput} disabled={loading}/>
       <ButtonRow>
-        <button onClick={onSaveCLick}>{saveLabel}</button>
-        {useCancel && <button onClick={onCancel}>Cancel</button>}
+        <Button onClick={onSaveCLick} label={saveLabel} loading={loading} loadingLabel={loadingLabel}/>
+        {useCancel && !loading && <Button onClick={onCancel} label='Cancel' />}
       </ButtonRow>
     </div>
   );
