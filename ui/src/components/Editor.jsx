@@ -12,7 +12,8 @@ const Editor = (props) => {
     useTitle = false,
     useCancel = true,
     loading = false,
-    loadingLabel = 'Loading'
+    loadingLabel = 'Loading',
+    textAreaHeight = '400px',
   } = props;
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
@@ -33,11 +34,28 @@ const Editor = (props) => {
 
   return (
     <div className="flex-column">
-      {useTitle && <input onChange={onHeaderInput} value={title} placeholder="Post title" />}
-      <textarea className="text-area" value={content} onChange={onContentInput} disabled={loading}/>
+      {useTitle && (
+        <input
+          onChange={onHeaderInput}
+          value={title}
+          placeholder="Post title"
+        />
+      )}
+      <textarea
+        className="text-area"
+        value={content}
+        onChange={onContentInput}
+        disabled={loading}
+        style={{ height: textAreaHeight }}
+      />
       <ButtonRow>
-        <Button onClick={onSaveCLick} label={saveLabel} loading={loading} loadingLabel={loadingLabel}/>
-        {useCancel && !loading && <Button onClick={onCancel} label='Cancel' />}
+        <Button
+          onClick={onSaveCLick}
+          label={saveLabel}
+          loading={loading}
+          loadingLabel={loadingLabel}
+        />
+        {useCancel && !loading && <Button onClick={onCancel} label="Cancel" />}
       </ButtonRow>
     </div>
   );

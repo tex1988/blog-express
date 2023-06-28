@@ -142,6 +142,7 @@ const CommentList = forwardRef((props, ref) => {
             useCancel={false}
             saveLabel={'Left a comment'}
             loading={isSaveLoading}
+            textAreaHeight='50px'
           />
         )}
       </div>

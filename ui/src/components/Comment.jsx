@@ -54,6 +54,7 @@ const Comment = ({ comment, onCommentUpdate, onCommentDelete }) => {
           onCancel={() => setEditMode(false)}
           initialContent={content}
           useTitle={false}
+          textAreaHeight='50px'
         />
       ) : (
         commentElement
