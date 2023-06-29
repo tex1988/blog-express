@@ -10,6 +10,7 @@ import useCommentListQuery from '../hooks/useCommentListQuery';
 import useCommentListSearchParams from '../hooks/useCommentListSearchParams';
 import useAuthContext from '../hooks/useAuthContext';
 import Empty from './ui/Empty';
+import CommentSkeleton from './skeleton/CommentSkeleton';
 
 const NON_SEARCH_PARAMS = ['sort', 'order', 'page', 'size', 'comments', 'search'];
 const PAGE_SIZE = 5;
@@ -32,8 +33,9 @@ const CommentList = forwardRef((props, ref) => {
   const { userId, postId } = useParams();
   const fetchParams = getFetchParams(page);
   const isCanLeftAComment = user && !isTheSameUser(user, userId);
-  const [editedPostId, setEditedPostsId] = useState(null);
-  const { isSuccess, comments, pageCount, saveComment, isSaveLoading, editComment, isEditLoading, deleteComment } =
+  const [editedCommentId, setEditedCommentId] = useState(null);
+  const [deletedCommentId, setDeletedCommentId] = useState(null);
+  const { isSuccess, comments, pageCount, saveComment, isSaveLoading, editComment, isEditLoading, deleteComment, isDeleteLoading } =
     useCommentListQuery({ postId, fetchParams, isFetch: showComments, afterDelete, afterSave, afterEdit });
 
   useImperativeHandle(ref, () => ({
@@ -77,12 +79,13 @@ const CommentList = forwardRef((props, ref) => {
     if (!isPageExists(commentCount - 1, PAGE_SIZE, page)) {
       newPage--;
     }
+    setDeletedCommentId(null);
     setCommentCount((prev) => --prev);
     setPage(newPage);
   }
 
   function afterEdit() {
-    setEditedPostsId(null);
+    setEditedCommentId(null);
   }
 
   function getSortOptions() {
@@ -99,22 +102,31 @@ const CommentList = forwardRef((props, ref) => {
     ];
   }
 
+  function onDeleteComment(commentId) {
+    deleteComment(commentId);
+    setDeletedCommentId(commentId);
+  }
+
   function getComments() {
     if (isSuccess && comments.length > 0) {
       return comments.map((comment) => {
         const commentId = comment.commentId;
-        return editedPostId !== commentId ? (
-          <Comment
-            key={`comment_${commentId}`}
-            comment={{ ...comment }}
-            onCommentUpdate={setEditedPostsId}
-            onCommentDelete={deleteComment}
-          />
+        return editedCommentId !== commentId ? (
+          isDeleteLoading && deletedCommentId === commentId ? (
+            <CommentSkeleton />
+          ) : (
+            <Comment
+              key={`comment_${commentId}`}
+              comment={{ ...comment }}
+              onCommentUpdate={setEditedCommentId}
+              onCommentDelete={onDeleteComment}
+            />
+          )
         ) : (
           <Editor
             key={`comment_${commentId}`}
             onSave={(content) => editComment({ commentId, content })}
-            onCancel={() => setEditedPostsId(null)}
+            onCancel={() => setEditedCommentId(null)}
             initialContent={comment.content}
             useTitle={false}
             textAreaHeight="50px"
