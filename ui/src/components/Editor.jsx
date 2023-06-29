@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
 import Button from './ui/Button';
 
@@ -17,6 +17,7 @@ const Editor = (props) => {
   } = props;
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
+  const lastValue = useRef();
 
   function onHeaderInput(event) {
     setTitle(event.target.value);
@@ -30,6 +31,7 @@ const Editor = (props) => {
     onSave(content, title);
     setContent('');
     setTitle('');
+    lastValue.current = content;
   }
 
   return (
@@ -43,7 +45,7 @@ const Editor = (props) => {
       )}
       <textarea
         className="text-area"
-        value={content}
+        value={loading ? lastValue.current : content}
         onChange={onContentInput}
         disabled={loading}
         style={{ height: textAreaHeight }}
