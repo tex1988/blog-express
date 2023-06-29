@@ -7,13 +7,14 @@ import usePostQuery from '../hooks/usePostQuery';
 import usePostAdditionalParams from '../hooks/usePostAdditionalParams';
 import useAuthContext from '../hooks/useAuthContext';
 import CommentListSkeleton from './skeleton/CommentListSkeleton';
+import FullPostSkeleton from './skeleton/FullPostSkeleton';
 
 const FullPost = () => {
   const { user: loggedInUser } = useAuthContext();
   const { userId, postId } = useParams();
   const [editMode, setEditMode] = useState(false);
   const { showComments, showCommentsSearch } = usePostAdditionalParams();
-  const { post, editPost, deletePost } = usePostQuery(postId, userId);
+  const { post, editPost, isEditLoading, deletePost, isDeleteLoading } = usePostQuery(postId, userId);
   const { title, content, created, modified, user, commentCount: count } = post;
   const [commentCount, setCommentCount] = useState(0);
   const hasComments = commentCount > 0;
@@ -48,7 +49,9 @@ const FullPost = () => {
         <div>
           <span
             className={hasComments ? 'action-link' : ''}
-            onClick={hasComments ? () => ref.current.setCommentsSearchParam(!showComments) : () => {}}
+            onClick={
+              hasComments ? () => ref.current.setCommentsSearchParam(!showComments) : () => {}
+            }
             aria-disabled={hasComments}
             style={hasComments ? {} : { textDecoration: 'none' }}>
             Comments: {commentCount}
@@ -79,14 +82,17 @@ const FullPost = () => {
         )}
       </div>
       <Suspense fallback={<CommentListSkeleton />}>
-        <CommentList ref={ref}
-                     {...{ showComments, showCommentsSearch, commentCount, setCommentCount }}
+        <CommentList
+          ref={ref}
+          {...{ showComments, showCommentsSearch, commentCount, setCommentCount }}
         />
       </Suspense>
     </>
   );
 
-  return (
+  return isDeleteLoading ? (
+    <FullPostSkeleton />
+  ) : (
     <div className="flex-column" style={{ padding: '10px' }}>
       {editMode ? (
         <Editor
@@ -95,6 +101,8 @@ const FullPost = () => {
           initialTitle={title}
           initialContent={content}
           useTitle={true}
+          loading={isEditLoading}
+          loadingLabel="Saving"
         />
       ) : (
         postElement

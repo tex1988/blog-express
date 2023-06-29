@@ -15,6 +15,7 @@ export default function usePostQuery(postId, userId) {
   const {
     mutate: editPost,
     error: editError,
+    isLoading: isEditLoading,
     isSuccess: isEditSuccess,
   } = useMutation({
     mutationFn: (post) => updatePost(postId, post),
@@ -23,6 +24,7 @@ export default function usePostQuery(postId, userId) {
   const {
     mutate: deletePost,
     error: deleteError,
+    isLoading: isDeleteLoading,
     isSuccess: isDeleteSuccess,
   } = useMutation({
     mutationFn: deletePostById,
@@ -35,9 +37,11 @@ export default function usePostQuery(postId, userId) {
     post,
     editPost,
     editError,
+    isEditLoading,
     isEditSuccess,
     deletePost,
     deleteError,
+    isDeleteLoading,
     isDeleteSuccess,
   };
 }
