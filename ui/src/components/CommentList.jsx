@@ -1,4 +1,4 @@
-import { forwardRef, useImperativeHandle } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Comment from './Comment';
 import { isPageExists, isTheSameUser } from '../utils/utils';
@@ -32,8 +32,9 @@ const CommentList = forwardRef((props, ref) => {
   const { userId, postId } = useParams();
   const fetchParams = getFetchParams(page);
   const isCanLeftAComment = user && !isTheSameUser(user, userId);
+  const [editedPostId, setEditedPostsId] = useState(null);
   const { isSuccess, comments, pageCount, saveComment, isSaveLoading, editComment, isEditLoading, deleteComment } =
-    useCommentListQuery({ postId, fetchParams, isFetch: showComments, afterDelete, afterSave });
+    useCommentListQuery({ postId, fetchParams, isFetch: showComments, afterDelete, afterSave, afterEdit });
 
   useImperativeHandle(ref, () => ({
     setCommentsSearchParam,
@@ -80,6 +81,10 @@ const CommentList = forwardRef((props, ref) => {
     setPage(newPage);
   }
 
+  function afterEdit() {
+    setEditedPostsId(null);
+  }
+
   function getSortOptions() {
     return [
       { value: 'created', label: 'creation date' },
@@ -96,14 +101,28 @@ const CommentList = forwardRef((props, ref) => {
 
   function getComments() {
     if (isSuccess && comments.length > 0) {
-      return comments.map((comment) => (
-        <Comment
-          key={`comment_${comment.commentId}`}
-          comment={{ ...comment }}
-          onCommentUpdate={editComment}
-          onCommentDelete={deleteComment}
-        />
-      ));
+      return comments.map((comment) => {
+        const commentId = comment.commentId;
+        return editedPostId !== commentId ? (
+          <Comment
+            key={`comment_${commentId}`}
+            comment={{ ...comment }}
+            onCommentUpdate={setEditedPostsId}
+            onCommentDelete={deleteComment}
+          />
+        ) : (
+          <Editor
+            key={`comment_${commentId}`}
+            onSave={(content) => editComment({ commentId, content })}
+            onCancel={() => setEditedPostsId(null)}
+            initialContent={comment.content}
+            useTitle={false}
+            textAreaHeight="50px"
+            loading={isEditLoading}
+            loadingLabel="Saving"
+          />
+        );
+      });
     }
   }
 

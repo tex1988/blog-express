@@ -48,7 +48,7 @@ const Editor = ({
       <textarea
         className="text-area"
         value={content}
-        placeholder={loading && lastContent.current}
+        placeholder={loading ? lastContent.current : ''}
         onChange={onContentInput}
         disabled={loading}
         style={{ height: textAreaHeight }}

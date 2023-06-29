@@ -1,8 +1,8 @@
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 const CommentSkeleton = ({ count }) => {
-  const skeleton = (
-    <SkeletonTheme baseColor="#444" highlightColor="#202020">
+  const skeleton = (index) => (
+    <SkeletonTheme key={`commentSkeleton_${index}`} baseColor="#444" highlightColor="#202020">
       <div className="flex-column">
         <div className="info">
           <span>
@@ -19,9 +19,9 @@ const CommentSkeleton = ({ count }) => {
   function getSkeletons() {
     let skeletons;
     if (!count || count < 1) {
-      skeletons = skeleton;
+      skeletons = skeleton(1);
     } else {
-      skeletons = [...Array(count)].map((_) => skeleton);
+      skeletons = [...Array(count)].map((_, index) => skeleton(index));
     }
     return skeletons;
   }
