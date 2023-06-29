@@ -18,7 +18,7 @@ const PostList = ({ isMyPosts }) => {
     useDefaultSearchParams(NON_SEARCH_PARAMS);
   const [isEditorVisible, setEditorVisible] = useState(false);
   const fetchParams = getFetchParams();
-  const { isSuccess, posts, pageCount, createPost } = usePostListQuery(fetchParams);
+  const { isSuccess, posts, pageCount, createPost, isSaveLoading } = usePostListQuery(fetchParams);
 
   function getFetchParams() {
     const params = { order, sort, size: PAGE_SIZE, page };
@@ -95,6 +95,8 @@ const PostList = ({ isMyPosts }) => {
           initialTitle=""
           initialContent=""
           useTitle={true}
+          loading={isSaveLoading}
+          loadingLabel="Saving"
         />
       )}
       {isMyPosts && (

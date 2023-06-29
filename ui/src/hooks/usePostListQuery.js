@@ -10,10 +10,14 @@ export default function usePostListQuery(fetchParams) {
   });
   const { posts = null, pageCount = 1 } = data || {};
   const client = useQueryClient();
-  const { mutate: createPost, error: saveError } = useMutation({
+  const {
+    mutate: createPost,
+    error: saveError,
+    isLoading: isSaveLoading,
+  } = useMutation({
     mutationFn: savePost,
     onSuccess: () => client.invalidateQueries({ queryKey }),
   });
 
-  return { isSuccess, isLoading, saveError, posts, pageCount, createPost };
+  return { isSuccess, isLoading, saveError, posts, pageCount, createPost, isSaveLoading };
 }

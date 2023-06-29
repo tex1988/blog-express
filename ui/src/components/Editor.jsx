@@ -2,22 +2,22 @@ import { useRef, useState } from 'react';
 import styled from 'styled-components';
 import Button from './ui/Button';
 
-const Editor = (props) => {
-  const {
-    onSave,
-    onCancel,
-    saveLabel = 'Save',
-    initialTitle = '',
-    initialContent = '',
-    useTitle = false,
-    useCancel = true,
-    loading = false,
-    loadingLabel = 'Loading',
-    textAreaHeight = '400px',
-  } = props;
+const Editor = ({
+  onSave,
+  onCancel,
+  saveLabel = 'Save',
+  initialTitle = '',
+  initialContent = '',
+  useTitle = false,
+  useCancel = true,
+  loading = false,
+  loadingLabel = 'Loading',
+  textAreaHeight = '400px',
+}) => {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
-  const lastValue = useRef();
+  const lastContent = useRef(null);
+  const lastTitle = useRef(null);
 
   function onHeaderInput(event) {
     setTitle(event.target.value);
@@ -31,7 +31,8 @@ const Editor = (props) => {
     onSave(content, title);
     setContent('');
     setTitle('');
-    lastValue.current = content;
+    lastContent.current = content;
+    lastTitle.current = title;
   }
 
   return (
@@ -40,12 +41,14 @@ const Editor = (props) => {
         <input
           onChange={onHeaderInput}
           value={title}
-          placeholder="Post title"
+          placeholder={loading ? lastTitle.current : "Post title"}
+          disabled={loading}
         />
       )}
       <textarea
         className="text-area"
-        value={loading ? lastValue.current : content}
+        value={content}
+        placeholder={loading && lastContent.current}
         onChange={onContentInput}
         disabled={loading}
         style={{ height: textAreaHeight }}
@@ -64,12 +67,12 @@ const Editor = (props) => {
 };
 
 const ButtonRow = styled.div.attrs({
-  className: 'flex-row-center'
+  className: 'flex-row-center',
 })`
   flex-basis: auto;
   justify-content: center;
   align-content: center;
   flex-wrap: wrap;
-`
+`;
 
 export default Editor;
