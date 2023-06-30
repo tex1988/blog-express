@@ -120,6 +120,7 @@ const CommentList = forwardRef((props, ref) => {
               comment={{ ...comment }}
               onCommentUpdate={setEditedCommentId}
               onCommentDelete={onDeleteComment}
+              isLoading={isEditLoading}
             />
           )
         ) : (

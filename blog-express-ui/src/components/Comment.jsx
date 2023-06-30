@@ -1,7 +1,7 @@
 import { getDate, isTheSameUser } from '../utils/utils';
 import useAuthContext from '../hooks/useAuthContext';
 
-const Comment = ({ comment, onCommentUpdate, onCommentDelete }) => {
+const Comment = ({ comment, onCommentUpdate, onCommentDelete, isLoading = false }) => {
   const { user } = useAuthContext();
   const { commentId, content, created, modified, userId } = comment;
   const userName = `${comment?.user?.firstName} ${comment?.user?.lastName}`;
@@ -18,12 +18,14 @@ const Comment = ({ comment, onCommentUpdate, onCommentDelete }) => {
       <span className="content">{content}</span>
       {isEditable && (
         <div className="flex-row-left info">
-          <span className="action-link" onClick={() => onCommentUpdate(commentId)}>
+          <span
+            className={isLoading ? '' : 'action-link'}
+            onClick={isLoading ? () => {} : () => onCommentUpdate(commentId)}>
             Edit
           </span>
           <span
-            className="action-link"
-            onClick={() => onCommentDelete(commentId)}
+            className={isLoading ? '' : 'action-link'}
+            onClick={isLoading ? () => {} : () => onCommentDelete(commentId)}
             style={{ marginLeft: '5px' }}>
             Delete
           </span>
