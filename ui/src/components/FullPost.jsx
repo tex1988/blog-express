@@ -38,14 +38,14 @@ const FullPost = () => {
   const postElement = (
     <>
       <h3>{title}</h3>
-      <div className="info">
+      <div className="flex-row-left info">
         <span>
           Posted by {user?.firstName} {user?.lastName}, {getDate(created)}
         </span>
-        {modified && <span>Edited {getDate(modified)}</span>}
+        {modified && <span>, edited {getDate(modified)}</span>}
       </div>
       <span className="content">{content}</span>
-      <div className="info" style={{ textAlign: 'right' }}>
+      <div className="flex-row-space-between info" style={{ textAlign: 'right' }}>
         <div>
           <span
             className={hasComments ? 'action-link' : ''}

@@ -25,13 +25,13 @@ const PostPreview = ({ post }) => {
       <h3 onClick={navigateToPost} style={{ cursor: 'pointer', width: 'fit-content' }}>
         {title}
       </h3>
-      <span className="info">
-        Posted by {userName}, {getDate(created)}
-      </span>
+      <div className="flex-row-left info">
+        <span>Posted by {userName}, {getDate(created)}</span>
+        {modified && <span>, edited {getDate(modified)}</span>}
+      </div>
       <span className="content">{contentPreview}</span>
-      <div className="info" style={{ textAlign: 'right' }}>
+      <div className="flex-row-left info" style={{ textAlign: 'right' }}>
         <span>Comments: {commentsCount}</span>
-        {modified && <span>Edited {getDate(modified)}</span>}
       </div>
     </div>
   );

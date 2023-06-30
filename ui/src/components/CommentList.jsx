@@ -113,7 +113,7 @@ const CommentList = forwardRef((props, ref) => {
         const commentId = comment.commentId;
         return editedCommentId !== commentId ? (
           isDeleteLoading && deletedCommentId === commentId ? (
-            <CommentSkeleton />
+            <CommentSkeleton withEdit={true}/>
           ) : (
             <Comment
               key={`comment_${commentId}`}
@@ -184,7 +184,6 @@ const CommentList = forwardRef((props, ref) => {
 export const CommentListWrapper = styled.div.attrs({
   className: 'flex-column',
 })`
-  margin-top: 10px;
   margin-left: 20px;
 `;
 

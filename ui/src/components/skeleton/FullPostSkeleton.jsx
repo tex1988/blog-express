@@ -7,18 +7,15 @@ const FullPostSkeleton = () => {
         <h3>
           <Skeleton width={200} />
         </h3>
-        <div className="info">
+        <div className="flex-row-left info">
           <span>
             <Skeleton width={270}/>
-          </span>
-          <span>
-            <Skeleton width={165} />
           </span>
         </div>
         <span className="content">
           <Skeleton count={5} />
         </span>
-        <div className="info" style={{ textAlign: 'right' }}>
+        <div className="flex-row-space-between info" style={{ textAlign: 'right' }}>
           <div>
             <span>
               <Skeleton width={85} />
