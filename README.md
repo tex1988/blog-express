@@ -15,6 +15,7 @@ docker run --name some-postgres -e POSTGRES_USER=username POSTGRES_PASSWORD=myse
 DATABASE_URL="postgresql://username:password@host:port/db_name"
 PORT=desired_application_port
 ```
+`Note: This step can be changed with adding mentioned env variables to your run environment`
 
 ### 2. Install npm packages
 ```
