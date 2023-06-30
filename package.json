@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon app.js"
+    "dev": "nodemon blog-express-be/app.js"
   },
   "dependencies": {
     "@prisma/client": "^4.16.1",
@@ -16,7 +16,8 @@
     "styled-components": "^5.3.11"
   },
   "prisma": {
-    "seed": "node prisma/seed.js"
+    "seed": "node prisma/seed.js",
+    "schema": "blog-express-be/src/prisma/schema.prisma"
   },
   "prettier": {
     "tabWidth": 2,

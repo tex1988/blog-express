@@ -1,8 +1,8 @@
 import { Suspense, useEffect, useRef, useState } from 'react';
-import Editor from '../components/Editor';
+import Editor from './Editor';
 import { getDate, isTheSameUser } from '../utils/utils';
 import { useParams } from 'react-router-dom';
-import CommentList from '../components/CommentList';
+import CommentList from './CommentList';
 import usePostQuery from '../hooks/usePostQuery';
 import usePostAdditionalParams from '../hooks/usePostAdditionalParams';
 import useAuthContext from '../hooks/useAuthContext';

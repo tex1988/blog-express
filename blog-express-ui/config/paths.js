@@ -5,7 +5,7 @@ module.exports = {
   src: path.resolve(__dirname, '../src'),
 
   // Production build files
-  build: path.resolve(__dirname, '../../static'),
+  build: path.resolve(__dirname, '../../blog-express-be/static'),
 
   // Static files that get copied to build folder
   public: path.resolve(__dirname, '../public'),

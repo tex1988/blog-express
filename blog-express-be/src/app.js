@@ -1,7 +1,8 @@
 require('dotenv').config()
 const PORT = process.env.PORT;
+const path = require('path')
 const express = require('express');
-const indexRouter = require('./route/index');
+const indexRouter = require('./route');
 const userRouter = require('./route/user');
 const postRouter = require('./route/post');
 const commentRouter = require('./route/comment');
@@ -10,7 +11,7 @@ const app = express();
 const { errorLogger, errorResponder, invalidPathHandler } = require('./middleware/errorHandler');
 
 app.use(express.json());
-app.use(express.static('./static'));
+app.use(express.static(path.join(__dirname, '../static')));
 
 app.use('/', indexRouter);
 app.use('/user', userRouter);

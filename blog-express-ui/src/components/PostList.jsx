@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import Editor from '../components/Editor';
-import PostPreview from '../components/PostPreview';
+import Editor from './Editor';
+import PostPreview from './PostPreview';
 import Pagination from './ui/Pagination';
 import Search from './Search';
 import styled from 'styled-components';
