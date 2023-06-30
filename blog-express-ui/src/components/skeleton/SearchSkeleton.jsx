@@ -21,7 +21,7 @@ const SearchSkeleton = () => {
             </div>
           </div>
         </div>
-        <div className="flex-row-left">
+        <div className="flex-row-left search-part">
           <div className="flex-row-left">
             <span>
               <Skeleton width={74} style={{ marginRight: '7px' }} />

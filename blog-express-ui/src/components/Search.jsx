@@ -78,7 +78,7 @@ const Search = (props) => {
           </div>
         </div>
       </div>
-      <div className="flex-row-left">
+      <div className="flex-row-left search-part">
         <div className="flex-row-left">
           <span>Search by:</span>
           <Select
@@ -104,6 +104,16 @@ export const SearchWrapper = styled.div.attrs({
   align-content: center;
   padding: 5px 5px 10px 5px;
   border-bottom: 1px solid #4b4b4b;
+
+  @media (max-width: 803px) {
+    flex-direction: column;
+  }
+  
+  .search-part {
+    @media (max-width: 803px) {
+      flex-direction: column;
+    }
+  }
 
   fieldset {
     border: none;
