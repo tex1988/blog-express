@@ -12,8 +12,8 @@ const Comment = ({ comment, onCommentUpdate, onCommentDelete }) => {
       <div className="info">
         <span>
           {userName}, {getDate(created)}
+          {modified && `, edited ${getDate(modified)}`}
         </span>
-        {modified && <span>, edited {getDate(modified)}</span>}
       </div>
       <span className="content">{content}</span>
       {isEditable && (

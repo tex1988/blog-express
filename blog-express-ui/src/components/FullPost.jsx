@@ -41,8 +41,8 @@ const FullPost = () => {
       <div className="flex-row-left info">
         <span>
           Posted by {user?.firstName} {user?.lastName}, {getDate(created)}
+          {modified && `, edited ${getDate(modified)}`}
         </span>
-        {modified && <span>, edited {getDate(modified)}</span>}
       </div>
       <span className="content">{content}</span>
       <div className="flex-row-space-between info" style={{ textAlign: 'right' }}>

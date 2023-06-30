@@ -26,8 +26,10 @@ const PostPreview = ({ post }) => {
         {title}
       </h3>
       <div className="flex-row-left info">
-        <span>Posted by {userName}, {getDate(created)}</span>
-        {modified && <span>, edited {getDate(modified)}</span>}
+        <span>
+          Posted by {userName}, {getDate(created)}
+          {modified && `, edited ${getDate(modified)}`}
+        </span>
       </div>
       <span className="content">{contentPreview}</span>
       <div className="flex-row-left info" style={{ textAlign: 'right' }}>
