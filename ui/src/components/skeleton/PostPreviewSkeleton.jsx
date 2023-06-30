@@ -2,8 +2,8 @@ import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 const PostPreviewSkeleton = ({ count }) => {
-  const skeleton = (
-    <SkeletonTheme baseColor="#444" highlightColor="#202020">
+  const skeleton = (index) => (
+    <SkeletonTheme key={`postPreviewSkeleton_${index}`} baseColor="#444" highlightColor="#202020">
       <div className="flex-column">
         <h3>
           <Skeleton width={200} />
@@ -28,7 +28,7 @@ const PostPreviewSkeleton = ({ count }) => {
     if (!count || count < 1) {
       skeletons = skeleton;
     } else {
-      skeletons = [...Array(count)].map(_ => skeleton);
+      skeletons = [...Array(count)].map((_, index) => skeleton(index));
     }
     return skeletons;
   }
