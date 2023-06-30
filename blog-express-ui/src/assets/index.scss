@@ -130,6 +130,19 @@ h3 {
   margin: 15px 5px 5px 5px;
 }
 
+.title {
+  margin: 15px 5px 5px 5px;
+  font-size: 19px;
+  font-weight: bold;
+  color: #f6f6f6;
+  width: fit-content;
+  text-decoration: none;
+
+  &:visited {
+    color: #b5b5b5;
+  }
+}
+
 .info {
   font-size: 13px;
   color: grey;
