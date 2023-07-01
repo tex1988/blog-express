@@ -76,21 +76,8 @@ const SearchInputWrapper = styled.div`
     min-width: 30px;
     width: 41px;
     border-radius: 0 3px 3px 0;
-    border: 1px solid royalblue;
     padding: 6px 10px 6px 10px;
     margin: 0;
-
-    &&:hover {
-      border-color: #3a5eca;
-    }
-
-    &:hover:enabled {
-      border-color: #4f79ff;
-    }
-
-    &:hover:enabled:active {
-      border-color: #3454B4;
-    }
 
     svg {
       width: 14px;

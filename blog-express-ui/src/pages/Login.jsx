@@ -1,25 +1,17 @@
 import { useState } from 'react';
-import { logInUser } from '../api/api';
-import { Link, useNavigate } from 'react-router-dom';
-import useAuthContext from '../hooks/useAuthContext';
+import { Link } from 'react-router-dom';
+import useLoginQuery from '../hooks/useLoginQuery';
+import Button from '../components/ui/Button';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const credentials = {username, password};
-  const { signIn } = useAuthContext();
-  const navigate = useNavigate();
+  const credentials = { username, password };
+  const { logIn, error, isLoading } = useLoginQuery(credentials);
 
   function onSignIn(event) {
     event.preventDefault();
-    logInUser(credentials)
-      .then((user) => {
-        signIn(user)
-        navigate(`/user/${user.userId}/post`);
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
+    logIn(credentials);
   }
 
   function onInputKeyPress(event) {
@@ -43,6 +35,7 @@ const Login = () => {
             value={username}
             onChange={(event) => setUsername(event.target.value)}
             onKeyDown={onInputKeyPress}
+            disabled={isLoading}
           />
           <label className="input-label" htmlFor="password">
             Password
@@ -54,10 +47,20 @@ const Login = () => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             onKeyDown={onInputKeyPress}
+            disabled={isLoading}
           />
-          <button type="submit" disabled={username.length < 4 || password.length < 4}>
-            Sign in
-          </button>
+          <Button
+            className="mt-10"
+            type="submit"
+            disabled={username.length < 4 || password.length < 4 || isLoading}
+            loading={isLoading}
+            label="Sign in"
+            loadingLabel="Signin in"
+            color="#238636"
+            hoveredColor="#26a641"
+            pressedColor="#016401"
+            disabledColor="#016401"
+          />
         </form>
         <div className="form-info">
           <span>New to BLOG-EXPRESS?</span>

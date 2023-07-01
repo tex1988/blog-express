@@ -72,22 +72,25 @@ button {
   min-width: 50px;
   background-color: royalblue;
   color: white;
-  border: 1px transparent;
+  border: 1px solid royalblue;
   border-radius: 3px;
   box-sizing: border-box;
   transition: all 200ms linear;
 
   &:disabled {
     background-color: #3a5eca;
+    border-color: #3a5eca;
     color: #b2b2b2;
   }
 
   &:hover:enabled {
     background-color: #4f79ff;
+    border-color: #4f79ff;
   }
 
   &:hover:enabled:active {
     background-color: #3454B4;
+    border-color: #3454B4
   }
 }
 
@@ -208,24 +211,6 @@ html, body, #root, .centered-wrapper {
     margin: 0 0 0 7px;
     font-size: 12px;
     text-align: left;
-  }
-
-  button {
-    background-color: #238636;
-    margin-top: 15px;
-
-    &:disabled {
-      background-color: #016401;
-      color: #b2b2b2;
-    }
-
-    &:hover:enabled {
-      background-color: #26a641;
-    }
-
-    &:hover:enabled:active {
-      background-color: #016401;
-    }
   }
 }
 
