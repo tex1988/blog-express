@@ -1,6 +1,7 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { createUser } from '../api/api';
+import useRegisterQuery from '../hooks/useRegisterQuery';
+import Button from '../components/ui/Button';
 
 export const Register = () => {
   const [firstName, setFirstName] = useState('');
@@ -9,13 +10,11 @@ export const Register = () => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const user = { firstName, lastName, username, password, email };
-  const navigate = useNavigate();
+  const { register, error, isLoading } = useRegisterQuery();
 
   function onSubmit(event) {
     event.preventDefault();
-    createUser(user).then(() => {
-      navigate('/login');
-    });
+    register(user);
   }
 
   return (
@@ -33,6 +32,7 @@ export const Register = () => {
                 autoComplete='given-name'
                 onChange={(event) => setFirstName(event.target.value)}
                 value={firstName}
+                disabled={isLoading}
               />
             </div>
             <div className='flex-column'>
@@ -44,6 +44,7 @@ export const Register = () => {
                 autoComplete='family-name'
                 onChange={(event) => setLastName(event.target.value)}
                 value={lastName}
+                disabled={isLoading}
               />
             </div>
           </div>
@@ -57,6 +58,7 @@ export const Register = () => {
                 autoComplete='nickname'
                 onChange={(event) => setUsername(event.target.value)}
                 value={username}
+                disabled={isLoading}
               />
             </div>
             <div className='flex-column'>
@@ -69,8 +71,8 @@ export const Register = () => {
                 type='password'
                 onChange={(event) => setPassword(event.target.value)}
                 value={password}
+                disabled={isLoading}
               />
-
             </div>
           </div>
           <div className='flex-row-center mt-10'>
@@ -83,10 +85,20 @@ export const Register = () => {
                 autoComplete='email'
                 onChange={(event) => setEmail(event.target.value)}
                 value={email}
+                disabled={isLoading}
               />
             </div>
           </div>
-          <button type='submit'>Register</button>
+          <Button
+            type="submit"
+            loading={isLoading}
+            label="Register"
+            loadingLabel="Registering"
+            color="#238636"
+            hoveredColor="#26a641"
+            pressedColor="#016401"
+            disabledColor="#016401"
+          />
         </form>
         <div className='form-info'>
           <span>By clicking Register or registering through a third party you accept the</span>

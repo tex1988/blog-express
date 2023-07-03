@@ -7,7 +7,7 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const credentials = { username, password };
-  const { logIn, error, isLoading } = useLoginQuery(credentials);
+  const { logIn, error, isLoading } = useLoginQuery();
 
   function onSignIn(event) {
     event.preventDefault();

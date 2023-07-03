@@ -3,7 +3,7 @@ import useAuthContext from './useAuthContext';
 import { useNavigate } from 'react-router-dom';
 import { logInUser } from '../api/api';
 
-export default function useLoginQuery(credentials) {
+export default function useLoginQuery() {
   const { signIn } = useAuthContext();
   const navigate = useNavigate();
   const {
@@ -11,7 +11,7 @@ export default function useLoginQuery(credentials) {
     error,
     isLoading,
   } = useMutation({
-    mutationFn: () => logInUser(credentials),
+    mutationFn: (credentials) => logInUser(credentials),
     onSuccess: (data) => updateAuthContext(data),
   });
 
