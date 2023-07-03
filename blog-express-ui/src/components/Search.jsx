@@ -47,7 +47,9 @@ const Search = (props) => {
   }
 
   function onSearchClick(value) {
-    value ? onSearch({ [searchField]: value }) : onSearch(null);
+    if(defaultSearch || value) {
+      value ? onSearch({ [searchField]: value }) : onSearch(null);
+    }
   }
 
   function onSearchInput(value) {
