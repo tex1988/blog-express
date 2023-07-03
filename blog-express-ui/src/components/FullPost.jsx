@@ -81,7 +81,7 @@ const FullPost = () => {
           </div>
         )}
       </div>
-      <Suspense fallback={<CommentListSkeleton />}>
+      <Suspense fallback={<CommentListSkeleton search={showCommentsSearch}/>}>
         <CommentList
           ref={ref}
           {...{ showComments, showCommentsSearch, commentCount, setCommentCount }}
