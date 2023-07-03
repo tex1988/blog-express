@@ -1,13 +1,12 @@
 import styled, { css } from 'styled-components';
 
-const SearchInput = (props) => {
-  const {
-    value = '',
-    onInput = (value) => {},
-    onSearch = (value) => {},
-    placeholder = 'Search',
-  } = props;
-
+const SearchInput = ({
+  value = '',
+  onInput = (value) => {},
+  onSearch = (value) => {},
+  placeholder = 'Search',
+  disabled = false,
+}) => {
   function onInputKeyPress(event) {
     if (event.key === 'Enter') {
       onSearchClick();
@@ -37,7 +36,8 @@ const SearchInput = (props) => {
         value={value}
         onInput={onSearchInput}
         onKeyDown={onInputKeyPress}
-        placeholder={placeholder}
+        placeholder={disabled && value !== '' ? value : placeholder}
+        disabled={disabled}
       />
       <svg
         className="clear-icon"
@@ -51,7 +51,7 @@ const SearchInput = (props) => {
         aria-hidden="true">
         <path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm165.4 618.2l-66-.3L512 563.4l-99.3 118.4-66.1.3c-4.4 0-8-3.5-8-8 0-1.9.7-3.7 1.9-5.2l130.1-155L340.5 359a8.32 8.32 0 01-1.9-5.2c0-4.4 3.6-8 8-8l66.1.3L512 464.6l99.3-118.4 66-.3c4.4 0 8 3.5 8 8 0 1.9-.7 3.7-1.9 5.2L553.5 514l130 155c1.2 1.5 1.9 3.3 1.9 5.2 0 4.4-3.6 8-8 8z"></path>
       </svg>
-      <button onClick={onSearchClick} disabled={value.length < 1}>
+      <button onClick={onSearchClick} disabled={value.length < 1 || disabled}>
         <svg
           viewBox="64 64 896 896"
           focusable="false"
@@ -87,9 +87,9 @@ const SearchInputWrapper = styled.div`
 
   input {
     padding-right: 70px;
-    margin: 0
+    margin: 0;
   }
-  
+
   .clear-icon {
     position: absolute;
     right: 50px;
@@ -101,11 +101,12 @@ const SearchInputWrapper = styled.div`
     z-index: -1;
     transition: all 200ms linear;
 
-    ${props => props.showClearIcon && css`
-    opacity: 1;
-    z-index: 1;
-  `}
-
+    ${(props) =>
+      props.showClearIcon &&
+      css`
+        opacity: 1;
+        z-index: 1;
+      `}
     &:hover {
       fill: #8c8c8c;
     }

@@ -35,7 +35,7 @@ const CommentList = forwardRef((props, ref) => {
   const isCanLeftAComment = user && !isTheSameUser(user, userId);
   const [editedCommentId, setEditedCommentId] = useState(null);
   const [deletedCommentId, setDeletedCommentId] = useState(null);
-  const { isSuccess, comments, pageCount, saveComment, isSaveLoading, editComment, isEditLoading, deleteComment, isDeleteLoading } =
+  const { isSuccess, comments, pageCount, isLoading, saveComment, isSaveLoading, editComment, isEditLoading, deleteComment, isDeleteLoading } =
     useCommentListQuery({ postId, fetchParams, isFetch: showComments, afterDelete, afterSave, afterEdit });
 
   useImperativeHandle(ref, () => ({
@@ -153,6 +153,7 @@ const CommentList = forwardRef((props, ref) => {
               setOrder={setOrder}
               setSort={setSort}
               onSearch={setSearchQuery}
+              disabled={isLoading}
             />
           )}
           {comments.length > 0 ? getComments() : <Empty />}

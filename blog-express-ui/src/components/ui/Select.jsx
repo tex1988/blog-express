@@ -1,8 +1,7 @@
 import styled, { css } from 'styled-components';
 import { useEffect, useRef, useState } from 'react';
 
-const Select = (props) => {
-  const { options = [], defaultValue, onChange = null, style = {} } = props;
+const Select = ({ options = [], defaultValue, onChange = null, style = {}, disabled = false }) => {
   const [index, setIndex] = useState(getIndex(defaultValue));
   const [showDropDown, setShowDropDown] = useState(false);
   const ref = useRef(null);
@@ -14,7 +13,7 @@ const Select = (props) => {
 
   useEffect(() => {
     setIndex(getIndex(defaultValue));
-  }, [defaultValue])
+  }, [defaultValue]);
 
   function handleClickOutside(event) {
     if (ref.current && !ref.current?.contains(event.target)) {
@@ -23,7 +22,9 @@ const Select = (props) => {
   }
 
   function toggleDropdownVisibility() {
-    setShowDropDown(!showDropDown)
+    if (!disabled) {
+      setShowDropDown(!showDropDown);
+    }
   }
 
   function onInputChange(event, index) {
@@ -67,15 +68,13 @@ const Select = (props) => {
 
   return (
     <div ref={ref} className="flex-column" style={style}>
-      <SelectWrapper onClick={toggleDropdownVisibility}>
-        {options[index].label}
-      </SelectWrapper>
+      <SelectWrapper onClick={toggleDropdownVisibility} disabled={disabled}>{options[index].label}</SelectWrapper>
       <DropdownWrapper showDropDown={showDropDown}>
         <div>{getItems()}</div>
       </DropdownWrapper>
     </div>
   );
-}
+};
 
 const DropdownWrapper = styled.div`
   position: relative;
@@ -85,11 +84,13 @@ const DropdownWrapper = styled.div`
   z-index: -1;
   transition: all 200ms linear;
 
-  ${props => props.showDropDown && css`
-    opacity: 1;
-    z-index: 1;
-  `}
-
+  ${(props) =>
+    props.showDropDown &&
+    css`
+      opacity: 1;
+      z-index: 1;
+    `}
+  
   div {
     display: flex;
     flex-direction: column;
@@ -107,7 +108,7 @@ const DropdownWrapper = styled.div`
     border-bottom: 1px solid #4b4b4b;
     cursor: pointer;
     transition: all 200ms linear;
-    
+
     &:hover {
       background-color: #282828;
     }
@@ -134,6 +135,13 @@ const SelectWrapper = styled.div`
   padding: 5px 0 5px 5px;
   cursor: pointer;
   margin: 0;
+
+  ${(props) =>
+    props.disabled &&
+    css`
+      cursor: default;
+      color: grey;
+    `}
 `;
 
 export default Select;

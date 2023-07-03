@@ -1,21 +1,22 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { useEffect, useState } from 'react';
 import Select from './ui/Select';
 import SearchInput from './ui/SearchInput';
 
-const Search = (props) => {
-  const ASC = 'asc';
-  const DESC = 'desc';
-  const {
-    sortOptions = [],
-    searchOptions = [],
-    setOrder = (value) => {},
-    setSort = (value) => {},
-    onSearch = (value) => {},
-    defaultSort = 'created',
-    defaultOrder = DESC,
-    defaultSearch = null,
-  } = props;
+const ASC = 'asc';
+const DESC = 'desc';
+
+const Search = ({
+  sortOptions = [],
+  searchOptions = [],
+  setOrder = (value) => {},
+  setSort = (value) => {},
+  onSearch = (value) => {},
+  defaultSort = 'created',
+  defaultOrder = DESC,
+  defaultSearch = null,
+  disabled = false,
+}) => {
   const [defaultSearchType, defaultSearchValue] = getDefaultSearch();
   const [selectedOrder, setSelectedOrder] = useState(defaultOrder);
   const [searchField, setSearchField] = useState(defaultSearchType);
@@ -23,15 +24,15 @@ const Search = (props) => {
 
   useEffect(() => {
     setSearchInputValue(defaultSearchValue);
-  }, [defaultSearchValue])
+  }, [defaultSearchValue]);
 
   useEffect(() => {
     setSelectedOrder(defaultOrder);
-  }, [defaultOrder])
+  }, [defaultOrder]);
 
   useEffect(() => {
     setSearchField(defaultSearchType);
-  }, [defaultSearchType])
+  }, [defaultSearchType]);
 
   function onOrderChange(event) {
     setOrder(event.target.value);
@@ -47,7 +48,7 @@ const Search = (props) => {
   }
 
   function onSearchClick(value) {
-    if(defaultSearch || value) {
+    if (defaultSearch || value) {
       value ? onSearch({ [searchField]: value }) : onSearch(null);
     }
   }
@@ -61,7 +62,7 @@ const Search = (props) => {
   }
 
   return (
-    <SearchWrapper>
+    <SearchWrapper disabled={disabled}>
       <div className="flex-row-left">
         <div className="flex-row-left">
           <span>Sort by:</span>
@@ -70,13 +71,28 @@ const Search = (props) => {
             options={sortOptions}
             onChange={onSortChange}
             style={{ width: '105px' }}
+            disabled={disabled}
           />
         </div>
         <div className="flex-row-left">
           <span>Order: </span>
           <div className="flex-row-left" onChange={onOrderChange}>
-            <input checked={selectedOrder === ASC} type="radio" value={ASC} readOnly />⇑
-            <input checked={selectedOrder === DESC} type="radio" value={DESC} readOnly />⇓
+            <input
+              checked={selectedOrder === ASC}
+              type="radio"
+              value={ASC}
+              readOnly
+              disabled={disabled}
+            />
+            ⇑
+            <input
+              checked={selectedOrder === DESC}
+              type="radio"
+              value={DESC}
+              readOnly
+              disabled={disabled}
+            />
+            ⇓
           </div>
         </div>
       </div>
@@ -88,12 +104,14 @@ const Search = (props) => {
             options={searchOptions}
             onChange={onSearchTypeChange}
             style={{ width: '65px' }}
+            disabled={disabled}
           />
         </div>
         <SearchInput
           value={searchInputValue}
           onSearch={onSearchClick}
           onInput={onSearchInput}
+          disabled={disabled}
         />
       </div>
     </SearchWrapper>
@@ -103,6 +121,11 @@ const Search = (props) => {
 export const SearchWrapper = styled.div.attrs({
   className: 'flex-row-space-between',
 })`
+  ${(props) =>
+    props.disabled &&
+    css`
+      color: grey;
+    `}
   align-content: center;
   padding: 5px 5px 10px 5px;
   border-bottom: 1px solid #4b4b4b;
@@ -110,7 +133,7 @@ export const SearchWrapper = styled.div.attrs({
   @media (max-width: 803px) {
     flex-direction: column;
   }
-  
+
   .search-part {
     @media (max-width: 803px) {
       flex-direction: column;
