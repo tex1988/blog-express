@@ -15,11 +15,22 @@ export default function usePostListQuery(fetchParams) {
   const {
     mutate: createPost,
     isLoading: isSaveLoading,
+    isError: isCreateError,
+    reset: resetCreate,
   } = useMutation({
     mutationFn: savePost,
     onSuccess: () => client.invalidateQueries({ queryKey }),
     onError: (err) => pushNotification({ message: err.message, type: 'error' }),
   });
 
-  return { isSuccess, isLoading, posts, pageCount, createPost, isSaveLoading };
+  return {
+    isSuccess,
+    isLoading,
+    posts,
+    pageCount,
+    createPost,
+    isSaveLoading,
+    isCreateError,
+    resetCreate,
+  };
 }

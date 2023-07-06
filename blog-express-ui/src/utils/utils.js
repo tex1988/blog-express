@@ -8,13 +8,15 @@ export function isTheSameUser(user, userId) {
   return Number(userId) === Number(user.userId);
 }
 
-export function isPageExists(length, size , page) {
+export function isPageExists(length, size, page) {
   return Math.ceil(length / size) >= page;
 }
 
 export function forEachObjectEntry(object, callback) {
-  Object.entries(object).forEach(entry => {
-    const [key, value ] = entry;
-    callback(key, value);
-  })
+  if (object) {
+    Object.entries(object).forEach((entry) => {
+      const [key, value] = entry;
+      callback(key, value);
+    });
+  }
 }

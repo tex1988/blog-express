@@ -32,20 +32,20 @@ export default function useCommentListSearchParams(nonSearchParams)  {
   function setCommentsSearchParam(value) {
     if (value && value === true) {
       searchParams.set('comments', value);
-      setSearchParams(searchParams);
+      setSearchParams(Object.fromEntries(searchParams));
     } else {
       searchParams.delete('comments');
-      setSearchParams(searchParams);
+      setSearchParams(Object.fromEntries(searchParams));
     }
   }
 
   function setSearch(value) {
     if (value && value === true) {
       searchParams.set('search', value);
-      setSearchParams(searchParams);
+      setSearchParams(Object.fromEntries(searchParams));
     } else {
       searchParams.delete('search');
-      setSearchParams(searchParams);
+      setSearchParams(Object.fromEntries(searchParams));
     }
   }
 

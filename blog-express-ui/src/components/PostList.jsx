@@ -18,7 +18,7 @@ const PostList = ({ isMyPosts }) => {
     useDefaultSearchParams(NON_SEARCH_PARAMS);
   const [isEditorVisible, setEditorVisible] = useState(false);
   const fetchParams = getFetchParams();
-  const { isSuccess, posts, pageCount, createPost, isSaveLoading } = usePostListQuery(fetchParams);
+  const { isSuccess, posts, pageCount, createPost, isSaveLoading, isCreateError, resetCreate } = usePostListQuery(fetchParams);
 
   function getFetchParams() {
     const params = { order, sort, size: PAGE_SIZE, page };
@@ -92,11 +92,13 @@ const PostList = ({ isMyPosts }) => {
         <Editor
           onSave={(title, content) => onPostSave(content, title)}
           onCancel={() => setEditorVisible(false)}
+          onEdit={resetCreate}
           initialTitle=""
           initialContent=""
           useTitle={true}
           loading={isSaveLoading}
           loadingLabel="Saving"
+          isError={isCreateError}
         />
       )}
       {isMyPosts && (

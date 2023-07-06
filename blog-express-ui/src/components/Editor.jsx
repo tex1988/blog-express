@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import Button from './ui/Button';
 
@@ -7,7 +7,7 @@ const Editor = ({
   onCancel = () => {},
   onEdit = () => {},
   saveLabel = 'Save',
-  initialTitle = '',
+  initialTitle = '' ,
   initialContent = '',
   useTitle = false,
   useCancel = true,
@@ -16,10 +16,17 @@ const Editor = ({
   textAreaHeight = '400px',
   isError = false
 }) => {
+  const lastContent = useRef('');
+  const lastTitle = useRef('');
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
-  const lastContent = useRef(null);
-  const lastTitle = useRef(null);
+
+  useEffect(() => {
+    if(isError === true) {
+      setTitle(lastTitle.current);
+      setContent(lastContent.current);
+    }
+  }, [isError])
 
   function onHeaderInput(event) {
     onEdit();
@@ -42,11 +49,12 @@ const Editor = ({
   return (
     <div className="flex-column">
       {useTitle && (
-        <input
+        <InputWrapper
           onChange={onHeaderInput}
           value={isError ? lastTitle.current : title}
           placeholder={loading ? lastTitle.current : "Post title"}
           disabled={loading}
+          error={isError}
         />
       )}
       <TextAreaWrapper
@@ -83,6 +91,18 @@ const ButtonRow = styled.div.attrs({
 const TextAreaWrapper = styled.textarea`
   height: ${(props) => props.height};
 
+  ${(props) =>
+    props.error &&
+    css`
+      border-color: #ce352c;
+
+      &:focus {
+        border-color: #ce352c;
+      }
+    `}
+`;
+
+const InputWrapper = styled.input`
   ${(props) =>
     props.error &&
     css`

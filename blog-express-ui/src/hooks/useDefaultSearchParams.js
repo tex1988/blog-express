@@ -22,7 +22,7 @@ export default function useDefaultSearchParams(nonSearchParams) {
     const { page, sort, order } = params;
     const searchQuery = getSearchParam(params);
     const defaultParams = { page: Number(page), sort, order };
-    Object.assign(defaultParams, searchQuery ? { searchQuery } : { search: null });
+    Object.assign(defaultParams, searchQuery ? { searchQuery } : { searchQuery: null });
     return defaultParams;
   }
 
@@ -37,17 +37,17 @@ export default function useDefaultSearchParams(nonSearchParams) {
 
   function setPage(value) {
     searchParams.set('page', value);
-    setSearchParams(searchParams);
+    setSearchParams(Object.fromEntries(searchParams));
   }
 
   function setOrder(value) {
     searchParams.set('order', value);
-    setSearchParams(searchParams);
+    setSearchParams(Object.fromEntries(searchParams));
   }
 
   function setSort(value) {
     searchParams.set('sort', value);
-    setSearchParams(searchParams);
+    setSearchParams(Object.fromEntries(searchParams));
   }
 
   function setSearchQuery(searchQueryValue) {
@@ -57,7 +57,7 @@ export default function useDefaultSearchParams(nonSearchParams) {
       forEachObjectEntry(searchQuery, (key) => searchParams.delete(key));
     }
     searchParams.set('page', '1');
-    setSearchParams(searchParams);
+    setSearchParams(Object.fromEntries(searchParams));
   }
 
   return {

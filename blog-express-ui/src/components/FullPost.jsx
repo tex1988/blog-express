@@ -14,7 +14,8 @@ const FullPost = () => {
   const { userId, postId } = useParams();
   const [editMode, setEditMode] = useState(false);
   const { showComments, showCommentsSearch } = usePostAdditionalParams();
-  const { post, editPost, isEditLoading, deletePost, isDeleteLoading } = usePostQuery(postId, userId);
+  const { post, editPost, isEditLoading, deletePost, isDeleteLoading, isEditError, resetEdit } =
+    usePostQuery(postId, userId);
   const { title, content, created, modified, user, commentCount: count } = post;
   const [commentCount, setCommentCount] = useState(0);
   const hasComments = commentCount > 0;
@@ -81,7 +82,7 @@ const FullPost = () => {
           </div>
         )}
       </div>
-      <Suspense fallback={<CommentListSkeleton search={showCommentsSearch}/>}>
+      <Suspense fallback={<CommentListSkeleton search={showCommentsSearch} />}>
         <CommentList
           ref={ref}
           {...{ showComments, showCommentsSearch, commentCount, setCommentCount }}
@@ -98,11 +99,13 @@ const FullPost = () => {
         <Editor
           onSave={(content, title) => onPostEdit(content, title)}
           onCancel={() => setEditMode(false)}
+          onEdit={resetEdit}
           initialTitle={title}
           initialContent={content}
           useTitle={true}
           loading={isEditLoading}
           loadingLabel="Saving"
+          isError={isEditError}
         />
       ) : (
         postElement
