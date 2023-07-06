@@ -12,13 +12,15 @@ const Notifications = () => {
     return notifications.map((notification) => {
       const { message, type } = notification;
       return (
-        <Toast
-          key={`notification_${notification.id}`}
-          message={message}
-          type={type}
-          onClose={() => closeNotification(notification.id)}
-          duration={notification.autoClose ? NOTIFICATION_DURATION : 0}
-        />
+        <div className="flex-row-center">
+          <Toast
+            key={`notification_${notification.id}`}
+            message={message}
+            type={type}
+            onClose={() => closeNotification(notification.id)}
+            duration={notification.autoClose ? NOTIFICATION_DURATION : 0}
+          />
+        </div>
       );
     });
   }

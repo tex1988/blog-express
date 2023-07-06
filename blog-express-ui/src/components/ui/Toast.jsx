@@ -115,7 +115,7 @@ const ToastWrapper = styled.div`
   margin: 5px;
   font-size: 12px;
   display: flex;
-  box-shadow: 0 0 5px 2px ${(props) => props.color};
+  box-shadow: 0 0 2px 1px ${(props) => props.color};
 
   .close-icon {
     text-align: center;
