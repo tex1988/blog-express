@@ -3,7 +3,7 @@ import useNotificationContext from '../hooks/useNotificationContext';
 import Toast from './ui/Toast';
 import styled from 'styled-components';
 
-const NOTIFICATION_AUTO_CLOSE = 2000;
+const NOTIFICATION_DURATION = 2000;
 
 const Notifications = () => {
   const { notifications, closeNotification } = useNotificationContext();
@@ -17,7 +17,7 @@ const Notifications = () => {
           message={message}
           type={type}
           onClose={() => closeNotification(notification.id)}
-          autoClose={notification.autoClose ? NOTIFICATION_AUTO_CLOSE : 0}
+          duration={notification.autoClose ? NOTIFICATION_DURATION : 0}
         />
       );
     });
