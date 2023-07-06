@@ -148,7 +148,10 @@ const CommentList = forwardRef((props, ref) => {
           <Editor
             key={`comment_${commentId}`}
             onSave={(content) => editComment({ commentId, content })}
-            onCancel={() => setEditedCommentId(null)}
+            onCancel={() => {
+              setEditedCommentId(null);
+              resetEdit();
+            }}
             onEdit={resetEdit}
             initialContent={comment.content}
             useTitle={false}

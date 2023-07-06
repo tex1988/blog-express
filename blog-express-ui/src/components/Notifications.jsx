@@ -12,9 +12,8 @@ const Notifications = () => {
     return notifications.map((notification) => {
       const { message, type } = notification;
       return (
-        <div className="flex-row-center">
+        <div key={`notification_${notification.id}`} className='flex-row-center'>
           <Toast
-            key={`notification_${notification.id}`}
             message={message}
             type={type}
             onClose={() => closeNotification(notification.id)}
