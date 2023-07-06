@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { deleteCommentById, fetchCommentsByPostId, savePostComment, updateComment, } from '../api/api';
+import useNotificationContext from './useNotificationContext';
 
 export default function useCommentListQuery(props) {
   const {
@@ -10,6 +11,7 @@ export default function useCommentListQuery(props) {
     afterDelete = () => {},
     isFetch,
   } = props;
+  const { pushNotification } = useNotificationContext();
   const queryKey = `post/${postId}/comment?${JSON.stringify(fetchParams)}`;
   const { isSuccess, isLoading, data } = useQuery({
     queryFn: () => fetchCommentsByPostId(postId, fetchParams),
@@ -22,52 +24,61 @@ export default function useCommentListQuery(props) {
   const client = useQueryClient();
   const {
     mutate: saveComment,
-    error: saveError,
     isSuccess: isSaveSuccess,
     isLoading: isSaveLoading,
+    isError: isSaveError,
+    reset: resetSave
   } = useMutation({
     mutationFn: (comment) => savePostComment(postId, comment),
     onSuccess: () => client.invalidateQueries({ queryKey })
       .then(() => afterSave()),
+    onError: (err) => onMutationError(err),
   });
 
   const {
     mutate: editComment,
-    error: editError,
     isSuccess: isEditSuccess,
     isLoading: isEditLoading,
+    isError: isEditError,
+    reset: resetEdit
   } = useMutation({
     mutationFn: (comment) => updateComment(comment.commentId, comment),
     onSuccess: () => client.invalidateQueries({ queryKey })
       .then(() => afterEdit()),
+    onError: (err) => onMutationError(err),
   });
 
   const {
     mutate: deleteComment,
-    error: deleteError,
     isSuccess: isDeleteSuccess,
     isLoading: isDeleteLoading,
   } = useMutation({
     mutationFn: deleteCommentById,
     onSuccess: () => client.invalidateQueries({ queryKey })
       .then(() => afterDelete()),
+    onError: (err) => onMutationError(err),
   });
+
+  function onMutationError(error) {
+    pushNotification({ message: error.message, type: 'error' });
+  }
 
   return {
     isSuccess,
     isLoading,
-    saveError,
     comments,
     pageCount,
     saveComment,
     isSaveLoading,
     isSaveSuccess,
+    isSaveError,
+    resetSave,
     editComment,
-    editError,
     isEditLoading,
     isEditSuccess,
+    isEditError,
+    resetEdit,
     deleteComment,
-    deleteError,
     isDeleteLoading,
     isDeleteSuccess,
   };

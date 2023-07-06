@@ -35,8 +35,29 @@ const CommentList = forwardRef((props, ref) => {
   const isCanLeftAComment = user && !isTheSameUser(user, userId);
   const [editedCommentId, setEditedCommentId] = useState(null);
   const [deletedCommentId, setDeletedCommentId] = useState(null);
-  const { isSuccess, comments, pageCount, isLoading, saveComment, isSaveLoading, editComment, isEditLoading, deleteComment, isDeleteLoading } =
-    useCommentListQuery({ postId, fetchParams, isFetch: showComments, afterDelete, afterSave, afterEdit });
+  const {
+    isSuccess,
+    comments,
+    pageCount,
+    isLoading,
+    saveComment,
+    isSaveLoading,
+    isSaveError,
+    resetSave,
+    editComment,
+    isEditLoading,
+    isEditError,
+    resetEdit,
+    deleteComment,
+    isDeleteLoading,
+  } = useCommentListQuery({
+    postId,
+    fetchParams,
+    isFetch: showComments,
+    afterDelete,
+    afterSave,
+    afterEdit,
+  });
 
   useImperativeHandle(ref, () => ({
     setCommentsSearchParam,
@@ -128,11 +149,13 @@ const CommentList = forwardRef((props, ref) => {
             key={`comment_${commentId}`}
             onSave={(content) => editComment({ commentId, content })}
             onCancel={() => setEditedCommentId(null)}
+            onEdit={resetEdit}
             initialContent={comment.content}
             useTitle={false}
             textAreaHeight="50px"
             loading={isEditLoading}
             loadingLabel="Saving"
+            isError={isEditError}
           />
         );
       });
@@ -171,11 +194,14 @@ const CommentList = forwardRef((props, ref) => {
         {isCanLeftAComment && (
           <Editor
             onSave={(content) => onCommentSave(content)}
+            onEdit={resetSave}
             useTitle={false}
             useCancel={false}
             saveLabel={'Left a comment'}
+            loadingLabel="Saving"
             loading={isSaveLoading}
             textAreaHeight='50px'
+            isError={isSaveError}
           />
         )}
       </div>

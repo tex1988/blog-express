@@ -1,10 +1,11 @@
 import { useRef, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Button from './ui/Button';
 
 const Editor = ({
-  onSave,
-  onCancel,
+  onSave = () => {},
+  onCancel = () => {},
+  onEdit = () => {},
   saveLabel = 'Save',
   initialTitle = '',
   initialContent = '',
@@ -13,6 +14,7 @@ const Editor = ({
   loading = false,
   loadingLabel = 'Loading',
   textAreaHeight = '400px',
+  isError = false
 }) => {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
@@ -20,10 +22,12 @@ const Editor = ({
   const lastTitle = useRef(null);
 
   function onHeaderInput(event) {
+    onEdit();
     setTitle(event.target.value);
   }
 
   function onContentInput(event) {
+    onEdit();
     setContent(event.target.value);
   }
 
@@ -40,18 +44,19 @@ const Editor = ({
       {useTitle && (
         <input
           onChange={onHeaderInput}
-          value={title}
+          value={isError ? lastTitle.current : title}
           placeholder={loading ? lastTitle.current : "Post title"}
           disabled={loading}
         />
       )}
-      <textarea
+      <TextAreaWrapper
         className="text-area"
-        value={content}
+        value={isError ? lastContent.current : content}
         placeholder={loading ? lastContent.current : ''}
         onChange={onContentInput}
         disabled={loading}
-        style={{ height: textAreaHeight }}
+        height={textAreaHeight}
+        error={isError}
       />
       <ButtonRow>
         <Button
@@ -73,6 +78,20 @@ const ButtonRow = styled.div.attrs({
   justify-content: center;
   align-content: center;
   flex-wrap: wrap;
+`;
+
+const TextAreaWrapper = styled.textarea`
+  height: ${(props) => props.height};
+
+  ${(props) =>
+    props.error &&
+    css`
+      border-color: #ce352c;
+
+      &:focus {
+        border-color: #ce352c;
+      }
+    `}
 `;
 
 export default Editor;
