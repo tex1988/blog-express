@@ -8,7 +8,11 @@ const colors = {
   notification: 'royalblue',
 };
 
-const Toast = ({ message = '', type = 'notification', onClose = () => {} }) => {
+const Toast = ({ message = '', type = 'notification', onClose = () => {}, autoClose = 0 }) => {
+  if (autoClose > 0) {
+    setTimeout(onClose, [autoClose]);
+  }
+
   function getColor() {
     const color = colors[type];
     if (color) return color;
@@ -17,8 +21,8 @@ const Toast = ({ message = '', type = 'notification', onClose = () => {} }) => {
 
   return (
     <ToastWrapper color={getColor()}>
-      <div className='message'>{message}</div>
-      <div className='icon' onClick={onClose}>
+      <div className="message">{message}</div>
+      <div className="icon" onClick={onClose}>
         <svg
           className="clear-icon"
           viewBox="64 64 896 896"

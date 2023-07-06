@@ -22,7 +22,7 @@ export default function usePostQuery(postId, userId) {
     reset: resetEdit,
   } = useMutation({
     mutationFn: (post) => updatePost(postId, post),
-    onSuccess: () => client.invalidateQueries({ queryKey }),
+    onSuccess: () => onEditSuccess(),
     onError: (err) => onMutationError(err),
   });
   const {
@@ -31,9 +31,27 @@ export default function usePostQuery(postId, userId) {
     isSuccess: isDeleteSuccess,
   } = useMutation({
     mutationFn: deletePostById,
-    onSuccess: () => navigate(`/user/${userId}/post`),
+    onSuccess: () => onDeleteSuccess(),
     onError: (err) => onMutationError(err),
   });
+
+  function onEditSuccess() {
+    pushNotification({
+      message: 'Post was successfully edited',
+      type: 'success',
+      autoClose: true,
+    });
+    client.invalidateQueries({ queryKey });
+  }
+
+  function onDeleteSuccess() {
+    pushNotification({
+      message: 'Post was successfully deleted',
+      type: 'success',
+      autoClose: true,
+    });
+    navigate(`/user/${userId}/post`);
+  }
 
   function onMutationError(error) {
     pushNotification({ message: error.message, type: 'error' });

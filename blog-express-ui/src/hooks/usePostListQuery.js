@@ -19,7 +19,14 @@ export default function usePostListQuery(fetchParams) {
     reset: resetCreate,
   } = useMutation({
     mutationFn: savePost,
-    onSuccess: () => client.invalidateQueries({ queryKey }),
+    onSuccess: () => {
+      pushNotification({
+        message: 'Post was successfully saved',
+        type: 'success',
+        autoClose: true,
+      });
+      client.invalidateQueries({ queryKey })
+    },
     onError: (err) => pushNotification({ message: err.message, type: 'error' }),
   });
 

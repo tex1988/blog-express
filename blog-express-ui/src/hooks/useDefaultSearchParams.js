@@ -53,7 +53,7 @@ export default function useDefaultSearchParams(nonSearchParams) {
   function setSearchQuery(searchQueryValue) {
     if (searchQueryValue) {
       forEachObjectEntry(searchQueryValue, (key, value) => searchParams.set(key, value));
-    } else {
+    } else if (searchQuery) {
       forEachObjectEntry(searchQuery, (key) => searchParams.delete(key));
     }
     searchParams.set('page', '1');

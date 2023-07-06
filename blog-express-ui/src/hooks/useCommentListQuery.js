@@ -30,8 +30,7 @@ export default function useCommentListQuery(props) {
     reset: resetSave
   } = useMutation({
     mutationFn: (comment) => savePostComment(postId, comment),
-    onSuccess: () => client.invalidateQueries({ queryKey })
-      .then(() => afterSave()),
+    onSuccess: () => onSaveSuccess(),
     onError: (err) => onMutationError(err),
   });
 
@@ -43,8 +42,7 @@ export default function useCommentListQuery(props) {
     reset: resetEdit
   } = useMutation({
     mutationFn: (comment) => updateComment(comment.commentId, comment),
-    onSuccess: () => client.invalidateQueries({ queryKey })
-      .then(() => afterEdit()),
+    onSuccess: () => onEditSuccess(),
     onError: (err) => onMutationError(err),
   });
 
@@ -54,10 +52,39 @@ export default function useCommentListQuery(props) {
     isLoading: isDeleteLoading,
   } = useMutation({
     mutationFn: deleteCommentById,
-    onSuccess: () => client.invalidateQueries({ queryKey })
-      .then(() => afterDelete()),
+    onSuccess: () => onDeleteSuccess(),
     onError: (err) => onMutationError(err),
   });
+
+  function onSaveSuccess() {
+    pushNotification({
+      message: 'Comment was successfully saved',
+      type: 'success',
+      autoClose: true,
+    });
+    client.invalidateQueries({ queryKey })
+      .then(() => afterSave());
+  }
+
+  function onEditSuccess() {
+    pushNotification({
+      message: 'Comment was successfully edited',
+      type: 'success',
+      autoClose: true,
+    });
+    client.invalidateQueries({ queryKey })
+      .then(() => afterEdit());
+  }
+
+  function onDeleteSuccess() {
+    pushNotification({
+      message: 'Comment was successfully deleted',
+      type: 'success',
+      autoClose: true,
+    });
+    client.invalidateQueries({ queryKey })
+      .then(() => afterDelete());
+  }
 
   function onMutationError(error) {
     pushNotification({ message: error.message, type: 'error' });
