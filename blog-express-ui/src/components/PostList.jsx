@@ -92,7 +92,8 @@ const PostList = ({ isMyPosts }) => {
         <Editor
           onSave={(title, content) => onPostSave(content, title)}
           onCancel={() => setEditorVisible(false)}
-          onEdit={resetCreate}
+          onTitleEdit={resetCreate}
+          onContentEdit={resetCreate}
           initialTitle=""
           initialContent=""
           useTitle={true}

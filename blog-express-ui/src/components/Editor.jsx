@@ -5,7 +5,8 @@ import Button from './ui/Button';
 const Editor = ({
   onSave = () => {},
   onCancel = () => {},
-  onEdit = () => {},
+  onTitleEdit = () => {},
+  onContentEdit = () => {},
   saveLabel = 'Save',
   initialTitle = '' ,
   initialContent = '',
@@ -29,12 +30,12 @@ const Editor = ({
   }, [isError])
 
   function onHeaderInput(event) {
-    onEdit();
+    onTitleEdit();
     setTitle(event.target.value);
   }
 
   function onContentInput(event) {
-    onEdit();
+    onContentEdit();
     setContent(event.target.value);
   }
 

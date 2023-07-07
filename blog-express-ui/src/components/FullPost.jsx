@@ -99,7 +99,8 @@ const FullPost = () => {
         <Editor
           onSave={(content, title) => onPostEdit(content, title)}
           onCancel={() => setEditMode(false)}
-          onEdit={resetEdit}
+          onTitleEdit={resetEdit}
+          onContentEdit={resetEdit}
           initialTitle={title}
           initialContent={content}
           useTitle={true}

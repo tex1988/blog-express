@@ -152,7 +152,7 @@ const CommentList = forwardRef((props, ref) => {
               setEditedCommentId(null);
               resetEdit();
             }}
-            onEdit={resetEdit}
+            onContentEdit={resetEdit}
             initialContent={comment.content}
             useTitle={false}
             textAreaHeight="50px"
@@ -197,7 +197,7 @@ const CommentList = forwardRef((props, ref) => {
         {isCanLeftAComment && (
           <Editor
             onSave={(content) => onCommentSave(content)}
-            onEdit={resetSave}
+            onContentEdit={resetSave}
             useTitle={false}
             useCancel={false}
             saveLabel={'Left a comment'}
