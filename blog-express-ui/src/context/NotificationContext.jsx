@@ -7,11 +7,13 @@ const NotificationContextProvider = ({ children }) => {
 
   function pushNotification(notification) {
     notification.id = Date.now();
-    setNotifications((prevState) =>[notification, ...prevState]);
+    setNotifications((prevState) => [notification, ...prevState]);
   }
-  
+
   function closeNotification(id) {
-    setNotifications(notifications.filter((notification) => notification.id !== id));
+    setNotifications((prevState) => [
+      ...prevState.filter((notification) => notification.id !== id),
+    ]);
   }
 
   const closeAll = useCallback(() => {

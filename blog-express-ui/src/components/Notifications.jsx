@@ -36,7 +36,7 @@ const NotificationsWrapper = styled.div.attrs({
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  position: absolute;
+  position: fixed;
   top: 5px;
   z-index: 100;
 `;
