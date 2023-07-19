@@ -12,6 +12,7 @@ import {
 } from './animation/motionComponents';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
+import Button from './ui/Button';
 
 const NON_SEARCH_PARAMS = ['sort', 'order', 'page', 'size'];
 const PAGE_SIZE = 5;
@@ -212,7 +213,9 @@ const PostList = ({ isMyPosts }) => {
       </AnimatePresence>
       {isMyPosts && (
         <ButtonWrapper>
-          {!isEditorVisible && <button onClick={() => setEditorVisible(true)}>Create post</button>}
+          {!isEditorVisible && (
+            <Button onClick={() => setEditorVisible(true)} label="Create post" />
+          )}
         </ButtonWrapper>
       )}
     </motion.div>

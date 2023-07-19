@@ -82,7 +82,7 @@ const Editor = forwardRef(({
             </motion.div>
             {useCancel && !loading && (
               <motion.div
-                // layout={'position'}
+                layout={'position'}
                 key='editor_cancel'
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0 }}
