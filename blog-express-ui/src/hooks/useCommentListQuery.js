@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { deleteCommentById, fetchCommentsByPostId, savePostComment, updateComment, } from '../api/api';
 import useNotificationContext from './useNotificationContext';
+import { useState } from 'react';
 
 export default function useCommentListQuery(props) {
   const {
@@ -21,7 +22,10 @@ export default function useCommentListQuery(props) {
   });
 
   const { comments = null, pageCount = 1 } = data || {};
+  const [isSavedCommentLoading, setIsSavedCommentLoading] = useState(false);
   const client = useQueryClient();
+  const isInvalidateLoading = !!client.isFetching(queryKey);
+  
   const {
     mutate: saveComment,
     isSuccess: isSaveSuccess,
@@ -62,8 +66,11 @@ export default function useCommentListQuery(props) {
       type: 'success',
       autoClose: true,
     });
-    client.invalidateQueries({ queryKey })
-      .then(() => afterSave());
+    setIsSavedCommentLoading(true)
+    client.invalidateQueries({ queryKey }).then(() => {
+      afterSave();
+      setIsSavedCommentLoading(false);
+    });
   }
 
   function onEditSuccess() {
@@ -98,6 +105,7 @@ export default function useCommentListQuery(props) {
     saveComment,
     isSaveLoading,
     isSaveSuccess,
+    isSavedCommentLoading,
     isSaveError,
     resetSave,
     editComment,
@@ -108,5 +116,6 @@ export default function useCommentListQuery(props) {
     deleteComment,
     isDeleteLoading,
     isDeleteSuccess,
+    isInvalidateLoading
   };
 }

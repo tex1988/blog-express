@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { fetchPosts, savePost } from '../api/api';
 import useNotificationContext from './useNotificationContext';
+import { useState } from 'react';
 
 export default function usePostListQuery(fetchParams) {
   const { pushNotification } = useNotificationContext();
@@ -12,6 +13,8 @@ export default function usePostListQuery(fetchParams) {
   });
   const { posts = null, pageCount = 1 } = data || {};
   const client = useQueryClient();
+  const isInvalidateLoading = !!client.isFetching(queryKey);
+  const [isSavedPostLoading, setIsSavedPostLoading] = useState(false);
   const {
     mutate: createPost,
     isLoading: isSaveLoading,
@@ -25,7 +28,9 @@ export default function usePostListQuery(fetchParams) {
         type: 'success',
         autoClose: true,
       });
+      setIsSavedPostLoading(true)
       client.invalidateQueries({ queryKey })
+        .then(() => setIsSavedPostLoading(false))
     },
     onError: (err) => pushNotification({ message: err.message, type: 'error' }),
   });
@@ -39,5 +44,7 @@ export default function usePostListQuery(fetchParams) {
     isSaveLoading,
     isCreateError,
     resetCreate,
+    isSavedPostLoading,
+    isInvalidateLoading
   };
 }

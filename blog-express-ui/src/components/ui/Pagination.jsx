@@ -1,29 +1,39 @@
 import ReactPaginate from 'react-paginate';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { forwardRef } from 'react';
 
-const Pagination = (props) => {
-  const {page, pageCount, onPageChange, pageRangeDisplayed } = props;
-
-  return (
-    <PaginationWrapper>
-      <ReactPaginate
-        forcePage={page}
-        previousLabel={'<'}
-        nextLabel={'>'}
-        pageCount={pageCount}
-        pageRangeDisplayed={pageRangeDisplayed}
-        onPageChange={(event) => onPageChange(event.selected + 1)}
-      />
-    </PaginationWrapper>
-  )
-}
+const Pagination = forwardRef(
+  ({ page, pageCount, onPageChange, pageRangeDisplayed, disabled = false }, ref) => {
+    return (
+      <PaginationWrapper disabled={disabled} ref={ref}>
+        <ReactPaginate
+          forcePage={page}
+          previousLabel={'<'}
+          nextLabel={'>'}
+          pageCount={pageCount}
+          pageRangeDisplayed={pageRangeDisplayed}
+          onPageChange={(event) => onPageChange(event.selected + 1)}
+        />
+      </PaginationWrapper>
+    );
+  },
+);
 
 const PaginationWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   user-select: none;
-  
+
+  ${(props) =>
+    props.disabled &&
+    css`
+      a {
+        background-color: #2f2f2f;
+        pointer-events: none;
+      }
+    `}
+
   ul {
     padding: 0;
   }
@@ -67,6 +77,6 @@ const PaginationWrapper = styled.div`
       pointer-events: none;
     }
   }
-`
+`;
 
 export default Pagination;

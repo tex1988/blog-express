@@ -1,7 +1,8 @@
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import { forwardRef } from 'react';
 
-const PostPreviewSkeleton = ({ count }) => {
+const PostPreviewSkeleton = forwardRef(({ count }, ref) => {
   const skeleton = (index) => (
     <SkeletonTheme key={`postPreviewSkeleton_${index}`} baseColor="#444" highlightColor="#202020">
       <div className="flex-column">
@@ -26,14 +27,14 @@ const PostPreviewSkeleton = ({ count }) => {
   function getSkeletons() {
     let skeletons;
     if (!count || count < 1) {
-      skeletons = skeleton;
+      skeletons = skeleton(1);
     } else {
       skeletons = [...Array(count)].map((_, index) => skeleton(index));
     }
     return skeletons;
   }
 
-  return getSkeletons();
-};
+  return <div ref={ref}>{getSkeletons()}</div>;
+});
 
 export default PostPreviewSkeleton;

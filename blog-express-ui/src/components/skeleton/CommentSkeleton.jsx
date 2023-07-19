@@ -1,7 +1,7 @@
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import { forwardRef } from 'react';
 
-const CommentSkeleton = ({ count, withEdit = false }) => {
-
+const CommentSkeleton = forwardRef(({ count, withEdit = false }, ref) => {
   const skeleton = (index) => (
     <SkeletonTheme key={`commentSkeleton_${index}`} baseColor="#444" highlightColor="#202020">
       <div className="flex-column mt-10">
@@ -37,7 +37,7 @@ const CommentSkeleton = ({ count, withEdit = false }) => {
     return skeletons;
   }
 
-  return getSkeletons();
-};
+  return <div ref={ref}>{getSkeletons()}</div>;
+});
 
 export default CommentSkeleton;

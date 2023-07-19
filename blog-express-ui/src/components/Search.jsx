@@ -1,12 +1,12 @@
 import styled, { css } from 'styled-components';
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import Select from './ui/Select';
 import SearchInput from './ui/SearchInput';
 
 const ASC = 'asc';
 const DESC = 'desc';
 
-const Search = ({
+const Search = forwardRef(({
   sortOptions = [],
   searchOptions = [],
   setOrder = (value) => {},
@@ -16,7 +16,7 @@ const Search = ({
   defaultOrder = DESC,
   defaultSearch = null,
   disabled = false,
-}) => {
+}, ref) => {
   const [defaultSearchType, defaultSearchValue] = getDefaultSearch();
   const [selectedOrder, setSelectedOrder] = useState(defaultOrder);
   const [searchField, setSearchField] = useState(defaultSearchType);
@@ -62,61 +62,63 @@ const Search = ({
   }
 
   return (
-    <SearchWrapper disabled={disabled}>
-      <div className="flex-row-left">
+    <div ref={ref}>
+      <SearchWrapper disabled={disabled}>
         <div className="flex-row-left">
-          <span>Sort by:</span>
-          <Select
-            defaultValue={defaultSort}
-            options={sortOptions}
-            onChange={onSortChange}
-            style={{ width: '105px' }}
-            disabled={disabled}
-          />
-        </div>
-        <div className="flex-row-left">
-          <span>Order: </span>
-          <div className="flex-row-left" onChange={onOrderChange}>
-            <input
-              checked={selectedOrder === ASC}
-              type="radio"
-              value={ASC}
-              readOnly
+          <div className="flex-row-left">
+            <span>Sort by:</span>
+            <Select
+              defaultValue={defaultSort}
+              options={sortOptions}
+              onChange={onSortChange}
+              style={{ width: '105px' }}
               disabled={disabled}
             />
-            ⇑
-            <input
-              checked={selectedOrder === DESC}
-              type="radio"
-              value={DESC}
-              readOnly
-              disabled={disabled}
-            />
-            ⇓
+          </div>
+          <div className="flex-row-left">
+            <span>Order: </span>
+            <div className="flex-row-left" onChange={onOrderChange}>
+              <input
+                checked={selectedOrder === ASC}
+                type="radio"
+                value={ASC}
+                readOnly
+                disabled={disabled}
+              />
+              ⇑
+              <input
+                checked={selectedOrder === DESC}
+                type="radio"
+                value={DESC}
+                readOnly
+                disabled={disabled}
+              />
+              ⇓
+            </div>
           </div>
         </div>
-      </div>
-      <div className="flex-row-left search-part">
-        <div className="flex-row-left">
-          <span>Search by:</span>
-          <Select
-            defaultValue={defaultSearchType}
-            options={searchOptions}
-            onChange={onSearchTypeChange}
-            style={{ width: '65px' }}
+        <div className="flex-row-left search-part">
+          <div className="flex-row-left">
+            <span>Search by:</span>
+            <Select
+              defaultValue={defaultSearchType}
+              options={searchOptions}
+              onChange={onSearchTypeChange}
+              style={{ width: '65px' }}
+              disabled={disabled}
+            />
+          </div>
+          <SearchInput
+            value={searchInputValue}
+            onSearch={onSearchClick}
+            onInput={onSearchInput}
             disabled={disabled}
           />
         </div>
-        <SearchInput
-          value={searchInputValue}
-          onSearch={onSearchClick}
-          onInput={onSearchInput}
-          disabled={disabled}
-        />
-      </div>
-    </SearchWrapper>
+      </SearchWrapper>
+    </div>
   );
-};
+});
 
 export const SearchWrapper = styled.div.attrs({
   className: 'flex-row-space-between',

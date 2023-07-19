@@ -1,14 +1,17 @@
 import { CommentListWrapper } from '../CommentList';
 import CommentSkeleton from './CommentSkeleton';
 import SearchSkeleton from './SearchSkeleton';
+import { forwardRef } from 'react';
 
-const CommentListSkeleton = ({ search = false }) => {
+const CommentListSkeleton = forwardRef(({ search = false }, ref) => {
   return (
-    <CommentListWrapper>
-      {search && <SearchSkeleton />}
-      <CommentSkeleton count={3} />
-    </CommentListWrapper>
+    <div ref={ref}>
+      <CommentListWrapper>
+        {search && <SearchSkeleton />}
+        <CommentSkeleton count={3} />
+      </CommentListWrapper>
+    </div>
   );
-};
+});
 
 export default CommentListSkeleton;

@@ -1,7 +1,8 @@
 import { getDate } from '../utils/utils';
 import { Link } from 'react-router-dom';
+import { forwardRef } from 'react';
 
-const PostPreview = ({ post }) => {
+const PostPreview = forwardRef(({ post }, ref) => {
   const { postId, title, content, userId, created, modified } = post;
   const commentsCount = post?._count?.comments;
   const userName = `${post?.user?.firstName} ${post?.user?.lastName}`;
@@ -16,7 +17,7 @@ const PostPreview = ({ post }) => {
   }
 
   return (
-    <div className="flex-column">
+    <div className="flex-column" ref={ref}>
       <Link className='title' to={`/user/${userId}/post/${postId}`}>{title}</Link>
       <div className="flex-row-left info">
         <span>
@@ -30,6 +31,6 @@ const PostPreview = ({ post }) => {
       </div>
     </div>
   );
-};
+});
 
 export default PostPreview;

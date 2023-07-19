@@ -3,7 +3,7 @@ import { deletePostById, fetchPostById, updatePost } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import useNotificationContext from './useNotificationContext';
 
-export default function usePostQuery(postId, userId) {
+export default function usePostQuery(postId, userId, setCommentCount, setEditMode) {
   const { pushNotification } = useNotificationContext();
   const navigate = useNavigate();
   const queryKey = `post/${postId}`;
@@ -11,9 +11,11 @@ export default function usePostQuery(postId, userId) {
     queryFn: () => fetchPostById(postId),
     queryKey,
     staleTime: 1000 * 5,
+    onSuccess: (data) => setCommentCount(data.commentCount)
   });
   const post = data || {};
   const client = useQueryClient();
+  const isInvalidateLoading = !!client.isFetching(queryKey);
   const {
     mutate: editPost,
     isLoading: isEditLoading,
@@ -41,6 +43,7 @@ export default function usePostQuery(postId, userId) {
       type: 'success',
       autoClose: true,
     });
+    setEditMode(false);
     client.invalidateQueries({ queryKey });
   }
 
@@ -50,7 +53,7 @@ export default function usePostQuery(postId, userId) {
       type: 'success',
       autoClose: true,
     });
-    navigate(`/user/${userId}/post`);
+    navigate(`/user/${userId}/post`, { replace: true, state: { deletedPostId: Number(postId) } });
   }
 
   function onMutationError(error) {
@@ -69,5 +72,6 @@ export default function usePostQuery(postId, userId) {
     deletePost,
     isDeleteLoading,
     isDeleteSuccess,
+    isInvalidateLoading
   };
 }

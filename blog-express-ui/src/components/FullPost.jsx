@@ -6,26 +6,34 @@ import CommentList from './CommentList';
 import usePostQuery from '../hooks/usePostQuery';
 import usePostAdditionalParams from '../hooks/usePostAdditionalParams';
 import useAuthContext from '../hooks/useAuthContext';
-import CommentListSkeleton from './skeleton/CommentListSkeleton';
 import FullPostSkeleton from './skeleton/FullPostSkeleton';
+import { AnimatePresence, motion } from 'framer-motion';
+import { basicFade, loadingFade, MotionCommentListSkeleton } from './animation/motionComponents';
 
 const FullPost = () => {
   const { user: loggedInUser } = useAuthContext();
   const { userId, postId } = useParams();
   const [editMode, setEditMode] = useState(false);
   const { showComments, showCommentsSearch } = usePostAdditionalParams();
-  const { post, editPost, isEditLoading, deletePost, isDeleteLoading, isEditError, resetEdit } =
-    usePostQuery(postId, userId);
-  const { title, content, created, modified, user, commentCount: count } = post;
   const [commentCount, setCommentCount] = useState(0);
+  const {
+    post,
+    editPost,
+    isEditLoading,
+    deletePost,
+    isDeleteLoading,
+    isEditError,
+    resetEdit,
+    isInvalidateLoading,
+  } = usePostQuery(postId, userId, setCommentCount, setEditMode);
+  const { title, content, created, modified, user, commentCount: count } = post;
   const hasComments = commentCount > 0;
   const isEditable = isTheSameUser(loggedInUser, userId);
   const ref = useRef();
 
   useEffect(() => {
-    setEditMode(false);
     setCommentCount(count);
-  }, [post]);
+  }, []);
 
   function onPostEdit(content, title) {
     const post = {
@@ -57,16 +65,23 @@ const FullPost = () => {
             style={hasComments ? {} : { textDecoration: 'none' }}>
             Comments: {commentCount}
           </span>
-          {showComments && hasComments && (
-            <>
-              <span>, </span>
-              <span
-                className="action-link"
-                onClick={() => ref.current.setSearch(!showCommentsSearch)}>
-                {showCommentsSearch ? 'Hide' : 'Show'} search
-              </span>
-            </>
-          )}
+          <AnimatePresence initial={false}>
+            {showComments && hasComments && (
+              <>
+                <span> </span>
+                <motion.span
+                  className="action-link"
+                  onClick={() => ref.current.setSearch(!showCommentsSearch)}
+                  key="comment_search_switcher"
+                  variants={basicFade}
+                  initial="hidden"
+                  animate="visible"
+                  exit="hidden">
+                  {showCommentsSearch ? 'Hide' : 'Show'} search
+                </motion.span>
+              </>
+            )}
+          </AnimatePresence>
         </div>
         {isEditable && (
           <div className="flex-row-left" style={{ flexBasis: 'auto' }}>
@@ -82,16 +97,27 @@ const FullPost = () => {
           </div>
         )}
       </div>
-      <Suspense fallback={<CommentListSkeleton search={showCommentsSearch} />}>
-        <CommentList
-          ref={ref}
-          {...{ showComments, showCommentsSearch, commentCount, setCommentCount }}
-        />
-      </Suspense>
+      <AnimatePresence mode="wait">
+        <Suspense
+          fallback={
+            <MotionCommentListSkeleton
+              search={showCommentsSearch}
+              variants={loadingFade}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+            />
+          }>
+          <CommentList
+            ref={ref}
+            {...{ showComments, showCommentsSearch, commentCount, setCommentCount }}
+          />
+        </Suspense>
+      </AnimatePresence>
     </>
   );
 
-  return isDeleteLoading ? (
+  return (isDeleteLoading || isInvalidateLoading) ? (
     <FullPostSkeleton />
   ) : (
     <div className="flex-column" style={{ padding: '10px' }}>
