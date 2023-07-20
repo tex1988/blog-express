@@ -1,9 +1,7 @@
-import { createContext, Suspense } from 'react';
+import { Suspense } from 'react';
 import PostList from '../components/PostList';
 import { loadingFade, MotionPostListSkeleton } from '../components/animation/motionComponents';
 import { AnimatePresence } from 'framer-motion';
-
-export const EditorContext = createContext(undefined);
 
 const MyPosts = () => {
   return (
