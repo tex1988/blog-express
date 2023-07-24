@@ -11,7 +11,7 @@ import {
   basicTransition, loadingFade,
   MotionComment,
   MotionCommentSkeleton,
-  MotionEditor, MotionEmpty, MotionPagination, MotionSearch, pageChildrenVariants, pageVariants,
+  MotionEditor, MotionEmpty, MotionPagination, MotionSearch, paginationChildrenVariants, paginationVariants,
 } from './animation/motionComponents';
 
 const NON_SEARCH_PARAMS = ['sort', 'order', 'page', 'size', 'comments', 'search'];
@@ -208,7 +208,7 @@ const CommentList = forwardRef((props, ref) => {
         layout="position"
         layoutId="comment_list"
         key={`comments_page_${page}`}
-        variants={pageVariants}
+        variants={paginationVariants}
         initial="hidden"
         animate="visible">
         <AnimatePresence mode="popLayout">
@@ -230,7 +230,7 @@ const CommentList = forwardRef((props, ref) => {
           return (
             <motion.div
               key={`comment_list_item_${commentId}`}
-              variants={pageChildrenVariants}
+              variants={paginationChildrenVariants}
               initial="hidden"
               animate="visible"
               exit="exit"

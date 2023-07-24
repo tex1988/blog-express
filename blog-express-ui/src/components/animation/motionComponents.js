@@ -22,15 +22,21 @@ export const loadingFade = {
   visible: { opacity: 1, transition: { duration: 0.5 } },
 }
 
-export const pageVariants = {
+export const paginationVariants = {
   hidden: { opacity: 1, transition: { duration: 0.1} },
   visible: {  opacity: 1, transition: { duration: 0.1, staggerChildren: 0.1, when: "afterChildren" } },
 };
 
-export const pageChildrenVariants = {
+export const paginationChildrenVariants = {
   hidden: { opacity: 0, x: 400, },
   visible: (options) => ({  opacity: 1, x: 0, transition: {duration: 0.1, delay: options.delay} }),
   exit: (options) => ({  opacity: 0, x: 400, transition: {duration: 0.1, delay: options.exitDelay} })
+};
+
+export const pageTransitionVariants = {
+  hidden: { opacity: 0, x: 400 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.2 } },
+  exit: { opacity: 0, x: -400, transition: { duration: 0.2 } },
 };
 
 export const basicTransition = { layout: { duration: 0.25 } }

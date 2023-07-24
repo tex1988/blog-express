@@ -8,7 +8,7 @@ import {
   basicTransition, loadingFade,
   MotionEditor, MotionEmpty, MotionPagination,
   MotionPostPreview,
-  MotionPostPreviewSkeleton, MotionSearch, pageChildrenVariants, pageVariants,
+  MotionPostPreviewSkeleton, MotionSearch, paginationChildrenVariants, paginationVariants,
 } from './animation/motionComponents';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
@@ -76,7 +76,7 @@ const PostList = ({ isMyPosts }) => {
           layout="position"
           layoutId="post_list"
           key={`post_page_${page}`}
-          variants={pageVariants}
+          variants={paginationVariants}
           initial="hidden"
           animate="visible">
           <AnimatePresence mode="wait">
@@ -96,7 +96,7 @@ const PostList = ({ isMyPosts }) => {
             return (
               <motion.div
                 key={`post_list_item_${postId}`}
-                variants={pageChildrenVariants}
+                variants={paginationChildrenVariants}
                 initial="hidden"
                 animate="visible"
                 exit="exit"
