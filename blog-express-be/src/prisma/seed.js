@@ -7,6 +7,7 @@ async function main() {
       firstName: 'Alice',
       lastName: 'Johnson',
       email: 'noreply1@test.com',
+      password: '$2b$10$qtdCYNB6sf9fwXDszpcyoO1/qkHk89rzSqW7JJ.lXMynmaxCnthaS',
       posts: {
         create: [
           {
@@ -54,6 +55,7 @@ async function main() {
       firstName: 'Bob',
       lastName: 'Brown',
       email: 'noreply2@test.com',
+      password: '$2b$10$qtdCYNB6sf9fwXDszpcyoO1/qkHk89rzSqW7JJ.lXMynmaxCnthaS',
       posts: {
         create: [
           {
@@ -101,6 +103,7 @@ async function main() {
       firstName: 'John',
       lastName: 'Black',
       email: 'noreply3@test.com',
+      password: '$2b$10$qtdCYNB6sf9fwXDszpcyoO1/qkHk89rzSqW7JJ.lXMynmaxCnthaS',
     },
   });
 }
