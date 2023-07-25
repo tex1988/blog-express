@@ -32,11 +32,13 @@ const postUser = joi.object({
 
 const putUser = joi.object({
   firstName: joi.string()
+    .empty('')
     .pattern(new RegExp('^[a-zA-Z]'))
     .min(1)
     .max(50),
 
   lastName: joi.string()
+    .empty('')
     .pattern(new RegExp('^[a-zA-Z]'))
     .min(1)
     .max(50),

@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const PostService = require('../service/postService');
 const postService = new PostService();
+const validateSchema = require('../validator/schema/schemaValidator');
+const { postPutPost } = require('../validator/schema/postSchema');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -22,7 +24,7 @@ router.get('/:postId', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', validateSchema(postPutPost), async (req, res, next) => {
   try {
     const post = await postService.save(req.body);
     res.status(201).json(post);
@@ -31,7 +33,7 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.put('/:postId', async (req, res, next) => {
+router.put('/:postId', validateSchema(postPutPost), async (req, res, next) => {
   try {
     const { postId } = req.params;
     const post = await postService.update(postId, req.body);
