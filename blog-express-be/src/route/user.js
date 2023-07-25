@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const UserService = require('../service/userService');
 const userService = new UserService();
+const validateSchema = require('../validator/schema/schemaValidator');
+const { postUser, putUser } = require('../validator/schema/userSchema');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -22,7 +24,7 @@ router.get('/:userId', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', validateSchema(postUser), async (req, res, next) => {
   try {
     const user = await userService.save(req.body);
     res.status(201).json(user);
@@ -31,7 +33,7 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.put('/:userId', async (req, res, next) => {
+router.put('/:userId', validateSchema(putUser), async (req, res, next) => {
   try {
     const { userId } = req.params;
     const user = await userService.update(userId, req.body);
