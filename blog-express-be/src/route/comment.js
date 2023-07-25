@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const CommentService = require('../service/commentService');
 const commentService = new CommentService();
+const validateSchema = require('../validator/schema/schemaValidator');
+const { postComment, putComment } = require('../validator/schema/commentSchema');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -22,7 +24,7 @@ router.get('/:commentId', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', validateSchema(postComment), async (req, res, next) => {
   try {
     const comment = await commentService.save(req.body);
     res.status(201).json(comment);
@@ -31,7 +33,7 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.put('/:commentId', async (req, res, next) => {
+router.put('/:commentId', validateSchema(putComment), async (req, res, next) => {
   try {
     const { commentId } = req.params;
     const comment = await commentService.update(commentId, req.body);

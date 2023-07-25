@@ -4,6 +4,7 @@ const PostService = require('../service/postService');
 const postService = new PostService();
 const validateSchema = require('../validator/schema/schemaValidator');
 const { postPutPost } = require('../validator/schema/postSchema');
+const { postComment } = require('../validator/schema/commentSchema');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -53,7 +54,7 @@ router.get('/:postId/comment', async (req, res, next) => {
   }
 });
 
-router.post('/:postId/comment', async (req, res, next) => {
+router.post('/:postId/comment', validateSchema(postComment), async (req, res, next) => {
   try {
     const { postId } = req.params;
     const comments = await postService.savePostComment(postId, req.body);

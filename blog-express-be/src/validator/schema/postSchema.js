@@ -15,6 +15,7 @@ const postPutPost = joi.object({
     .positive()
     .min(1)
     .max(9223372036854775807)
+    .required()
 });
 
 module.exports = { postPutPost };
