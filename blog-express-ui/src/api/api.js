@@ -62,6 +62,13 @@ export async function fetchUserPosts(userId, params) {
   return res.json();
 }
 
+export async function fetchUserPost(userId, postId) {
+  const url = `${BASE_URL}/user/${userId}/post/${postId}`;
+  const res = await fetch(url);
+  await validateResponse(res);
+  return res.json();
+}
+
 export async function logInUser(credentials) {
   const url = `${BASE_URL}/login`;
   const res = await fetch(url, {

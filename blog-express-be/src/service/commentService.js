@@ -1,4 +1,5 @@
 const CommentRepository = require('../repository/commentRepository');
+const { validateNumber } = require('../validator/validator');
 
 class CommentService {
   #commentRepository = new CommentRepository();
@@ -15,7 +16,15 @@ class CommentService {
   }
 
   async findById(id) {
-    return this.#commentRepository.findById(id);
+    validateNumber(id);
+    const comment = await this.#commentRepository.findById(id);
+    if(comment) {
+      return comment
+    } else {
+      const error = new Error(`Comment with id:${id} not found`);
+      error.status = 404;
+      throw error;
+    }
   }
 
   async save(comment) {
@@ -23,11 +32,24 @@ class CommentService {
   }
 
   async update(id, comment) {
+    validateNumber(id);
+    await this.#validateIfCommentExists(id);
     return this.#commentRepository.update(id, comment);
   }
 
   async delete(id) {
+    validateNumber(id);
+    await this.#validateIfCommentExists(id);
     return this.#commentRepository.delete(id);
+  }
+
+  async #validateIfCommentExists(id) {
+    const post = await this.#commentRepository.findById(id);
+    if (!post) {
+      const error = new Error(`Comment with id:${id} not found`);
+      error.status = 404;
+      throw error;
+    }
   }
 }
 

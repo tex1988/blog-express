@@ -53,6 +53,16 @@ router.get('/:userId/post', async (req, res, next) => {
   }
 });
 
+router.get('/:userId/post/:postId', async (req, res, next) => {
+  try {
+    const { userId, postId } = req.params;
+    const post = await userService.findUserPost(userId, postId);
+    res.json(post);
+  } catch (e) {
+    next(e);
+  }
+});
+
 router.get('/:userId/comment', async (req, res, next) => {
   try {
     const { userId } = req.params;

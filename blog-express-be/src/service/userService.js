@@ -58,6 +58,20 @@ class UserService extends AbstractQueryableService {
     return { posts, pageCount };
   }
 
+  async findUserPost(userId, postId) {
+    validateNumber(userId);
+    validateNumber(postId);
+    await this.validateIfUserExists(userId);
+    const post = await this.#postRepository.findByIdAndUserId(postId, userId);
+    if(post) {
+      return post;
+    } else {
+      const error = new Error(`Post with id:${postId} not found for User with id:${userId}`);
+      error.status = 404;
+      throw error;
+    }
+  }
+
   async findAllUserComments(id) {
     validateNumber(id);
     await this.validateIfUserExists(id);

@@ -34,10 +34,16 @@ class PostService extends AbstractQueryableService {
   async findById(id) {
     validateNumber(id);
     const post = await this.#postRepository.findById(id);
-    const commentCount = post._count.comments;
-    delete post._count;
-    post.commentCount = commentCount;
-    return post;
+    if(post) {
+      const commentCount = post._count.comments;
+      delete post._count;
+      post.commentCount = commentCount;
+      return post;
+    } else {
+      const error = new Error(`Post with id:${id} not found`);
+      error.status = 404;
+      throw error;
+    }
   }
 
   async save(post) {
@@ -46,11 +52,13 @@ class PostService extends AbstractQueryableService {
 
   async update(id, post) {
     validateNumber(id);
+    await this.#validateIfPostExists(id);
     return this.#postRepository.update(id, post);
   }
 
   async delete(id) {
     validateNumber(id);
+    await this.#validateIfPostExists(id);
     await this.#commentRepository.deleteAllByPostId(id);
     return this.#postRepository.delete(id);
   }

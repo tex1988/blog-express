@@ -71,6 +71,21 @@ class PostRepository {
     });
   }
 
+  async findByIdAndUserId(id, userId) {
+    return this.#prisma.post.findFirst({
+      where: {
+        postId: Number(id),
+        userId: Number(userId),
+      },
+      include: {
+        user: true,
+        _count: {
+          select: { comments: true },
+        },
+      },
+    });
+  }
+
   async save(post) {
     return this.#prisma.post.create({
       data: {

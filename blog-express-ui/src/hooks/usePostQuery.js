@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { deletePostById, fetchPostById, updatePost } from '../api/api';
+import { deletePostById, fetchUserPost, updatePost } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import useNotificationContext from './useNotificationContext';
 
@@ -8,7 +8,7 @@ export default function usePostQuery(postId, userId, setCommentCount, setEditMod
   const navigate = useNavigate();
   const queryKey = `post/${postId}`;
   const { isSuccess, isLoading, data } = useQuery({
-    queryFn: () => fetchPostById(postId),
+    queryFn: () => fetchUserPost(userId, postId),
     queryKey,
     staleTime: 1000 * 5,
     onSuccess: (data) => setCommentCount(data.commentCount)
